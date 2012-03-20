@@ -1,11 +1,9 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
 <settings>
-    <info>
-        <version>1.0</version>
-    </info>
-    <settingData>
-        <kvpair key="tabwidth">
-            <value>4</value>
-        </kvpair>
-    </settingData>
+<info/>
+<settingData>
+<kvpair key="tabwidth">
+<value>4</value>
+</kvpair>
+</settingData>
 </settings>

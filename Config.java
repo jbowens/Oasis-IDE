@@ -128,7 +128,7 @@ public class Config {
             Document newDoc = builder.newDocument();
 
             Element settingsRoot = newDoc.createElement("settings");
-            newDoc.getDocumentElement().appendChild(settingsRoot);
+            newDoc.appendChild(settingsRoot);
             
             Element infoEl = newDoc.createElement("info");
             settingsRoot.appendChild(infoEl);
@@ -158,13 +158,18 @@ public class Config {
             transformer.transform(source, result);
             String xmlString = sw.toString();
 
-            System.out.println(xmlString);
+            FileWriter writer = new FileWriter( new File( this.fileLocation ) );
+            writer.write( xmlString );
+            writer.flush();
+            writer.close();
 
         } catch( ParserConfigurationException e ) {
             throw new SettingsSaveException();
         } catch( TransformerConfigurationException e ) {
             throw new SettingsSaveException();
         } catch( TransformerException e ) {
+            throw new SettingsSaveException();
+        } catch( IOException e ) {
             throw new SettingsSaveException();
         }
     }
@@ -181,8 +186,11 @@ public class Config {
             if( val != null )
                 System.out.println( val.equals("4") );
             System.out.println( c.getSettingAsInt( "tabwidth" ) == 4 );
+            c.save();
         } catch( NoSettingsException e ) {
             System.out.println( "Unable to load settings from file" );
+        } catch( SettingsSaveException e ) {
+            System.out.println(" Unable to save settings to file" );
         }
     }
 
