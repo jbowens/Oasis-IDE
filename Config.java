@@ -1,10 +1,14 @@
 package Camel;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.io.*;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.*;
+import javax.xml.transform.dom.*;
+import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 
@@ -75,6 +79,7 @@ public class Config {
      */
     public Config(String file) throws NoSettingsException {
         settings = new HashMap<String,String>();
+        this.fileLocation = file;
         loadDataFromFile(file);
     }
 
@@ -114,8 +119,54 @@ public class Config {
      * Saves the current state of the settings object to the XML file
      * it was constructed from.
      */
-    public void save() {
+    public void save() throws SettingsSaveException {
+        try {
+             /* Create the DOM document from the file */  
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance(); 
+            factory.setValidating(false);    
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            Document newDoc = builder.newDocument();
 
+            Element settingsRoot = newDoc.createElement("settings");
+            newDoc.getDocumentElement().appendChild(settingsRoot);
+            
+            Element infoEl = newDoc.createElement("info");
+            settingsRoot.appendChild(infoEl);
+
+            Element settingData = newDoc.createElement("settingData");
+            settingsRoot.appendChild(settingData);
+
+            /* Add in the actual setting values. */
+            for( Map.Entry<String,String> entry : settings.entrySet() ) {
+                Element kvpair = newDoc.createElement("kvpair");
+                kvpair.setAttribute( "key", entry.getKey() );
+                Element valNode = newDoc.createElement("value");
+                Text valText = newDoc.createTextNode(entry.getValue());
+                valNode.appendChild(valText);
+                kvpair.appendChild(valNode);
+                settingData.appendChild(kvpair);
+            }
+
+            /* The document is ready to save to the disk. */
+            TransformerFactory transformFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformFactory.newTransformer();
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            transformer.setOutputProperty(OutputKeys.ENCODING, "utf-8");
+            StringWriter sw = new StringWriter();
+            StreamResult result = new StreamResult(sw);
+            DOMSource source = new DOMSource( newDoc );
+            transformer.transform(source, result);
+            String xmlString = sw.toString();
+
+            System.out.println(xmlString);
+
+        } catch( ParserConfigurationException e ) {
+            throw new SettingsSaveException();
+        } catch( TransformerConfigurationException e ) {
+            throw new SettingsSaveException();
+        } catch( TransformerException e ) {
+            throw new SettingsSaveException();
+        }
     }
 
     /*
