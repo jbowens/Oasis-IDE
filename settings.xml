@@ -1,0 +1,10 @@
+<settings>
+    <info>
+        <version>1.0</version>
+    </info>
+    <settingData>
+        <kvpair key="tabwidth">
+            <value>4</value>
+        </kvpair>
+    </settingData>
+</settings>
