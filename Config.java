@@ -35,7 +35,6 @@ public class Config {
 
             NodeList kvpairs = doc.getElementsByTagName("kvpair");
 
-            outerfor:
             for( int i = 0; i < kvpairs.getLength(); i++ ) {
                 Node pairEl = kvpairs.item(i);
                 String key = pairEl.getAttributes().getNamedItem("key").getNodeValue().trim();
