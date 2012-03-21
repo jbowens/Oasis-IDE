@@ -52,7 +52,10 @@ public class Interactions {
         replWriter = new OutputStreamWriter( replProcess.getOutputStream() );
 
         InputStream processInputStream = replProcess.getInputStream();
-        
+        Runnable readProcess = new ReplListener( processInputStream, this.observers );
+
+        /* Begin the read process for this Interactions REPL */
+        new Thread(readProcess).start();        
 
     }
 
