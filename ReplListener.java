@@ -10,7 +10,7 @@ import java.util.*;
 public class ReplListener implements Runnable {
 
     protected InputStreamReader replStreamReader;
-    protected List<TextOutputListeners> observers;
+    protected List<TextOutputListener> observers;
     protected StringBuilder buffer;
 
     /*
@@ -31,29 +31,33 @@ public class ReplListener implements Runnable {
         boolean done = false;
 
         while( ! done ) {
+            
+            try {
+                int c = replStreamReader.read();            
+                buffer.append( (char) c );
+                while( replStreamReader.ready() ) {
+                    c = replStreamReader.read();
+                    if( c == -1 )
+                        done = true;
+                    else
+                        buffer.append( (char) replStreamReader.read() );
+                }
 
-            int c = replStreamReader.read();            
-            buffer.append( (char) c );
-            while( replStreamReader.ready() ) {
-                c = replStreamReader.read();
-                if( c == -1 )
-                    done = true;
-                else
-                    buffer.append( (char) replStreamReader.read() );
+                /* Done reading contiguous output, so notify every observer */
+                String output = buffer.toString();
+                for( TextOutputListener listener : observers ) {
+                    listener.receiveOutput( output );
+                }
+                /* Clear the buffer */
+                buffer.delete(0, buffer.length());
+        
+
+                replStreamReader.close();
+            } catch( IOException e) {
+                // Eat the exception and end execution
+                done = true;
             }
-
-            /* Done reading contiguous output, so notify every observer */
-            String output = buffer.toString();
-            for( TextOutputListener listener : observers ) {
-                listener.receiveOutput( output );
-            }
-            /* Clear the buffer */
-            buffer.delete(0, buffer.length());
-
         }
-
-        replStreamReader.close();
-
     }
 
 }

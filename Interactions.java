@@ -1,6 +1,8 @@
 package Camel;
 
 import java.io.*;
+import java.util.List;
+import java.util.ArrayList;
 
 public class Interactions {
 
@@ -16,7 +18,7 @@ public class Interactions {
      * of a definitions file. If the definitions filename is NULL, no initial definitions
      * are loaded.
      */
-    public Interactions(Config c, String filePath) throws FileNotFoundException {
+    public Interactions(Config c, String filePath) throws FileNotFoundException, InteractionsUnavailableException {
         observers = new ArrayList<TextOutputListener>();
         this.config = c;
 
@@ -29,15 +31,24 @@ public class Interactions {
         if( this.definitionsFile != null && ! this.definitionsFile.exists() )
             throw new FileNotFoundException("The OCaml definitions file " + this.definitionsFile.toString() + " could not be found.");
 
-        /* Create the terminal command to start the OCaml REPL. */
-        if( this.definitionsFile != null )
-            String[] cmd = {"ocaml", this->definitionsFile.getPath()};
-        else
-            String[] cmd = {"ocaml"};
+        String[] cmd;
 
+        /* Create the terminal command to start the OCaml REPL. */
+        if( this.definitionsFile != null ) {
+            cmd = new String[2];
+            cmd[0] = "ocaml";
+            cmd[1] = this.definitionsFile.getPath();
+        } else {
+            cmd = new String[1];
+            cmd[0] = "ocaml";
+        }
         /* Start the OCaml process */
-        Runtime runtime = Runtime::getRuntime();
-        replProcess = runtime.exec(cmd);
+        Runtime runtime = Runtime.getRuntime();
+        try {
+            replProcess = runtime.exec(cmd);
+        } catch(IOException e) {
+            throw new InteractionsUnavailableException();
+        }
         replWriter = new OutputStreamWriter( replProcess.getOutputStream() );
 
         InputStream processInputStream = replProcess.getInputStream();
@@ -82,7 +93,11 @@ public class Interactions {
      */
     public void close() {
         if( replWriter != null ) {
-            replWriter.close();
+            try {
+                replWriter.close();
+            } catch(IOException e) {
+                // just eat the exception
+            }
             replWriter = null;
         }
     }

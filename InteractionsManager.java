@@ -1,6 +1,7 @@
 package Camel;
 
 import java.util.*;
+import java.io.FileNotFoundException;
 
 /*
  * The InteractionsManager class can be used to manage multiple concurrent
@@ -19,7 +20,7 @@ public class InteractionsManager {
     public InteractionsManager(Config c) {
         config = c;
         currIndex = 0;
-        interactions = new ArrrayList<Interactions>
+        interactions = new ArrayList<Interactions>();
     }
 
     /*
@@ -28,7 +29,7 @@ public class InteractionsManager {
      * to the interactions window, which can be used when registering listeners
      * or sending in input.
      */
-    public int newInteractionsInstance( String def ) {
+    public int newInteractionsInstance( String def ) throws FileNotFoundException, InteractionsUnavailableException {
         int index = currIndex++;
         Interactions newInstance = new Interactions(config, def);
         return index;
