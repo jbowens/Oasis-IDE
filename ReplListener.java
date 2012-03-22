@@ -10,7 +10,7 @@ import java.util.*;
 public class ReplListener implements Runnable {
 
     protected int handle;
-    protected InputStreamReader replStreamReader;
+    protected BufferedReader replStreamReader;
     protected List<TextOutputListener> observers;
     protected StringBuilder buffer;
 
@@ -19,7 +19,7 @@ public class ReplListener implements Runnable {
      */
     public ReplListener( InputStream replStream, List<TextOutputListener> observers, int handle ) {
 	this.handle = handle;
-        replStreamReader = new InputStreamReader(replStream);
+        replStreamReader = new BufferedReader( new InputStreamReader(replStream) );
         this.observers = observers;
         buffer = new StringBuilder();
     }
@@ -35,32 +35,41 @@ public class ReplListener implements Runnable {
         while( ! done ) {
             
             try {
-                int c = replStreamReader.read();            
-                buffer.append( (char) c );
+                int c = replStreamReader.read();
+		char theChar = (char) c;
+                buffer.append( theChar );
                 while( replStreamReader.ready() ) {
                     c = replStreamReader.read();
-                    if( c == -1 )
+		    theChar = (char) c;
+                    if( c == -1 || c == 0 )
                         done = true;
                     else
-                        buffer.append( (char) replStreamReader.read() );
+                        buffer.append( theChar );
                 }
 
-                /* Done reading contiguous output, so notify every observer */
-                String output = buffer.toString();
-		TextOutputEvent event = new TextOutputEvent( output, handle );
-                for( TextOutputListener listener : observers ) {
-                    listener.receiveOutput( event );
-                }
-                /* Clear the buffer */
-                buffer.delete(0, buffer.length());
-        
-
-                replStreamReader.close();
+		if( buffer.length() > 0 ) {
+		    /* Done reading contiguous output, so notify every observer */
+		    String output = buffer.toString();
+		    TextOutputEvent event = new TextOutputEvent( output, handle );
+		    for( TextOutputListener listener : observers ) {
+		        listener.receiveOutput( event );
+		    }
+		    /* Clear the buffer */
+		    buffer.delete(0, buffer.length());
+		}
             } catch( IOException e) {
                 // Eat the exception and end execution
+		e.printStackTrace();
                 done = true;
             }
         }
+
+	try {
+	    replStreamReader.close();
+	} catch( IOException e ) {
+	    // eat it and return
+	}
+	System.out.println("REPL Listener process finishing");
     }
 
 }

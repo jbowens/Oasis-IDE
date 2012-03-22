@@ -32,6 +32,7 @@ public class InteractionsManager {
     public int newInteractionsInstance( String def ) throws FileNotFoundException, InteractionsUnavailableException {
         int index = currIndex++;
         Interactions newInstance = new Interactions(config, def, index);
+	interactions.add(newInstance);
         return index;
     }
 
