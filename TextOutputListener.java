@@ -2,6 +2,6 @@ package Camel;
 
 public interface TextOutputListener {
 
-    void receiveOutput(String out);
+    void receiveOutput(TextOutputEvent evt);
 
 }

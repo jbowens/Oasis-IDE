@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 public class Interactions {
 
+    int handle;
     Config config;
     File definitionsFile;
     Process replProcess;
@@ -18,9 +19,10 @@ public class Interactions {
      * of a definitions file. If the definitions filename is NULL, no initial definitions
      * are loaded.
      */
-    public Interactions(Config c, String filePath) throws FileNotFoundException, InteractionsUnavailableException {
+    public Interactions(Config c, String filePath, int handle) throws FileNotFoundException, InteractionsUnavailableException {
         observers = new ArrayList<TextOutputListener>();
         this.config = c;
+	this.handle = handle;
 
         /* Process the given file path. */
         if( filePath == null || filePath.equals("") )
@@ -52,7 +54,7 @@ public class Interactions {
         replWriter = new OutputStreamWriter( replProcess.getOutputStream() );
 
         InputStream processInputStream = replProcess.getInputStream();
-        Runnable readProcess = new ReplListener( processInputStream, this.observers );
+        Runnable readProcess = new ReplListener( processInputStream, this.observers, handle );
 
         /* Begin the read process for this Interactions REPL */
         new Thread(readProcess).start();        

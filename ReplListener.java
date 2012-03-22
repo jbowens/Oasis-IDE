@@ -9,6 +9,7 @@ import java.util.*;
  */
 public class ReplListener implements Runnable {
 
+    protected int handle;
     protected InputStreamReader replStreamReader;
     protected List<TextOutputListener> observers;
     protected StringBuilder buffer;
@@ -16,7 +17,8 @@ public class ReplListener implements Runnable {
     /*
      * Constructs a new ReplListener from an input stream and a list of observers.
      */
-    public ReplListener( InputStream replStream, List<TextOutputListener> observers ) {
+    public ReplListener( InputStream replStream, List<TextOutputListener> observers, int handle ) {
+	this.handle = handle;
         replStreamReader = new InputStreamReader(replStream);
         this.observers = observers;
         buffer = new StringBuilder();
@@ -45,8 +47,9 @@ public class ReplListener implements Runnable {
 
                 /* Done reading contiguous output, so notify every observer */
                 String output = buffer.toString();
+		TextOutputEvent event = new TextOutputEvent( output, handle );
                 for( TextOutputListener listener : observers ) {
-                    listener.receiveOutput( output );
+                    listener.receiveOutput( event );
                 }
                 /* Clear the buffer */
                 buffer.delete(0, buffer.length());
