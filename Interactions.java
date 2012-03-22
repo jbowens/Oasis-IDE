@@ -38,11 +38,11 @@ public class Interactions {
         /* Create the terminal command to start the OCaml REPL. */
         if( this.definitionsFile != null ) {
             cmd = new String[2];
-            cmd[0] = "cat";
+            cmd[0] = "ocaml";
             cmd[1] = this.definitionsFile.getPath();
         } else {
             cmd = new String[1];
-            cmd[0] = "cat";
+            cmd[0] = "ocaml";
         }
         /* Start the OCaml process */
         Runtime runtime = Runtime.getRuntime();
@@ -86,7 +86,6 @@ public class Interactions {
     void processUserInput( char c ) {
         try {
             replWriter.write( c );
-            replWriter.close();
         } catch(IOException e) {
             // Silently catch, and continue,
         }

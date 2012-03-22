@@ -21,12 +21,16 @@ public class InteractionsTester implements TextOutputListener  {
 
 	BufferedReader reader = new BufferedReader( new InputStreamReader( System.in ) );
 	String line = reader.readLine();
-	while( line != null && ! line.equals("") ) {
+	while( line != null ) {
+	    System.out.println("Sending " + line);
 	    for( char c : line.toCharArray() ) {
 		manager.processUserInput( handle, c );
 	    }
+	    manager.processUserInput( handle, '\r' );
+	    manager.processUserInput( handle, '\n' );
 	    line = reader.readLine();
 	}
+	
     }
 
 }

@@ -38,6 +38,7 @@ public class ReplListener implements Runnable {
                 int c = replStreamReader.read();
 		char theChar = (char) c;
                 buffer.append( theChar );
+
                 while( replStreamReader.ready() ) {
                     c = replStreamReader.read();
 		    theChar = (char) c;
@@ -48,15 +49,29 @@ public class ReplListener implements Runnable {
                 }
 
 		if( buffer.length() > 0 ) {
-		    /* Done reading contiguous output, so notify every observer */
 		    String output = buffer.toString();
 		    TextOutputEvent event = new TextOutputEvent( output, handle );
 		    for( TextOutputListener listener : observers ) {
 		        listener.receiveOutput( event );
 		    }
-		    /* Clear the buffer */
-		    buffer.delete(0, buffer.length());
+		    buffer = new StringBuilder();
 		}
+		
+		/*
+		String str = replStreamReader.readLine();	
+
+		while( str != null ) {
+
+		    TextOutputEvent event = new TextOutputEvent( str, handle );
+		    for( TextOutputListener listener : observers ) {
+			listener.receiveOutput(event);
+		    }
+
+		    str = replStreamReader.readLine();
+
+		}
+		*/
+
             } catch( IOException e) {
                 // Eat the exception and end execution
 		e.printStackTrace();
