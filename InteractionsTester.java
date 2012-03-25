@@ -22,7 +22,6 @@ public class InteractionsTester implements TextOutputListener  {
 	BufferedReader reader = new BufferedReader( new InputStreamReader( System.in ) );
 	String line = reader.readLine();
 	while( line != null ) {
-	    System.out.println("Sending " + line);
 	    for( char c : line.toCharArray() ) {
 		manager.processUserInput( handle, c );
 	    }

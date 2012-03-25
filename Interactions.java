@@ -86,6 +86,7 @@ public class Interactions {
     void processUserInput( char c ) {
         try {
             replWriter.write( c );
+            replWriter.flush();
         } catch(IOException e) {
             // Silently catch, and continue,
         }
