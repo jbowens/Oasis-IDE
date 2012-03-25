@@ -60,7 +60,7 @@ public class ReplListener implements Runnable {
             } catch( IOException e) {
                 // Eat the exception and end execution
 		e.printStackTrace();
-                done = true;
+                return;
             }
         }
 
@@ -69,7 +69,6 @@ public class ReplListener implements Runnable {
 	} catch( IOException e ) {
 	    // eat it and return
 	}
-	System.out.println("REPL Listener process finishing");
     }
 
 }
