@@ -1,4 +1,4 @@
-package Camel;
+package Camel.Interactions;
 
 public interface TextOutputListener {
 

@@ -1,27 +1,32 @@
-package Camel;
+package Camel.Interactions;
 
 import java.io.*;
 import java.util.List;
 import java.util.ArrayList;
 
+/*
+ * Represents an individual interactions/REPL instance. There is no need for this
+ * class to be accessed outside the package. Instead, you should use the 
+ * InteractionsManager which will delegate requests to the appropriate 
+ * Interactions instances.
+ */
 public class Interactions {
 
     int handle;
-    Config config;
     File definitionsFile;
+    String ocamlPath;
     Process replProcess;
     OutputStreamWriter replWriter;
     List<TextOutputListener> observers;
 
     /*
-     * Creates a new Interactions backend. It takes in a Config object that is
-     * used to get a retrieve various installation-specific settings and the filename
+     * Creates a new Interactions backend. It takes in the path to the OCaml runnable and the filename
      * of a definitions file. If the definitions filename is NULL, no initial definitions
      * are loaded.
      */
-    public Interactions(Config c, String filePath, int handle) throws FileNotFoundException, InteractionsUnavailableException {
+    public Interactions(String ocamlPath, String filePath, int handle) throws FileNotFoundException, InteractionsUnavailableException {
         observers = new ArrayList<TextOutputListener>();
-        this.config = c;
+        this.ocamlPath = ocamlPath;
 	this.handle = handle;
 
         /* Process the given file path. */

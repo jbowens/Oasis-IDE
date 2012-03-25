@@ -1,4 +1,4 @@
-package Camel;
+package Camel.Interactions;
 
 import java.util.*;
 import java.io.FileNotFoundException;
@@ -10,15 +10,15 @@ import java.io.FileNotFoundException;
  */
 public class InteractionsManager {
 
+    String ocamlLoc;
     protected ArrayList<Interactions> interactions;
     protected int currIndex;
-    Config config;
 
     /*
-     * Constructs a new InteractionsManager, given a Config object.
+     * Constructs a new InteractionsManager, given the location of the OCaml runnable
      */
-    public InteractionsManager(Config c) {
-        config = c;
+    public InteractionsManager(String ocamlLocation) {
+        ocamlLoc = ocamlLocation;
         currIndex = 0;
         interactions = new ArrayList<Interactions>();
     }
@@ -31,7 +31,7 @@ public class InteractionsManager {
      */
     public int newInteractionsInstance( String def ) throws FileNotFoundException, InteractionsUnavailableException {
         int index = currIndex++;
-        Interactions newInstance = new Interactions(config, def, index);
+        Interactions newInstance = new Interactions(ocamlLoc, def, index);
 	interactions.add(newInstance);
         return index;
     }

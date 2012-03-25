@@ -1,4 +1,4 @@
-package Camel;
+package Camel.Interactions;
 
 import java.io.*;
 import java.util.*;
@@ -54,23 +54,8 @@ public class ReplListener implements Runnable {
 		    for( TextOutputListener listener : observers ) {
 		        listener.receiveOutput( event );
 		    }
-		    buffer = new StringBuilder();
+		    buffer.delete(0, buffer.length());
 		}
-		
-		/*
-		String str = replStreamReader.readLine();	
-
-		while( str != null ) {
-
-		    TextOutputEvent event = new TextOutputEvent( str, handle );
-		    for( TextOutputListener listener : observers ) {
-			listener.receiveOutput(event);
-		    }
-
-		    str = replStreamReader.readLine();
-
-		}
-		*/
 
             } catch( IOException e) {
                 // Eat the exception and end execution

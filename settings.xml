@@ -2,8 +2,14 @@
 <settings>
 <info/>
 <settingData>
-<kvpair key="tabwidth">
-<value>4</value>
-</kvpair>
+    <kvpair key="tabwidth">
+        <value>4</value>
+    </kvpair>
+    <kvpair key="ocaml_binary_location">
+        <value>/usr/local/bin/ocaml</value>
+    </kvpair>
+    <kvpair key="ocaml_debug_location">
+        <value>/usr/local/bin/ocamldebug</value>
+    </kvapir>
 </settingData>
 </settings>

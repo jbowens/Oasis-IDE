@@ -1,4 +1,4 @@
-package Camel;
+package Camel.Interactions;
 
 /*
  * Thrown when a request is made to an Interactions instance that

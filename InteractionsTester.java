@@ -1,6 +1,7 @@
 package Camel;
 
 import java.io.*;
+import Camel.Interactions.*;
 
 public class InteractionsTester implements TextOutputListener  {
 
@@ -12,8 +13,7 @@ public class InteractionsTester implements TextOutputListener  {
 
     public static void main(String[] args) throws Exception {
 
-	Config config = new Config("./Camel/settings.xml");
-	InteractionsManager manager = new InteractionsManager(config);
+	InteractionsManager manager = new InteractionsManager("ocaml");
 	InteractionsTester tester = new InteractionsTester();
 
 	int handle = manager.newInteractionsInstance( null );
