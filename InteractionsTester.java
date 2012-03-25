@@ -16,7 +16,7 @@ public class InteractionsTester implements TextOutputListener  {
 	InteractionsManager manager = new InteractionsManager("ocaml");
 	InteractionsTester tester = new InteractionsTester();
 
-	int handle = manager.newInteractionsInstance( null );
+	int handle = manager.newInteractionsInstance( "../test-ml/listlength.ml" );
 	manager.registerOutputListener(tester, handle);
 
 	BufferedReader reader = new BufferedReader( new InputStreamReader( System.in ) );

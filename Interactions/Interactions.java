@@ -41,14 +41,9 @@ public class Interactions {
         String[] cmd;
 
         /* Create the terminal command to start the OCaml REPL. */
-        if( this.definitionsFile != null ) {
-            cmd = new String[2];
-            cmd[0] = "ocaml";
-            cmd[1] = this.definitionsFile.getPath();
-        } else {
-            cmd = new String[1];
-            cmd[0] = "ocaml";
-        }
+        cmd = new String[1];
+        cmd[0] = "ocaml";
+
         /* Start the OCaml process */
         Runtime runtime = Runtime.getRuntime();
         try {
@@ -63,6 +58,17 @@ public class Interactions {
 
         /* Begin the read process for this Interactions REPL */
         new Thread(readProcess).start();        
+
+        /* Load the defintions */
+        try {
+            if( definitionsFile != null ) {
+                BufferedWriter writer = new BufferedWriter(replWriter);
+                writer.write( "#use \"" + definitionsFile.getAbsolutePath() + "\";;\n" );
+                writer.flush();
+            }
+        } catch(IOException e) {
+            throw new InteractionsUnavailableException();
+        }
 
     }
 
