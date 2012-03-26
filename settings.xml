@@ -5,7 +5,7 @@
     <kvpair key="tabwidth">
         <value>4</value>
     </kvpair>
-    <kvpair key="ocaml_binary_location">
+    <kvpair key="ocaml_location">
         <value>/usr/local/bin/ocaml</value>
     </kvpair>
     <kvpair key="ocaml_debug_location">
