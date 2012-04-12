@@ -6,14 +6,18 @@ import java.util.LinkedList;
 
 /**
  * Splits an OCaml document by the comments. (Necessary because OCaml allows nested
- * comments)
+ * comments) This can be used to preprocess OCaml before passing off the text to a
+ * lexer.
  */
 public class CommentSeparator {
   
-  public CommentSeparator() {
+  public CommentSeparator() { }
 
-  }
-
+  /**
+   * Given a reader that reads an OCaml Program, this method will return
+   * a list of TextBlocks containing the text of the program. It will be
+   * separated into comment or unknown types.
+   */
   public List<TextBlock> separateComments(Reader r) {
       
       /* Records how many comments deep we are. */
@@ -67,7 +71,7 @@ public class CommentSeparator {
         nextChar = (char) r.read();
       }
 
-      current.appendText( String.valueOf( lastChar ) );
+      current.appendText( String.valueOf( lastChar ) );x
 
       return els;
 
