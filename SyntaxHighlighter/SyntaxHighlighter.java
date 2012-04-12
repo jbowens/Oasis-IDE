@@ -1,4 +1,4 @@
-package Camel.SyntaxHighlighter;
+package camel.syntaxhighlighter;
 
 /**
  * Syntax highlighter interface

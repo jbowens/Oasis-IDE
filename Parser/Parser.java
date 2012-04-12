@@ -1,4 +1,4 @@
-package Camel.Parser;
+package camel.parser;
 
 /**
  * An OCaml Parser that uses the "-dparsetree" ocamlc option to build an OCaml parse
