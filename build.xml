@@ -7,6 +7,11 @@
   <property name="build" location="build"/>
   <property name="dist"  location="dist"/>
 
+  <path id="camel.class.path">
+    <pathelement location="build" />
+    <pathelement location="/usr/share/java/junit4.jar" />
+  </path>
+
   <target name="init">
     <!-- Create the time stamp -->
     <tstamp/>
@@ -17,7 +22,7 @@
   <target name="compile" depends="init"
         description="compile the source " >
     <!-- Compile the java code from ${src} into ${build} -->
-    <javac srcdir="${src}" destdir="${build}"/>
+    <javac srcdir="${src}" destdir="${build}" classpathref="camel.class.path" includeantruntime="false" />
   </target>
 
   <target name="dist" depends="compile"
@@ -26,7 +31,18 @@
     <mkdir dir="${dist}/lib"/>
 
     <!-- Put everything in ${build} into the MyProject-${DSTAMP}.jar file -->
-    <jar jarfile="${dist}/lib/Camel-${DSTAMP}.jar" basedir="${build}"/>
+    <jar jarfile="${dist}/lib/Camel-${DSTAMP}.jar" basedir="${build}" classpathref="camel.class.path" />
+  </target>
+
+  <target name="test" description="test using junit" depends="compile">
+  <junit printsummary="yes" haltonfailure="yes">
+    <classpath refid="camel.class.path" />
+    <batchtest fork="yes">
+        <fileset dir="{$src}/tests">
+        </fileset>
+        <formatter type="plain" usefile="false" />
+    </batchest>
+  </unit>
   </target>
 
   <target name="clean"

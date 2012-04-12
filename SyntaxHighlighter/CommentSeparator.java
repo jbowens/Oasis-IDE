@@ -27,6 +27,7 @@ public class CommentSeparator {
 
       TextBlock prev = null;
       TextBlock current = new TextBlock();
+      els.add(current);
       char lastlastChar = '\0';
       char lastChar = '\0';
       char nextChar = (char) r.read();
