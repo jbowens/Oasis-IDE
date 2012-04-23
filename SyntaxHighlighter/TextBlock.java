@@ -4,12 +4,12 @@ public class TextBlock {
 
   public enum TYPE { COMMENT, UNKNOWN };
   protected int startLine;
-  protected int endLine;
   protected int startChar;
-  protected int endChar;
   protected String text;
 
-  public TextBlock() {
+  public TextBlock(int startLine, int startChar) {
+    this.startLine = startLine;
+    this.startChar = startChar;
   }
 
   public void appendText(String text) {

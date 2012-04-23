@@ -31,11 +31,13 @@ public class CommentSeparator {
       List<TextBlock> els = new LinkedList<TextBlock>();
 
       TextBlock prev = null;
-      TextBlock current = new TextBlock();
+      TextBlock current = new TextBlock(0, 1);
       els.add(current);
       char lastlastChar =  (char) -1;
       char lastChar = (char) -1;
       char nextChar = (char) r.read();
+      int lineNumber = 0;
+      int charNumber = 1;
       while( nextChar !=  (char) -1 ) {
 
         /* Beginning of a comment */
@@ -45,7 +47,7 @@ public class CommentSeparator {
           if( commentStack == 1 ) {
             // this is the first comment in this stack. Let's create a new comment block
             prev = current;
-            current = new Comment();
+            current = new Comment(lineNumber, charNumber);
             els.add(current);
           }
 
@@ -58,7 +60,7 @@ public class CommentSeparator {
           if( commentStack == 0 ) {
             // We just got out of a deep comment stack, so let's create a new text block
             prev = current;
-            current = new TextBlock();
+            current = new TextBlock(lineNumber, charNumber);
             els.add(current);
           }
 
@@ -79,6 +81,13 @@ public class CommentSeparator {
         lastlastChar = lastChar;
         lastChar = nextChar;
         nextChar = (char) r.read();
+
+        // update character and line numbers
+        charNumber++;
+        if( lastChar == '\n' ) {
+          lineNumber++;
+          charNumber = 0;
+        }
       }
 
       current.appendText( String.valueOf( lastChar ) );
