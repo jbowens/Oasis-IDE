@@ -19,12 +19,12 @@ public class CommentSeparatorTests {
         try {
           CommentSeparator separator = new CommentSeparator();
 
-          List<TextBlock> results = separator.separateComments(reader);
+          List<Token> results = separator.separateComments(reader);
 
           assert( results.size() == 3 );
           assert( results.get(1).getText().equals("(* this is a comment! *)") );
-          assert( results.get(1).getType() == TextBlock.TYPE.COMMENT );
-          assert( results.get(2).getType() == TextBlock.TYPE.UNKNOWN );
+          assert( results.get(1).getType() == TokenType.COMMENT );
+          assert( results.get(2).getType() == TokenType.UNKNOWN );
 
         } catch( java.io.IOException e ) {
           System.err.println("I/O ERROR");

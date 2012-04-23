@@ -5,6 +5,9 @@ package camel.syntaxhighlighter;
  */
 public class OCamlHighlighter implements SyntaxHighlighter {
   
+  /**
+   * Creates a new syntax highlighter.
+   */
   public OCamlHighlighter() {
 
     
