@@ -1,6 +1,7 @@
 package camel.syntaxhighlighter;
 
 import java.io.Reader;
+import java.io.IOException;
 import java.util.List;
 import java.util.LinkedList;
 
@@ -17,8 +18,12 @@ public class CommentSeparator {
    * Given a reader that reads an OCaml Program, this method will return
    * a list of TextBlocks containing the text of the program. It will be
    * separated into comment or unknown types.
+   *
+   * @param r a reader to read the OCaml source from
+   *
+   * @return a list of textblocks, with comments and other text separated
    */
-  public List<TextBlock> separateComments(Reader r) {
+  public List<TextBlock> separateComments(Reader r) throws IOException {
       
       /* Records how many comments deep we are. */
       int commentStack = 0;
@@ -28,11 +33,12 @@ public class CommentSeparator {
       TextBlock prev = null;
       TextBlock current = new TextBlock();
       els.add(current);
-      char lastlastChar = '\0';
-      char lastChar = '\0';
+      char lastlastChar =  (char) -1;
+      char lastChar = (char) -1;
       char nextChar = (char) r.read();
-      while( nextChar != '\0' ) {
+      while( nextChar !=  (char) -1 ) {
 
+        /* Beginning of a comment */
         if( lastChar == '(' && nextChar == '*' ) {
           commentStack++;
 
@@ -45,6 +51,7 @@ public class CommentSeparator {
 
           current.appendText( String.valueOf( lastChar ) );
 
+        /* End of a comment */
         } else if( lastChar == '*' && nextChar == ')' && lastlastChar != '(' ) {
           commentStack--;
 
@@ -61,18 +68,20 @@ public class CommentSeparator {
           // move forward the character twice on this one
           lastlastChar = lastChar;
           lastChar = nextChar;
-          nextChar = (char) reader.read();
+          nextChar = (char) r.read();
 
+        /* Regular text */
         } else {
           current.appendText( String.valueOf( lastChar ) );
         }
 
+        // Get the next character
         lastlastChar = lastChar;
         lastChar = nextChar;
         nextChar = (char) r.read();
       }
 
-      current.appendText( String.valueOf( lastChar ) );x
+      current.appendText( String.valueOf( lastChar ) );
 
       return els;
 

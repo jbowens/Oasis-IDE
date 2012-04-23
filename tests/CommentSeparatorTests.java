@@ -1,3 +1,5 @@
+package camel.tests;
+
 import org.junit.*;
 import java.util.*;
 import org.junit.Assert.*;
@@ -10,20 +12,24 @@ public class CommentSeparatorTests {
     @Test
     public void testSimpleProgram() {
     	
-        String simpleProg = "(* this is a comment! *)
-let rec length(alist : 'a list) = match alist with
-| [] -> 0
-| _::tl -> 1 + length tl;;
-
-length( [5; 4; 3; 2; 1] );;";
+        String simpleProg = "(* this is a comment! *)\nlet rec length(alist : 'a list) = match alist with\n| [] -> 0\n| _::tl -> 1 + length tl;;\n\nlength( [5; 4; 3; 2; 1] );;";
 
         StringReader reader = new StringReader(simpleProg);
 
-        CommentSeparator separator = new CommentSeparator();
+        try {
+          CommentSeparator separator = new CommentSeparator();
 
-        List<TextBlock> results = separator.separateComments(separator);
+          List<TextBlock> results = separator.separateComments(reader);
 
-        assert( results.size() == 3 );
+          assert( results.size() == 3 );
+          assert( results.get(1).getText().equals("(* this is a comment! *)") );
+          assert( results.get(1).getType() == TextBlock.TYPE.COMMENT );
+          assert( results.get(2).getType() == TextBlock.TYPE.UNKNOWN );
+
+        } catch( java.io.IOException e ) {
+          System.err.println("I/O ERROR");
+          assert( false );
+        }
 
     }
 

@@ -1,11 +1,11 @@
 package camel.syntaxhighlighter;
 
-public Comment extends TextBlock {
+public class Comment extends TextBlock {
 
   public Comment() {
   }
 
-  @override
+  @Override
   public TextBlock.TYPE getType() {
     return TextBlock.TYPE.COMMENT;
   }

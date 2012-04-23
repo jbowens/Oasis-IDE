@@ -1,6 +1,6 @@
 package camel.syntaxhighlighter;
 
-public TextBlock {
+public class TextBlock {
 
   public enum TYPE { COMMENT, UNKNOWN };
   protected int startLine;
@@ -12,7 +12,7 @@ public TextBlock {
   public TextBlock() {
   }
 
-  public String appendText(String text) {
+  public void appendText(String text) {
     this.text = this.text + text;
   }
 
@@ -21,8 +21,11 @@ public TextBlock {
   }
 
   public TextBlock.TYPE getType() {
-    return UNKNOWN;
+    return TextBlock.TYPE.UNKNOWN;
   }
 
+  public String toString() {
+    return text;
+  }
 
 }
