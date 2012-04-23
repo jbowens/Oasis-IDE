@@ -10,8 +10,15 @@ public class UnknownToken extends Token {
   /**
    * Constructs a new unknown token.
    */
-  public UnknownToken(int line, int c) {
-    super(TokenType.UNKNOWN, line, c);
+  public UnknownToken(int charStart, int length) {
+    super(TokenType.UNKNOWN, charStart, length);
+  }
+
+  /**
+   * Constructs a new unknown token with unknown length.
+   */
+  public UnknownToken(int charStart) {
+    super(TokenType.UNKNOWN, charStart, 0);
   }
 
 }

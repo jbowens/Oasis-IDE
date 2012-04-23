@@ -8,11 +8,11 @@ public class Token {
   /* The type of the token */
   protected TokenType type;
 
-  /* The line this token begins */
-  protected int startLine;
-
-  /* The character on the line that token begins */
+  /* The character number where this token begins */
   protected int startChar;
+
+  /* The length of this token */
+  protected int length;
 
   /* The raw text of the token */
   protected String text;
@@ -20,9 +20,9 @@ public class Token {
   /**
    * Creates a new token.
    */
-  public Token(TokenType type, int startLine, int startChar) {
+  public Token(TokenType type, int startChar, int length) {
     this.type = type;
-    this.startLine = startLine;
+    this.length = length;
     this.startChar = startChar;
   }
 
@@ -32,6 +32,7 @@ public class Token {
    */
   public void appendText(String text) {
     this.text = this.text + text;
+    this.length++;
   }
 
   /**
@@ -48,6 +49,15 @@ public class Token {
    */
   public TokenType getType() {
     return type;
+  }
+
+  /**
+   * Returns the length of this token.
+   *
+   * @return the number of characters in the token
+   */
+  public int getLength() {
+    return length;
   }
 
   /**

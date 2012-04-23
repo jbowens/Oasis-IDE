@@ -23,20 +23,19 @@ public class CommentSeparator {
    *
    * @return a list of textblocks, with comments and other text separated
    */
-  public List<TextBlock> separateComments(Reader r) throws IOException {
+  public List<Token> separateComments(Reader r) throws IOException {
       
       /* Records how many comments deep we are. */
       int commentStack = 0;
 
-      List<TextBlock> els = new LinkedList<TextBlock>();
+      List<Token> els = new LinkedList<Token>();
 
-      TextBlock prev = null;
-      TextBlock current = new TextBlock(0, 1);
+      Token prev = null;
+      Token current = new UnknownToken(1);
       els.add(current);
       char lastlastChar =  (char) -1;
       char lastChar = (char) -1;
       char nextChar = (char) r.read();
-      int lineNumber = 0;
       int charNumber = 1;
       while( nextChar !=  (char) -1 ) {
 
@@ -47,7 +46,7 @@ public class CommentSeparator {
           if( commentStack == 1 ) {
             // this is the first comment in this stack. Let's create a new comment block
             prev = current;
-            current = new Comment(lineNumber, charNumber);
+            current = new Comment(charNumber);
             els.add(current);
           }
 
@@ -60,7 +59,7 @@ public class CommentSeparator {
           if( commentStack == 0 ) {
             // We just got out of a deep comment stack, so let's create a new text block
             prev = current;
-            current = new TextBlock(lineNumber, charNumber);
+            current = new UnknownToken(charNumber);
             els.add(current);
           }
 
@@ -82,12 +81,8 @@ public class CommentSeparator {
         lastChar = nextChar;
         nextChar = (char) r.read();
 
-        // update character and line numbers
+        // update character #
         charNumber++;
-        if( lastChar == '\n' ) {
-          lineNumber++;
-          charNumber = 0;
-        }
       }
 
       current.appendText( String.valueOf( lastChar ) );
