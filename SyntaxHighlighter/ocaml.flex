@@ -97,6 +97,9 @@ Identifier = [:jletter:][:jletterdigit:]*
   "abs"                   |
   "not"                   |
   "&&"                    |
+  "compare"               |
+  "raise"                 |
+  "failwith"              |
   "||"                    |
   "**"                    |
   "sqrt"                  |
@@ -105,17 +108,42 @@ Identifier = [:jletter:][:jletterdigit:]*
   "/."                    |
   "+."                    |
   "-."                    |
+  "~-"                    |
+  "~+"                    |
+  "max_int"               |
+  "min_int"               |
+  "land"                  |
+  "lor"                   |
+  "lxor"                  |
+  "lnot"                  |
+  "lsl"                   |
+  "lsr"                   |
+  "asr"                   |
+  "~-."                   |
+  "~+."                   |
   "ceil"                  |
   "floor"                 |
   "exp"                   |
+  "expm1"                 |
   "log"                   |
   "log10"                 |
+  "log1p"                 |
   "cos"                   |
   "sin"                   |
   "tan"                   |
   "acos"                  |
   "asin"                  |
   "atan"                  |
+  "atan2"                 |
+  "cosh"                  |
+  "sinh"                  |
+  "tanh"                  |
+  "abs_float"             |
+  "mod_float"             |
+  "frexp"                 |
+  "ldexp"                 |
+  "modf"                  |
+  "classify_float"        |
   "truncate"              |
   "int_of_char"           |
   "char_of_int"           |
@@ -167,7 +195,33 @@ Identifier = [:jletter:][:jletterdigit:]*
   "print_string"          |
   "print_endline"         |
   "print_newline"         |
+  "prerr_char"            |
+  "prerr_string"          |
+  "prerr_int"             |
+  "prerr_float"           |
+  "prerr_endline"         |
+  "prerr_newline"         |
   "read_line"             |
   "read_int"              |
-  "read_float"            { return token(TokenType.OPERATOR) }
+  "read_float"            |
+  "ignore"                |
+  "ref"                   |
+  "!"                     |
+  ":="                    |
+  "incr"                  |
+  "decr"                  |
+  "exit"                  { return token(TokenType.OPERATOR) }
+
+  "[]"                    |
+  "infinity"              |
+  "neg_infinity"          |
+  "nan"                   |
+  "max_float"             |
+  "min_float"             |
+  "epsilon_float"         |
+  "in_channel"            |
+  "out_channel"           |
+  "stdin"                 |
+  "stdout"                |
+  "stderr"                { return token(TokenType.SPECIAL_VALUE) }
 }

@@ -15,6 +15,7 @@ public enum TokenType {
   METASTRING,
   COMMENT,
   TYPE,
+  SPECIAL_VALUE,
   DEFAULT;
 
 }
