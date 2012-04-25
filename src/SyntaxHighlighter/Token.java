@@ -17,6 +17,9 @@ public class Token {
   /* The raw text of the token */
   protected String text;
 
+  /* The pair number of this token. */
+  protected byte pair;
+
   /**
    * Creates a new token.
    */
@@ -24,6 +27,11 @@ public class Token {
     this.type = type;
     this.length = length;
     this.startChar = startChar;
+  }
+
+  public Token(TokenType type, byte pair) {
+    this.type = type;
+    this.pair = pair;
   }
 
   /**

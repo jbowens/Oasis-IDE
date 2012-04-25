@@ -4,7 +4,7 @@ package camel.syntaxhighlighter;
 
 %public
 %class OCamlLexer
-%extends DefaultJFlexLexer
+%extends JFlexLexer
 %final
 %unicode
 %char
