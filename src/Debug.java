@@ -33,14 +33,14 @@ public class Debug {
     		proc = Runtime.getRuntime().exec(debugArgs);
     		args = proc.getInputStream();
     		output = proc.getOutputStream();
-    		String line = output.readLine();
-    		while(line != null){
-    			line = line + output.readLine();
-    		}
-    		displayInput(line);
-    		while(line != EOF){
-    			args.write(getStepInfo());
-    		}
+    		String line; //= output.readLine();
+    		//while(line != null){
+    		//	line = line + output.readLine();
+    		//}
+    		//displayInput(line);
+    		//while(line != null){
+    			//args.write(getStepInfo());
+    		//}
         
     	}
     	catch(IOException e){

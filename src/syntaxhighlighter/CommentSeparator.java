@@ -46,7 +46,7 @@ public class CommentSeparator {
           if( commentStack == 1 ) {
             // this is the first comment in this stack. Let's create a new comment block
             prev = current;
-            current = new Comment(charNumber);
+            current = new CommentToken(charNumber);
             els.add(current);
           }
 

@@ -1,10 +1,10 @@
 package camel.syntaxhighlighter;
 
 import java.io.Reader;
-import java.util.Reader;
+import java.util.List;
 import java.io.IOException;
 
-public abstract class FlexLexer {
+public abstract class JFlexLexer {
 
     protected int tokenStart;
     protected int tokenLength;

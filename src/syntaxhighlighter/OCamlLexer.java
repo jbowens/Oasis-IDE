@@ -1409,11 +1409,11 @@ public final class OCamlLexer extends JFlexLexer {
 
       switch (zzAction < 0 ? zzAction : ZZ_ACTION[zzAction]) {
         case 4: 
-          { return token(TokenType.OPERATOR)
+          { return token(TokenType.OPERATOR);
           }
         case 14: break;
         case 12: 
-          { return token(TokenType.SPECIAL_VALUE)
+          { return token(TokenType.SPECIAL_VALUE);
           }
         case 15: break;
         case 6: 
@@ -1427,11 +1427,11 @@ public final class OCamlLexer extends JFlexLexer {
           }
         case 17: break;
         case 11: 
-          { return token(TokenType.TYPE)
+          { return token(TokenType.TYPE);
           }
         case 18: break;
         case 10: 
-          { return token(TokenType.KEYWORD)
+          { return token(TokenType.KEYWORD);
           }
         case 19: break;
         case 2: 

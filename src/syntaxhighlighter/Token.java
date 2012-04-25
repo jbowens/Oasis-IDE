@@ -29,7 +29,10 @@ public class Token {
     this.startChar = startChar;
   }
 
-  public Token(TokenType type, byte pair) {
+  public Token(TokenType type, int startChar, int length, byte pair) {
+    this.type = type;
+    this.length = length;
+    this.startChar = startChar;
     this.type = type;
     this.pair = pair;
   }

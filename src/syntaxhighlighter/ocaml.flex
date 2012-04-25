@@ -120,7 +120,7 @@ SingleCharacter = [^\r\n\'\\]
   "virtual"       |
   "when"          |
   "while"         |
-  "with"          { return token(TokenType.KEYWORD) }
+  "with"          { return token(TokenType.KEYWORD); }
 
   "int"           |
   "char"          |
@@ -136,7 +136,7 @@ SingleCharacter = [^\r\n\'\\]
   "int32"         |
   "int64"         |
   "nativeint"     |
-  "lazy_t"        { return token(TokenType.TYPE) }
+  "lazy_t"        { return token(TokenType.TYPE); }
 
   "-"                     |
   "+"                     |
@@ -259,7 +259,7 @@ SingleCharacter = [^\r\n\'\\]
   ":="                    |
   "incr"                  |
   "decr"                  |
-  "exit"                  { return token(TokenType.OPERATOR) }
+  "exit"                  { return token(TokenType.OPERATOR); }
 
   "[]"                    |
   "infinity"              |
@@ -272,7 +272,7 @@ SingleCharacter = [^\r\n\'\\]
   "out_channel"           |
   "stdin"                 |
   "stdout"                |
-  "stderr"                { return token(TokenType.SPECIAL_VALUE) }
+  "stderr"                { return token(TokenType.SPECIAL_VALUE); }
 
     /* string literal */
   \"                             {  
