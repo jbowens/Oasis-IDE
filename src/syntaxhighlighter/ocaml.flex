@@ -67,7 +67,7 @@ Exponent = [eE] [+-]? [0-9_]+
 StringCharacter = [^\r\n\"\\]
 SingleCharacter = [^\r\n\'\\]
 
-%state STRING, CHARLITERAL, JDOC, JDOC_TAG
+%state STRING, CHARLITERAL
 
 %%
 
@@ -273,6 +273,15 @@ SingleCharacter = [^\r\n\'\\]
   "stdin"                 |
   "stdout"                |
   "stderr"                { return token(TokenType.SPECIAL_VALUE); }
+
+  "("                     |
+  ")"                     |
+  "["                     |
+  "]"                     |
+  "{"                     |
+  "}"                     |
+  ";"                     |
+  ":"                     { return token(TokenType.DELIMETER); }
 
     /* string literal */
   \"                             {  

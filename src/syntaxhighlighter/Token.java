@@ -75,7 +75,7 @@ public class Token {
    * A string representation of this token.
    */
   public String toString() {
-    return text;
+    return String.valueOf(type);
   }
 
 }
