@@ -53,7 +53,10 @@ OctDigit          = [0-7_]
 
 BinIntegerLiteral = 0 [bB] {BinDigit} {1,50}
 BinDigit          = [0-1_]
-    
+
+/* Generic type limits */
+GenericType       = \'[a-zA-Z]
+
 /* floating point literals */        
 FloatLiteral  = ({FLit1}|{FLit2}|{FLit3}) {Exponent}? [fF]
 DoubleLiteral = ({FLit1}|{FLit2}|{FLit3}) {Exponent}?
@@ -281,7 +284,8 @@ SingleCharacter = [^\r\n\'\\]
   "{"                     |
   "}"                     |
   ";"                     |
-  ":"                     { return token(TokenType.DELIMETER); }
+  ":"                     |
+  "|"                     { return token(TokenType.DELIMETER); }
 
     /* string literal */
   \"                             {  
@@ -289,6 +293,8 @@ SingleCharacter = [^\r\n\'\\]
                                     tokenStart = yychar; 
                                     tokenLength = 1; 
                                  }
+
+ {GenericType}                   { return token(TokenType.TYPE); }
 
   /* character literal */
   \'                             {  
