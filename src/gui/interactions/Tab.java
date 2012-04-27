@@ -11,10 +11,11 @@ import camel.interactions.*;
 
 public class Tab extends JPanel implements TextOutputListener {
 
-	JEditorPane textPane;
-	InteractionsManager _im;
-	int _handle;
-	String query;
+	protected JEditorPane textPane;
+	protected InteractionsManager _im;
+	protected int _handle;
+	protected String query;
+	protected int counter = 0;
 
 	public Tab(InteractionsManager im, String filePath) {
 		textPane = new JEditorPane();
@@ -29,15 +30,22 @@ public class Tab extends JPanel implements TextOutputListener {
 		} catch(Exception e) {}
 
 	}
+
+	/**
+	 * Required by the TextOutputListener interface. Receives
+	 * output from the interactions backend.
+	 */
 	public void receiveOutput(TextOutputEvent evt)
 	{
 		textPane.setText(textPane.getText() + evt.getText());
         textPane.setCaretPosition(textPane.getText().length());	
 	}
+
 	public String getText()
 	{
 		return textPane.getText();
 	}
+
 	public class KListener implements KeyListener
 	{
 		public KListener()

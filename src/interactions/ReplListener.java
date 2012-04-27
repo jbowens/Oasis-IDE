@@ -90,6 +90,10 @@ public class ReplListener implements Runnable {
      * Closes the listener
      */
     protected void close() {
-        replStreamReader.close();
+        try {
+            replStreamReader.close();
+        } catch (IOException e) {
+            // eat the exception
+        }
     }
 }

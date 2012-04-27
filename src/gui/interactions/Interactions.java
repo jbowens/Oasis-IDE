@@ -7,9 +7,11 @@ import javax.swing.*;
 import camel.interactions.*;
 import java.awt.GridBagLayout;
 
-public class Interactions extends JPanel{
+public class Interactions extends JPanel {
+
 	protected JTabbedPane tabs;
-	InteractionsManager _im;
+	protected InteractionsManager _im;
+
 	public Interactions(InteractionsManager im)
 	{
 		super(new GridBagLayout());

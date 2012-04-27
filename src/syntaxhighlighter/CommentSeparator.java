@@ -84,8 +84,6 @@ public class CommentSeparator {
 
       current.appendText( String.valueOf( lastChar ) );
 
-      return els;
-
   }
 
 }

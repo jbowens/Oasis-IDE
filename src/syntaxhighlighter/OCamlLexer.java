@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.io.StringReader;
 import java.io.Reader;
 import java.util.List;
+import java.io.IOException;
 
 /**
  * This class can be used to lex an entire OCaml document. It is used by the
@@ -34,7 +35,7 @@ public class OCamlLexer {
    * @input input a reader for the text that should be tokenized
    * @input tokens a list of tokens to be populated with the tokens of input
    */
-  public void tokenize(Reader input, List<Token> tokens) {
+  public void tokenize(Reader input, List<Token> tokens) throws IOException {
 
     /* Temporary list of tokens returned from comment separation preprocess */
     ArrayList<Token> initialTokens = new ArrayList<Token>();

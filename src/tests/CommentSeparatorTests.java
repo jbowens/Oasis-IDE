@@ -19,7 +19,8 @@ public class CommentSeparatorTests {
         try {
           CommentSeparator separator = new CommentSeparator();
 
-          List<Token> results = separator.separateComments(reader);
+          ArrayList<Token> results = new ArrayList<Token>();
+          separator.separateComments(reader, results);
 
           assert( results.size() == 3 );
           assert( results.get(1).getText().equals("(* this is a comment! *)") );

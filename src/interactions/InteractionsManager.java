@@ -84,7 +84,7 @@ public class InteractionsManager {
      * any child threads started by the interactions manager.
      */
     public void close() {
-        for( Interaction i : interactions )
+        for( Interactions i : interactions )
             i.close();
         interactions.clear();
     }

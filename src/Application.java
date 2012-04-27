@@ -79,7 +79,7 @@ public class Application {
             }
             catch( SettingsSaveException e2 ) {
                 // Completely unsuccessful, so we have to just ditch the settings.
-                System.err.println("Unable to save settings.")
+                System.err.println("Unable to save settings.");
             }
         }
     }

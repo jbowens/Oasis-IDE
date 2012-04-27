@@ -18,16 +18,15 @@ public class LexerTests {
         StringReader reader = new StringReader(simpleProg);
 
 
-          List<Token> results = new ArrayList<Token>();
+        List<Token> results = new ArrayList<Token>();
 
-          CommentlessOCamlLexer lexer = new CommentlessOCamlLexer();
-          lexer.parse( reader, results );
+        CommentlessOCamlLexer lexer = new CommentlessOCamlLexer();
+        lexer.parse( reader, results );
 
-          for( Token t : results )
-            System.out.println(t.toString());
+        for( Token t : results )
+          System.out.println(t.toString());
 
-      
-
+    
     }
 
 }
