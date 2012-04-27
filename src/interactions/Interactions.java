@@ -16,6 +16,7 @@ public class Interactions {
     File definitionsFile;
     String ocamlPath;
     Process replProcess;
+    ReplListener readProcess;
     OutputStreamWriter replWriter;
     List<TextOutputListener> observers;
 
@@ -27,7 +28,7 @@ public class Interactions {
     public Interactions(String ocamlPath, String filePath, int handle) throws FileNotFoundException, InteractionsUnavailableException {
         observers = new ArrayList<TextOutputListener>();
         this.ocamlPath = ocamlPath;
-	this.handle = handle;
+	    this.handle = handle;
 
         /* Process the given file path. */
         if( filePath == null || filePath.equals("") )
@@ -54,7 +55,7 @@ public class Interactions {
         replWriter = new OutputStreamWriter( replProcess.getOutputStream() );
 
         InputStream processInputStream = replProcess.getInputStream();
-        Runnable readProcess = new ReplListener( processInputStream, this.observers, handle );
+        readProcess = new ReplListener( processInputStream, this.observers, handle );
 
         /* Begin the read process for this Interactions REPL */
         new Thread(readProcess).start();        
@@ -111,6 +112,8 @@ public class Interactions {
         if( replWriter != null ) {
             try {
                 replWriter.close();
+                readProcess.kill();
+                replProcess.destroy();
             } catch(IOException e) {
                 // just eat the exception
             }
