@@ -1,4 +1,4 @@
-package debug;
+package camel.debug;
 
 import java.io.IOException;
 import java.io.InputStream;
