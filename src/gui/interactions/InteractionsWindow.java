@@ -7,12 +7,12 @@ import javax.swing.*;
 import camel.interactions.*;
 import java.awt.GridBagLayout;
 
-public class Interactions extends JPanel {
+public class InteractionsWindow extends JPanel {
 
 	protected JTabbedPane tabs;
 	protected InteractionsManager _im;
 
-	public Interactions(InteractionsManager im)
+	public InteractionsWindow(InteractionsManager im)
 	{
 		super(new GridBagLayout());
 		tabs = new JTabbedPane();
@@ -29,15 +29,16 @@ public class Interactions extends JPanel {
 		Tab t = new Tab(_im,filePath);
 		tabs.addTab("int window", t);
 	}
-
+	/*
 	public static void main(String[] args)
 	{
 		JFrame f = new JFrame();
 		InteractionsManager im = new InteractionsManager("ocaml");
-		Interactions iw = new Interactions(im);
+		InteractionsWindow iw = new InteractionsWindow(im);
 		f.add(iw);
 		f.pack();
 		f.setVisible(true);
 	}
+	*/
 	
 }

@@ -75,7 +75,9 @@ public class InteractionsManager {
 
         /* Pass on the input */
         for( char c : str.toCharArray() )
+		{
             interactions.get(id).processUserInput( c );
+		}
     }
 
     /**
