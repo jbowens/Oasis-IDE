@@ -21,7 +21,7 @@ public class LexerTests {
         List<Token> results = new ArrayList<Token>();
 
         CommentlessOCamlLexer lexer = new CommentlessOCamlLexer();
-        lexer.parse( reader, results );
+        lexer.parse( reader, results, 0 );
 
         for( Token t : results )
           System.out.println(t.toString());

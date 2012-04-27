@@ -49,7 +49,7 @@ public class OCamlLexer {
       if( t.getType() == TokenType.COMMENT )
         tokens.add( t );
       else if( t.getType() == TokenType.UNKNOWN )
-        lexer.parse(new StringReader(t.getText()), tokens);
+        lexer.parse(new StringReader(t.getText()), tokens, t.getStart());
       else
         tokens.add( t );
 

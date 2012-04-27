@@ -63,6 +63,15 @@ public class Token {
   }
 
   /**
+   * Returns the character number where this token begins.
+   *
+   * @return the start character of this token
+   */
+  public int getStart() {
+    return startChar;
+  }
+
+  /**
    * Returns the length of this token.
    *
    * @return the number of characters in the token
@@ -76,6 +85,13 @@ public class Token {
    */
   public String toString() {
     return String.valueOf(type);
+  }
+
+  /**
+   * Sets a start for the token.
+   */
+  public void setStart(int start) {
+    this.startChar = start;
   }
 
 }

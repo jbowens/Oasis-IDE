@@ -321,7 +321,7 @@ SingleCharacter = [^\r\n\'\\]
   {DoubleLiteral}[dD]            { return token(TokenType.NUMBER); }
 
   /* whitespace */
-  {WhiteSpace}                   { }
+  {WhiteSpace}                   { return token(TokenType.DEFAULT); }
 
   /* identifiers */ 
   {Identifier}                   { return token(TokenType.IDENTIFIER); }

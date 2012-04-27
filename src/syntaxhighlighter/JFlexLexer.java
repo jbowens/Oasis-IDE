@@ -29,10 +29,11 @@ public abstract class JFlexLexer {
         return new Token(type, yychar() + offset, yylength(), (byte) pairValue);
     }
 
-    public void parse(Reader reader, List<Token> tokens) {
+    public void parse(Reader reader, List<Token> tokens, int offset) {
         try {
             yyreset(reader);
             for (Token t = yylex(); t != null; t = yylex()) {
+                t.setStart(t.getStart() + offset);
                 tokens.add(t);
             }
         } catch (IOException ex) {
