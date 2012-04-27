@@ -20,15 +20,12 @@ public class CommentSeparator {
    * separated into comment or unknown types.
    *
    * @param r a reader to read the OCaml source from
-   *
-   * @return a list of textblocks, with comments and other text separated
+   * @param els a list of tokens to populate with the tokens of r
    */
-  public List<Token> separateComments(Reader r) throws IOException {
+  public void separateComments(Reader r, List<Token> els) throws IOException {
       
       /* Records how many comments deep we are. */
       int commentStack = 0;
-
-      List<Token> els = new LinkedList<Token>();
 
       Token prev = null;
       Token current = new UnknownToken(1);

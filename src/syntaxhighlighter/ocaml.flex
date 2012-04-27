@@ -3,7 +3,7 @@ package camel.syntaxhighlighter;
 %% 
 
 %public
-%class OCamlLexer
+%class CommentlessOCamlLexer
 %extends JFlexLexer
 %final
 %unicode
@@ -15,7 +15,7 @@ package camel.syntaxhighlighter;
      * Create an empty lexer, yyrset will be called later to reset and assign
      * the reader
      */
-    public OCamlLexer() {
+    public CommentlessOCamlLexer() {
         super();
     }
 

@@ -20,7 +20,7 @@ public class LexerTests {
 
           List<Token> results = new ArrayList<Token>();
 
-          OCamlLexer lexer = new OCamlLexer();
+          CommentlessOCamlLexer lexer = new CommentlessOCamlLexer();
           lexer.parse( reader, results );
 
           for( Token t : results )
