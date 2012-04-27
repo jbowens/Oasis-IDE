@@ -1,6 +1,6 @@
-package Camel;
+package camel;
 
-import Camel.Interactions.*;
+import camel.interactions.*;
 import java.util.*;
 
 /*

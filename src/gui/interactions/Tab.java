@@ -1,4 +1,4 @@
-package Camel.GUI.Interactions;
+package camel.gui.interactions;
 
 import java.awt.BorderLayout;
 import java.io.File;
@@ -7,7 +7,7 @@ import java.awt.event.*;
 import javax.swing.JEditorPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import Camel.Interactions.*;
+import camel.interactions.*;
 
 public class Tab extends JPanel implements TextOutputListener {
 

@@ -1,4 +1,4 @@
-package Camel;
+package camel;
 
 import java.util.ArrayList;
 

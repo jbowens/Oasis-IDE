@@ -1,4 +1,4 @@
-package Camel.Interactions;
+package camel.interactions;
 
 import java.util.*;
 import java.io.FileNotFoundException;

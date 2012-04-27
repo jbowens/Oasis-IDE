@@ -1,4 +1,4 @@
-package Camel.Interactions;
+package camel.interactions;
 
 /*
  * Thrown when a request is made to an Interactions instance that

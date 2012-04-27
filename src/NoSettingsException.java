@@ -1,4 +1,4 @@
-package Camel;
+package camel;
 
 /*
  * A NoSettingsException is thrown when settings are unable to be loaded by

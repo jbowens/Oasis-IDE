@@ -1,4 +1,4 @@
-package Camel.Interactions;
+package camel.interactions;
 
 /*
  * Thrown when the program is unable to connect with the OCaml

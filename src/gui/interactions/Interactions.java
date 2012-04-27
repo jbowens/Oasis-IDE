@@ -1,10 +1,10 @@
-package Camel.GUI.Interactions;
+package camel.gui.interactions;
 
 
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import Camel.Interactions.*;
+import camel.interactions.*;
 import java.awt.GridBagLayout;
 
 public class Interactions extends JPanel{

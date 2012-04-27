@@ -1,4 +1,4 @@
-package Camel.Interactions;
+package camel.interactions;
 
 import java.io.*;
 import java.util.List;

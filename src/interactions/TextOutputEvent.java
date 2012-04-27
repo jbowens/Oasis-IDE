@@ -1,4 +1,4 @@
-package Camel.Interactions;
+package camel.interactions;
 
 /*
  * An event that is sent to TextOutputListeners when text is outputted.
