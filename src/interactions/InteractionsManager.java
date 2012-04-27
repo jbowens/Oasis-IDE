@@ -78,4 +78,15 @@ public class InteractionsManager {
         interactions.get(id).removeOutputListener( o );
     
     }
+
+    /*
+     * Releases any system resources held by the interactions manager, including killing
+     * any child threads started by the interactions manager.
+     */
+    public void close() {
+        for( Interaction i : interactions )
+            i.close();
+        interactions.clear();
+    }
+
 }

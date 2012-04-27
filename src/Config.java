@@ -116,10 +116,25 @@ public class Config {
     }
 
     /*
+     * Gets the filename attached to this settings instance.
+     */
+    public String getFileLocation() {
+        return this.fileLocation;
+    }
+
+    /*
      * Saves the current state of the settings object to the XML file
      * it was constructed from.
      */
     public void save() throws SettingsSaveException {
+        save(this.fileLocation);
+    }
+
+    /*
+     * Saves the current state of the settings object to the XML file
+     * at the filename specified.
+     */
+    public void save(String filename) throws SettingsSaveException {
         try {
              /* Create the DOM document from the file */  
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance(); 
@@ -158,7 +173,7 @@ public class Config {
             transformer.transform(source, result);
             String xmlString = sw.toString();
 
-            FileWriter writer = new FileWriter( new File( this.fileLocation ) );
+            FileWriter writer = new FileWriter( new File( filename ) );
             writer.write( xmlString );
             writer.flush();
             writer.close();
