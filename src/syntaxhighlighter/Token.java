@@ -3,7 +3,7 @@ package camel.syntaxhighlighter;
 /**
  * Represents a token of the output.
  */
-public class Token {
+public class Token implements Comparable {
 
   /* The type of the token */
   protected TokenType type;
@@ -94,4 +94,26 @@ public class Token {
     this.startChar = start;
   }
 
+  @Override
+  public boolean equals(Object obj) {
+      if (obj instanceof Object) {
+        Token token = (Token) obj;
+          return ((this.getStart() == token.getStart()) &&
+                  (this.getLength() == token.getLength()) &&
+                  (this.getType() == token.getType()));
+        } else
+            return false;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        Token t = (Token) o;
+        if (this.getStart() != t.getStart()) {
+            return (this.getStart() - t.getStart());
+        } else if (this.getLength() != t.getLength()) {
+            return (this.getLength() - t.getLength());
+        } else {
+            return type.compareTo(t.getType());
+        }
+    }
 }

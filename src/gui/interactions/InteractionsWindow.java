@@ -29,7 +29,7 @@ public class InteractionsWindow extends JPanel {
 		Tab t = new Tab(_im,filePath);
 		tabs.addTab("int window", t);
 	}
-	/*
+	
 	public static void main(String[] args)
 	{
 		JFrame f = new JFrame();
@@ -39,6 +39,6 @@ public class InteractionsWindow extends JPanel {
 		f.pack();
 		f.setVisible(true);
 	}
-	*/
+	
 	
 }
