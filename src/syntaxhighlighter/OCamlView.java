@@ -65,15 +65,19 @@ public class OCamlView extends PlainView {
 
         System.out.println("Handling token " + t);
 
+        // Deal with the token offset
+        int tokenStart = t.getStart();
+        int tokenLength = t.getLength();
+
         // Look for a gap because it's possible for text to not have a token (for example,
         // whitespace is often tokenless)
-        if( start < t.getStart() ) {
-          doc.getText(start, t.getStart() - start, segment);
+        if( start < tokenStart ) {
+          doc.getText(start, tokenStart - start, segment);
           x = styling.getStyle(TokenType.DEFAULT).drawText(segment, x, y, graphics, this, start);
         }
 
-        int length = t.getLength();
-        int tmpStart = t.getStart();
+        int length = tokenLength;
+        int tmpStart = tokenStart;
         if( tmpStart < p0 ) {
           length -= (p0 - tmpStart);
           tmpStart = p0;
@@ -83,8 +87,8 @@ public class OCamlView extends PlainView {
           length = p1 - tmpStart;
         }
         doc.getText(tmpStart, length, segment);
-        x = styling.getStyle(t.getType()).drawText(segment, x, y, graphics, this, t.getStart());
-        start = t.getStart() + t.getLength();
+        x = styling.getStyle(t.getType()).drawText(segment, x, y, graphics, this, tokenStart);
+        start = tokenStart + tokenLength;
       }
 
       // There might be leftover untokenized text

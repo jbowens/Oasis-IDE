@@ -28,7 +28,7 @@ public class CommentSeparator {
       int commentStack = 0;
 
       Token prev = null;
-      Token current = new UnknownToken(1);
+      Token current = new UnknownToken(0);
       els.add(current);
       char lastlastChar =  (char) -1;
       char lastChar = (char) -1;
@@ -56,7 +56,8 @@ public class CommentSeparator {
             els.add(current);
           }
 
-          current.appendText( String.valueOf( lastChar ) );
+          if( lastChar != (char) -1 )
+            current.appendText( String.valueOf( lastChar ) );
 
         /* End of a comment */
         } else if( lastChar == '*' && nextChar == ')' && lastlastChar != '(' ) {
@@ -81,12 +82,14 @@ public class CommentSeparator {
             charNumber++;
           }
           else {
-            current.appendText( String.valueOf( lastChar ) ); 
+            if( lastChar != (char) -1 )
+              current.appendText( String.valueOf( lastChar ) ); 
           }
 
         /* Regular text */
         } else {
-          current.appendText( String.valueOf( lastChar ) );
+          if( lastChar != (char) -1 )
+            current.appendText( String.valueOf( lastChar ) );
         }
 
         // Get the next character
@@ -97,7 +100,8 @@ public class CommentSeparator {
         // update character #
         charNumber++;
       }
-
+      
+      if( lastChar != (char) -1 )
         current.appendText( String.valueOf( lastChar ) );
 
   }

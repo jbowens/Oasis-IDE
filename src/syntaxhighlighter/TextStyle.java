@@ -20,7 +20,7 @@ public class TextStyle {
 	 */
 	public TextStyle() {
 		// Load default styles
-		color = Color.BLACK;
+		color = Color.WHITE;
 		fontStyle = Font.PLAIN;
 	}
 
