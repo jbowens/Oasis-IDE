@@ -35,6 +35,12 @@
     <jar jarfile="${dist}/lib/Camel-${DSTAMP}.jar" basedir="${build}" classpathref="camel.class.path" />
   </target>
 
+  <target name="run" depends="compile" description="run the main program">
+    <java fork="true" classpathref="camel.class.path" classname="camel.Runner">
+      <arg value="settings.xml"/>
+    </java>
+  </target>
+
   <target name="test" description="test using junit" depends="compile">
   <junit printsummary="yes" haltonfailure="yes">
     <classpath refid="camel.class.path" />

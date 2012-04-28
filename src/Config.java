@@ -37,26 +37,34 @@ public class Config {
             DocumentBuilder builder = factory.newDocumentBuilder();
             Document doc = builder.parse(new File(file));
 
-            NodeList kvpairs = doc.getElementsByTagName("kvpair");
+            NodeList pairCont = doc.getElementsByTagName("settingsData");
+
+            if( pairCont.getLength() == 0 )
+                return;
+
+            Node settingsData = pairCont.item(0);
+
+            // get all the kvpairs
+            NodeList kvpairs = settingsData.getChildNodes();
 
             for( int i = 0; i < kvpairs.getLength(); i++ ) {
                 Node pairEl = kvpairs.item(i);
-                String key = pairEl.getAttributes().getNamedItem("key").getNodeValue().trim();
-                /* Doesn't make sense to not have a value child node. */
-                if( ! pairEl.hasChildNodes() )
+
+                // Make sure it's an element
+                if( pairEl.getNodeType() != Node.ELEMENT_NODE ) {
                     continue;
+                }
 
-                String value = null;
+                String key = pairEl.getNodeName();
 
+                String value = "";
+
+                // Concatenate child node values together
                 NodeList children = pairEl.getChildNodes();
                 for( int j = 0; j < children.getLength(); j++ )  {
                     Node valueNode = children.item(j);
-                    if( ! valueNode.getNodeName().equals("value") )
-                        continue;
-                    if( ! valueNode.hasChildNodes() )
-                        continue;
-                    value = valueNode.getFirstChild().getNodeValue();
-                    break;
+                    if( valueNode.getNodeValue() != null )
+                        value += valueNode.getNodeValue();
                 }
                 
                 /* Insert the mapping into the table */
@@ -153,12 +161,9 @@ public class Config {
 
             /* Add in the actual setting values. */
             for( Map.Entry<String,String> entry : settings.entrySet() ) {
-                Element kvpair = newDoc.createElement("kvpair");
-                kvpair.setAttribute( "key", entry.getKey() );
-                Element valNode = newDoc.createElement("value");
+                Element kvpair = newDoc.createElement(entry.getKey());
                 Text valText = newDoc.createTextNode(entry.getValue());
-                valNode.appendChild(valText);
-                kvpair.appendChild(valNode);
+                kvpair.appendChild(valText);
                 settingData.appendChild(kvpair);
             }
 

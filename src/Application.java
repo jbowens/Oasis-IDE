@@ -1,6 +1,7 @@
 package camel;
 
 import camel.interactions.*;
+import camel.gui.main.*;
 import java.util.*;
 
 /**
@@ -15,6 +16,9 @@ public class Application {
 
     /* The interactions manager that organizes all interactions with the ocaml REPL */
     protected InteractionsManager interactionsManager;
+
+    /* The main GUI class */
+    protected MainWindow gui;
 
     /**
      * Creates a new Application from the given settings file.
@@ -34,7 +38,7 @@ public class Application {
      * Constructs the front-end gui for the application.
      */
     protected void setupGui() {
-        // TODO: Connect with Raymond's GUI code
+        gui = new MainWindow();
     }
 
     /**
