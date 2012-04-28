@@ -16,10 +16,14 @@ import javax.swing.text.Utilities;
 import javax.swing.text.Document;
 import javax.swing.text.BadLocationException;
 
+import java.util.Iterator;
+
 /**
  * The view to be used when viewing OCaml documents.
  */
 public class OCamlView extends PlainView {
+
+  protected StyleSet styling;
 
   /**
    * Constructs a new OCaml view with the given element.
@@ -27,6 +31,9 @@ public class OCamlView extends PlainView {
   public OCamlView(Element element) {
 
     super(element);
+
+    // For now just assume the simple styling
+    styling = new SimpleStyleSet();
 
     // TODO: Change this to use the value loaded from the settings file.
     getDocument().putProperty(PlainDocument.tabSizeAttribute, 4);
@@ -43,8 +50,32 @@ public class OCamlView extends PlainView {
     Font saveFont = graphics.getFont();
     Color saveColor = graphics.getColor();
     
-    Document doc = getDocument();
-    String text = doc.getText(p0, p1 - p0);
+    OCamlDocument doc = (OCamlDocument) getDocument();
+    Segment segment = getLineBuffer();
+
+    try {
+      
+      Iterator<Token> i = doc.getTokens(p0, p1);
+
+      int start = p0;
+      while (i.hasNext()) {
+        Token t = i.next();
+
+        // Look for a gap because it's possible for text to not have a token (for example,
+        // whitespace is often tokenless)
+        if( start < t.getStart() ) {
+          doc.getText(start, t.getStart() - start);
+          
+        }
+
+      }
+
+    } catch( BadLocationException ex ) {
+      // eat it
+    } finally {
+      graphics.setFont(saveFont);
+      graphics.setColor(saveColor);
+    }
     
     return 0;
   }

@@ -39,8 +39,107 @@ public class OCamlDocument extends PlainDocument {
    *
    * @return a list of the tokens created from the document
    */
-  public List<Token> getTokens() {
-    return tokens;
+  public Iterator<Token> getTokens(int p0, int p1) {
+    return new TokenIterator(p0, p1);
+  }
+
+  /**
+   * This class is used to iterate over tokens between two positions
+   *
+   * ADAPTED FROM JSYNTAXPANE SOURCE
+   */
+  class TokenIterator implements ListIterator<Token> {
+
+    int start;
+    int end;
+    int ndx = 0;
+
+    @SuppressWarnings("unchecked")
+    private TokenIterator(int start, int end) {
+      this.start = start;
+      this.end = end;
+      if (tokens != null && !tokens.isEmpty()) {
+        Token token = new Token(TokenType.COMMENT, start, end - start);
+        ndx = Collections.binarySearch((List) tokens, token);
+        // we will probably not find the exact token...
+        if (ndx < 0) {
+          // so, start from one before the token where we should be...
+          // -1 to get the location, and another -1 to go back..
+          ndx = (-ndx - 1 - 1 < 0) ? 0 : (-ndx - 1 - 1);
+          Token t = tokens.get(ndx);
+          // if the prev token does not overlap, then advance one
+          if ((t.getStart()+t.getLength()) <= start) {
+            ndx++;
+          }
+
+        }
+      }
+    }
+
+    @Override
+    public boolean hasNext() {
+      if (tokens == null) {
+        return false;
+      }
+      if (ndx >= tokens.size()) {
+        return false;
+      }
+      Token t = tokens.get(ndx);
+      if (t.getStart() >= end) {
+        return false;
+      }
+      return true;
+    }
+
+    @Override
+    public Token next() {
+      return tokens.get(ndx++);
+    }
+
+    @Override
+    public void remove() {
+      throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean hasPrevious() {
+      if (tokens == null) {
+        return false;
+      }
+      if (ndx <= 0) {
+        return false;
+      }
+      Token t = tokens.get(ndx);
+      if ((t.getStart()+t.getLength()) <= start) {
+        return false;
+      }
+      return true;
+    }
+
+    @Override
+    public Token previous() {
+      return tokens.get(ndx--);
+    }
+
+    @Override
+    public int nextIndex() {
+      return ndx + 1;
+    }
+
+    @Override
+    public int previousIndex() {
+      return ndx - 1;
+    }
+
+    @Override
+    public void set(Token e) {
+      throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void add(Token e) {
+      throw new UnsupportedOperationException();
+    }
   }
 
   /**
