@@ -2,7 +2,7 @@ package camel.syntaxhighlighter;
 
 import javax.swing.text.*;
 
-public class OCamlEditorKit extends StyledEditorKit {
+public class OCamlEditorKit extends DefaultEditorKit implements ViewFactory {
 
   protected ViewFactory ocamlViewFactory;
 

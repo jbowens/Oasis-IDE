@@ -44,6 +44,8 @@ public class OCamlView extends PlainView {
   protected int drawUnselectedText(Graphics graphics, int x, int y, int p0, int p1)
                                   throws BadLocationException {
 
+    System.out.println("Drawing text");
+
     // Draw the text, but with the appropriate syntax highlighting
 
     setRenderingHints(graphics);
@@ -61,13 +63,34 @@ public class OCamlView extends PlainView {
       while (i.hasNext()) {
         Token t = i.next();
 
+        System.out.println("Handling token " + t);
+
         // Look for a gap because it's possible for text to not have a token (for example,
         // whitespace is often tokenless)
         if( start < t.getStart() ) {
-          doc.getText(start, t.getStart() - start);
-          
+          doc.getText(start, t.getStart() - start, segment);
+          x = styling.getStyle(TokenType.DEFAULT).drawText(segment, x, y, graphics, this, start);
         }
 
+        int length = t.getLength();
+        int tmpStart = t.getStart();
+        if( tmpStart < p0 ) {
+          length -= (p0 - tmpStart);
+          tmpStart = p0;
+        }
+
+        if( tmpStart + length > p1 ) {
+          length = p1 - tmpStart;
+        }
+        doc.getText(tmpStart, length, segment);
+        x = styling.getStyle(t.getType()).drawText(segment, x, y, graphics, this, t.getStart());
+        start = t.getStart() + t.getLength();
+      }
+
+      // There might be leftover untokenized text
+      if( start < p1 ) {
+        doc.getText(start, p1 - start, segment);
+        x = styling.getStyle(TokenType.DEFAULT).drawText(segment, x, y, graphics, this, start);
       }
 
     } catch( BadLocationException ex ) {
@@ -77,7 +100,7 @@ public class OCamlView extends PlainView {
       graphics.setColor(saveColor);
     }
     
-    return 0;
+    return x;
   }
 
   @Override
