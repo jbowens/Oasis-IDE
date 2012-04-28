@@ -9,7 +9,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public class Debug {
-    /* I commented this out because it had compilation errors. - jackson 
+    // I commented this out because it had compilation errors. - jackson 
 	private Process proc;
     private BufferedWriter output;
     private BufferedReader input;
@@ -22,7 +22,7 @@ public class Debug {
     
     public void getStartInfo(){
     	//get the info for the filename
-    	//this.filename = 
+    	this.filename = "./a.out";
     	//this.breakpoints = 
     }
     
@@ -36,16 +36,25 @@ public class Debug {
     		debugArgs[0] = "ocamldebug";
     		debugArgs[1] = filename;
     		proc = Runtime.getRuntime().exec(debugArgs);
+            System.out.println("Proc Started");
+            assert(proc != null);
     		input = new BufferedReader( new InputStreamReader( proc.getInputStream() ));
     		output = new BufferedWriter( new OutputStreamWriter( proc.getOutputStream() ));
+            System.out.println("Before readline");
     		String line = input.readLine();
-    		while(line != null){
-    		//	line = line + output.readLine();
-    		}
+            System.out.println("After read line: " + line);
+            line += input.readLine();
+            System.out.println(line);
+    		//while(!line.equals("")){
+            //    System.out.println("in while loop");
+            //	line = line + input.readLine();
+            //    System.out.println("line: " + line);
+    		//}
     		//displayInput(line);
     		//while(line != null){
     			//args.write(getStepInfo());
     		//}
+            System.out.println("passed while loop");
         
     	}
     	catch(IOException e){
@@ -54,7 +63,7 @@ public class Debug {
     	}
     }
     
-    public String runDebug(){
+    public String runDebug() throws IOException{
     	output.write("run");
     	output.flush();
     	String line = input.readLine();
@@ -66,7 +75,7 @@ public class Debug {
     	return outString;
     }
     
-    public String runStep(){
+    public String runStep() throws IOException{
     	output.write("s");
     	output.flush();
     	String line = input.readLine();
@@ -78,7 +87,7 @@ public class Debug {
     	return outString;
     }
     
-    public String runBack(){
+    public String runBack() throws IOException{
     	output.write("bt");
     	output.flush();
     	String line = input.readLine();
@@ -90,7 +99,7 @@ public class Debug {
     	return outString;
     }
 
-	public String getStepInfo() {
+	public String getStepInfo() throws IOException{
 		// TODO Auto-generated method stub
 		//THis method gets the next step command from the gui
 		return null;
@@ -100,6 +109,6 @@ public class Debug {
 		// TODO Auto-generated method stub
 		//This method parses the output for thd gui to use
 	}
-    */
+    //
     
 }
