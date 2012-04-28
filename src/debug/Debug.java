@@ -6,8 +6,8 @@ import java.io.OutputStream;
 
 public class Debug {
 	private Process proc;
-    private InputStream args;
-    private OutputStream output;
+    private BufferedWriter output;
+    private BufferedReader input;
     private String filename;
     private String[] breakpoints;
     
@@ -19,6 +19,7 @@ public class Debug {
     	//get the info for the filename
     	//this.filename = 
     	//this.breakpoints = 
+    	breakpoints = {"1", "3"};//for testing purposes
     }
     
     public void callDebug() throws IOException{
@@ -28,11 +29,11 @@ public class Debug {
     		for(int i = 0; i < breakpoints.length; i++){
     			debugArgs[i + 2] = breakpoints[i];
     		}
-    		debugArgs[0] = "ocamldebug ";
+    		debugArgs[0] = "ocamldebug";
     		debugArgs[1] = filename;
     		proc = Runtime.getRuntime().exec(debugArgs);
-    		args = proc.getInputStream();
-    		output = proc.getOutputStream();
+    		input = new BufferedReader (proc.getInputStream());
+    		output = new BufferedWriter (proc.getOutputStream());
     		String line; //= output.readLine();
     		//while(line != null){
     		//	line = line + output.readLine();
@@ -48,6 +49,10 @@ public class Debug {
     		System.out.print("Debug failed to initilize");
     	}
     	
+    }
+    
+    public void runDebug(){
+    	output.write(arg0)
     }
 
 	public String getStepInfo() {
