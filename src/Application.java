@@ -38,7 +38,7 @@ public class Application {
      * Constructs the front-end gui for the application.
      */
     protected void setupGui() {
-        gui = new MainWindow();
+        gui = new MainWindow(this, config, interactionsManager);
     }
 
     /**

@@ -4,5 +4,8 @@
 <settingData>
     <tabwidth>4</tabwidth>
     <styleset>simple</styleset>
+    <initial_width>800</initial_width>
+    <initial_height>600</initial_height>
+    <wordwrap>true</wordwrap>
 </settingData>
 </settings>

@@ -58,7 +58,7 @@ public class Interactions {
         readProcess = new ReplListener( processInputStream, this.observers, handle );
 
         /* Begin the read process for this Interactions REPL */
-        new Thread(readProcess).start();        
+        readProcess.start();        
 
         /* Load the defintions */
         try {
@@ -113,6 +113,7 @@ public class Interactions {
             try {
                 replWriter.close();
                 readProcess.kill();
+                readProcess.interrupt();
                 replProcess.destroy();
             } catch(IOException e) {
                 // just eat the exception
