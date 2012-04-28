@@ -31,7 +31,6 @@ public class OCamlEditorKit extends StyledEditorKit {
     return new OCamlDocument(lexer);
   }
 
-  @Override
   public View create(Element element) {
     return new OCamlView(element);
   }

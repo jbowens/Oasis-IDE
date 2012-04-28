@@ -17,7 +17,6 @@ public class LexerTests {
 
         StringReader reader = new StringReader(simpleProg);
 
-
         List<Token> results = new ArrayList<Token>();
 
         CommentlessOCamlLexer lexer = new CommentlessOCamlLexer();
@@ -25,7 +24,6 @@ public class LexerTests {
 
         for( Token t : results )
           System.out.println(t.toString());
-
     
     }
 

@@ -1,10 +1,13 @@
 package camel.syntaxhighlighter;
 
+import java.awt.Font;
 import java.awt.Color;
+import java.awt.Shape;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 
+import javax.swing.text.ViewFactory;
 import javax.swing.text.PlainView;
 import javax.swing.text.PlainDocument;
 import javax.swing.text.Element;
@@ -43,7 +46,7 @@ public class OCamlView extends PlainView {
     Document doc = getDocument();
     String text = doc.getText(p0, p1 - p0);
     
-
+    return 0;
   }
 
   @Override

@@ -13,6 +13,7 @@ import javax.swing.text.PlainDocument;
 import javax.swing.text.Segment;
 import java.io.StringReader;
 import java.io.Reader;
+import java.io.IOException;
 
 public class OCamlDocument extends PlainDocument {
   
@@ -55,9 +56,10 @@ public class OCamlDocument extends PlainDocument {
     List<Token> toks = new ArrayList<Token>(getLength() / 10);
     int len = getLength();
     try {
-      Reader textReader = new StringReader( getText(0, getLength() );
-      lexer.parse(textReader, toks);
+      Reader textReader = new StringReader( getText(0, getLength() ) );
+      lexer.tokenize(textReader, toks);
     } catch (BadLocationException ex) {
+    } catch (IOException ex) {
     } finally {
       tokens = toks;
     }

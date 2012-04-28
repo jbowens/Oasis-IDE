@@ -1,16 +1,20 @@
 package camel.debug;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
 public class Debug {
+    /* I commented this out because it had compilation errors. - jackson 
 	private Process proc;
     private BufferedWriter output;
     private BufferedReader input;
     private String filename;
-    private String[] breakpoints;
+    private String[] breakpoints = {"1", "3"};
     
     public Debug(String path) throws IOException{
         
@@ -20,7 +24,6 @@ public class Debug {
     	//get the info for the filename
     	//this.filename = 
     	//this.breakpoints = 
-    	breakpoints = {"1", "3"};//for testing purposes
     }
     
     public void callDebug() throws IOException{
@@ -33,11 +36,11 @@ public class Debug {
     		debugArgs[0] = "ocamldebug";
     		debugArgs[1] = filename;
     		proc = Runtime.getRuntime().exec(debugArgs);
-    		input = new BufferedReader (proc.getInputStream());
-    		output = new BufferedWriter (proc.getOutputStream());
-    		String line input.readLine();
+    		input = new BufferedReader( new InputStreamReader( proc.getInputStream() ));
+    		output = new BufferedWriter( new OutputStreamWriter( proc.getOutputStream() ));
+    		String line = input.readLine();
     		while(line != null){
-    			line = line + output.readLine();
+    		//	line = line + output.readLine();
     		}
     		//displayInput(line);
     		//while(line != null){
@@ -54,11 +57,11 @@ public class Debug {
     public String runDebug(){
     	output.write("run");
     	output.flush();
-    	String line = input.nextLine();
-    	String outString = 
+    	String line = input.readLine();
+    	String outString = "";
     	while(line != null){
     		outString += line;
-    		line = input.nextLine();
+    		line = input.readLine();
     	}
     	return outString;
     }
@@ -66,11 +69,11 @@ public class Debug {
     public String runStep(){
     	output.write("s");
     	output.flush();
-    	String line = input.nextLine();
-    	String outString = 
+    	String line = input.readLine();
+    	String outString = "";
     	while(line != null){
     		outString += line;
-    		line = input.nextLine();
+    		line = input.readLine();
     	}
     	return outString;
     }
@@ -78,11 +81,11 @@ public class Debug {
     public String runBack(){
     	output.write("bt");
     	output.flush();
-    	String line = input.nextLine();
-    	String outString = 
+    	String line = input.readLine();
+    	String outString = "";
     	while(line != null){
     		outString += line;
-    		line = input.nextLine();
+    		line = input.readLine();
     	}
     	return outString;
     }
@@ -97,5 +100,6 @@ public class Debug {
 		// TODO Auto-generated method stub
 		//This method parses the output for thd gui to use
 	}
+    */
     
 }
