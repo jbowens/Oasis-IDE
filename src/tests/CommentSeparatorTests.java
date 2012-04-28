@@ -27,11 +27,23 @@ public class CommentSeparatorTests {
           assert( results.get(1).getType() == TokenType.COMMENT );
           assert( results.get(2).getType() == TokenType.UNKNOWN );
 
+          System.out.println("Total length: " + simpleProg.length());
+
+          for( Token t : results ) {
+            System.out.println(t + "\n-" + simpleProg.substring(t.getStart(), (t.getStart() + t.getLength())) + "-\n\n");
+          }
+
+
         } catch( java.io.IOException e ) {
           System.err.println("I/O ERROR");
           assert( false );
         }
 
+    }
+
+    public static void main(String args[]) {
+      CommentSeparatorTests tests = new CommentSeparatorTests();
+      tests.testSimpleProgram();
     }
 
 }

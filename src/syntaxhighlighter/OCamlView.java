@@ -44,8 +44,6 @@ public class OCamlView extends PlainView {
   protected int drawUnselectedText(Graphics graphics, int x, int y, int p0, int p1)
                                   throws BadLocationException {
 
-    System.out.println("Drawing text");
-
     // Draw the text, but with the appropriate syntax highlighting
 
     setRenderingHints(graphics);
@@ -57,6 +55,8 @@ public class OCamlView extends PlainView {
 
     try {
       
+      System.out.println("Going to attemp to highlight from " + p0 + " to " + p1);
+
       Iterator<Token> i = doc.getTokens(p0, p1);
 
       int start = p0;
@@ -101,6 +101,13 @@ public class OCamlView extends PlainView {
     }
     
     return x;
+  }
+
+  @Override
+  public void paint(Graphics g, Shape s) {
+    g.setColor(styling.getBackgroundColor());
+    g.fillRect(0, 0, s.getBounds().width, s.getBounds().height);
+    super.paint(g, s);
   }
 
   @Override

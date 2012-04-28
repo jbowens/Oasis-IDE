@@ -43,7 +43,7 @@ public class Token implements Comparable {
    */
   public void appendText(String text) {
     this.text = this.text + text;
-    this.length++;
+    this.length += text.length();
   }
 
   /**
@@ -84,14 +84,25 @@ public class Token implements Comparable {
    * A string representation of this token.
    */
   public String toString() {
-    return String.valueOf(type);
+    return String.valueOf(type) + " - " + getStart() + "..." + (getStart()+getLength());
   }
 
   /**
    * Sets a start for the token.
+   *
+   * @param start new start position
    */
   public void setStart(int start) {
     this.startChar = start;
+  }
+
+  /**
+   * Sets the length of this token.
+   *
+   * @param length new length
+   */
+  public void setLength(int length) {
+    this.length = length;  
   }
 
   @Override

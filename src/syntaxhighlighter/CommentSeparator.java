@@ -33,7 +33,8 @@ public class CommentSeparator {
       char lastlastChar =  (char) -1;
       char lastChar = (char) -1;
       char nextChar = (char) r.read();
-      int charNumber = 1;
+      int charNumber = 0;
+      boolean justExitedComment = false;
       while( nextChar !=  (char) -1 ) {
 
         /* Beginning of a comment */
@@ -43,7 +44,15 @@ public class CommentSeparator {
           if( commentStack == 1 ) {
             // this is the first comment in this stack. Let's create a new comment block
             prev = current;
-            current = new CommentToken(charNumber);
+
+            /* Decrease the previous token's length because it accidentally included a left paren */
+            prev.setLength(prev.getLength()-1);
+
+            /* Remove the previous token if it's empty */
+            if( prev.getLength() == 0 )
+              els.remove(prev);
+            
+            current = new CommentToken(charNumber - 1);
             els.add(current);
           }
 
@@ -56,17 +65,24 @@ public class CommentSeparator {
           if( commentStack == 0 ) {
             // We just got out of a deep comment stack, so let's create a new text block
             prev = current;
-            current = new UnknownToken(charNumber);
+            current = new UnknownToken(charNumber + 1);
+            /* Remove the previous token if it's empty */
+            if( prev.getLength() == 0 )
+              els.remove(prev);
             els.add(current);
+
+            prev.appendText( String.valueOf( lastChar ) );
+            prev.appendText( String.valueOf( nextChar ) );
+
+            // move forward the character
+            lastlastChar = lastChar;
+            lastChar = nextChar;
+            nextChar = (char) r.read();
+            charNumber++;
           }
-
-          prev.appendText( String.valueOf( lastChar ) );
-          prev.appendText( String.valueOf( nextChar ) );
-
-          // move forward the character twice on this one
-          lastlastChar = lastChar;
-          lastChar = nextChar;
-          nextChar = (char) r.read();
+          else {
+            current.appendText( String.valueOf( lastChar ) ); 
+          }
 
         /* Regular text */
         } else {
@@ -82,7 +98,7 @@ public class CommentSeparator {
         charNumber++;
       }
 
-      current.appendText( String.valueOf( lastChar ) );
+        current.appendText( String.valueOf( lastChar ) );
 
   }
 
