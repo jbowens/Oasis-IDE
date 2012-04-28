@@ -1,13 +1,14 @@
 package camel.debug;
 
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
 public class Debug {
 	private Process proc;
-    private InputStream args;
-    private OutputStream output;
+    private BufferedWriter output;
+    private BufferedReader input;
     private String filename;
     private String[] breakpoints;
     
@@ -19,6 +20,7 @@ public class Debug {
     	//get the info for the filename
     	//this.filename = 
     	//this.breakpoints = 
+    	breakpoints = {"1", "3"};//for testing purposes
     }
     
     public void callDebug() throws IOException{
@@ -28,15 +30,15 @@ public class Debug {
     		for(int i = 0; i < breakpoints.length; i++){
     			debugArgs[i + 2] = breakpoints[i];
     		}
-    		debugArgs[0] = "ocamldebug ";
+    		debugArgs[0] = "ocamldebug";
     		debugArgs[1] = filename;
     		proc = Runtime.getRuntime().exec(debugArgs);
-    		args = proc.getInputStream();
-    		output = proc.getOutputStream();
-    		String line; //= output.readLine();
-    		//while(line != null){
-    		//	line = line + output.readLine();
-    		//}
+    		input = new BufferedReader (proc.getInputStream());
+    		output = new BufferedWriter (proc.getOutputStream());
+    		String line input.readLine();
+    		while(line != null){
+    			line = line + output.readLine();
+    		}
     		//displayInput(line);
     		//while(line != null){
     			//args.write(getStepInfo());
@@ -47,7 +49,42 @@ public class Debug {
     		e.printStackTrace();
     		System.out.print("Debug failed to initilize");
     	}
-    	
+    }
+    
+    public String runDebug(){
+    	output.write("run");
+    	output.flush();
+    	String line = input.nextLine();
+    	String outString = 
+    	while(line != null){
+    		outString += line;
+    		line = input.nextLine();
+    	}
+    	return outString;
+    }
+    
+    public String runStep(){
+    	output.write("s");
+    	output.flush();
+    	String line = input.nextLine();
+    	String outString = 
+    	while(line != null){
+    		outString += line;
+    		line = input.nextLine();
+    	}
+    	return outString;
+    }
+    
+    public String runBack(){
+    	output.write("bt");
+    	output.flush();
+    	String line = input.nextLine();
+    	String outString = 
+    	while(line != null){
+    		outString += line;
+    		line = input.nextLine();
+    	}
+    	return outString;
     }
 
 	public String getStepInfo() {
