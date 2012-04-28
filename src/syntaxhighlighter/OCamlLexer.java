@@ -49,7 +49,6 @@ public class OCamlLexer {
       if( t.getType() == TokenType.COMMENT )
         tokens.add( t );
       else if( t.getType() == TokenType.UNKNOWN ) {
-        System.out.println("Asking lexer to parse starting at index " + t.getStart() + ": " + t.getText() );
         lexer.parse(new StringReader(t.getText()), tokens, t.getStart());
       } else
         tokens.add( t );

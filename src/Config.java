@@ -39,10 +39,12 @@ public class Config {
             DocumentBuilder builder = factory.newDocumentBuilder();
             Document doc = builder.parse(new File(file));
 
-            NodeList pairCont = doc.getElementsByTagName("settingsData");
+            NodeList pairCont = doc.getElementsByTagName("settingData");
 
             if( pairCont.getLength() == 0 )
                 return;
+
+            System.out.println("here");
 
             Node settingsData = pairCont.item(0);
 

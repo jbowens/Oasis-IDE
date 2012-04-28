@@ -55,15 +55,11 @@ public class OCamlView extends PlainView {
 
     try {
       
-      System.out.println("Going to attemp to highlight from " + p0 + " to " + p1);
-
       Iterator<Token> i = doc.getTokens(p0, p1);
 
       int start = p0;
       while (i.hasNext()) {
         Token t = i.next();
-
-        System.out.println("Handling token " + t);
 
         // Deal with the token offset
         int tokenStart = t.getStart();

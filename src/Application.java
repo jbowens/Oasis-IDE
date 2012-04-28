@@ -86,6 +86,7 @@ public class Application {
                 System.err.println("Unable to save settings.");
             }
         }
+        System.exit(0);
     }
 
     /**

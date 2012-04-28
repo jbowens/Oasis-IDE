@@ -51,8 +51,6 @@ public class MainWindow extends JFrame {
 		add(ca,BorderLayout.CENTER);
 		add(ft,BorderLayout.WEST);
 		add(iw,BorderLayout.SOUTH);
-		
-
 
 		pack();
 
