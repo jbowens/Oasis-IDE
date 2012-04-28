@@ -1,5 +1,6 @@
 package camel.debug;
 
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -34,10 +35,10 @@ public class Debug {
     		proc = Runtime.getRuntime().exec(debugArgs);
     		input = new BufferedReader (proc.getInputStream());
     		output = new BufferedWriter (proc.getOutputStream());
-    		String line; //= output.readLine();
-    		//while(line != null){
-    		//	line = line + output.readLine();
-    		//}
+    		String line input.readLine();
+    		while(line != null){
+    			line = line + output.readLine();
+    		}
     		//displayInput(line);
     		//while(line != null){
     			//args.write(getStepInfo());
@@ -48,11 +49,42 @@ public class Debug {
     		e.printStackTrace();
     		System.out.print("Debug failed to initilize");
     	}
-    	
     }
     
-    public void runDebug(){
-    	output.write(arg0)
+    public String runDebug(){
+    	output.write("run");
+    	output.flush();
+    	String line = input.nextLine();
+    	String outString = 
+    	while(line != null){
+    		outString += line;
+    		line = input.nextLine();
+    	}
+    	return outString;
+    }
+    
+    public String runStep(){
+    	output.write("s");
+    	output.flush();
+    	String line = input.nextLine();
+    	String outString = 
+    	while(line != null){
+    		outString += line;
+    		line = input.nextLine();
+    	}
+    	return outString;
+    }
+    
+    public String runBack(){
+    	output.write("bt");
+    	output.flush();
+    	String line = input.nextLine();
+    	String outString = 
+    	while(line != null){
+    		outString += line;
+    		line = input.nextLine();
+    	}
+    	return outString;
     }
 
 	public String getStepInfo() {
