@@ -10,8 +10,13 @@ import java.io.FileNotFoundException;
  */
 public class InteractionsManager {
 
+    /* The command to run the OCaml REPL */
     String ocamlLoc;
+
+    /* All existing child interactions instances */
     protected ArrayList<Interactions> interactions;
+
+    /* The current handle index */
     protected int currIndex;
 
     /**

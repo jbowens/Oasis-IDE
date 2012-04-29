@@ -27,4 +27,9 @@ public class LexerTests {
     
     }
 
+    public static void main(String args[]) {
+        LexerTests lexerTests = new LexerTests();
+        lexerTests.testSimpleProgram();
+    }
+
 }

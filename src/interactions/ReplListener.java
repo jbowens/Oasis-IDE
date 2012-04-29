@@ -7,16 +7,29 @@ import java.util.*;
  * A ReplListener is a class whose sole purpose is to constantly read in input from a
  * running OCaml REPL and notify any output listeners of the REPL's output.
  */
-public class ReplListener implements Runnable {
+public class ReplListener extends Thread {
 
+    /* The handle this thread is listening for */
     protected int handle;
+
+    /* The stream to read from */
     protected BufferedReader replStreamReader;
+
+    /* List of output listeners */
     protected List<TextOutputListener> observers;
+
+    /* The string buffer for reading input */
     protected StringBuilder buffer;
+
+    /* Whether or not this ReplListener should be open */
     protected boolean alive;
 
-    /*
-     * protec a new ReplListener from an input stream and a list of observers.
+    /**
+     * Create a new ReplListener from an input stream and a list of observers.
+     *
+     * @param replStream - the input stream to read from
+     * @param observers - the listeners to notify when there's output
+     * @param handle - the handle associated with this input stream
      */
     public ReplListener( InputStream replStream, List<TextOutputListener> observers, int handle ) {
 	    this.handle = handle;
@@ -26,7 +39,7 @@ public class ReplListener implements Runnable {
         alive = true;
     }
 
-    /*
+    /**
      * Listens to the output of the REPL constantly, and notifies observers when output
      * is received.
      */

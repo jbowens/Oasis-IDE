@@ -10,27 +10,16 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
 import camel.gui.controller.FileHandler;
+import camel.gui.main.MainWindow;
+import camel.Application;
 
 public class MenuBar extends JMenuBar{
 	FileMenu _fMenu;
 	
-	public MenuBar(FileHandler fh)
+	public MenuBar(Application app, MainWindow window)
 	{
-		_fMenu = new FileMenu(fh);
+		_fMenu = new FileMenu(window.getCodeArea(), window.getFileHandler());
 		add(_fMenu,FlowLayout.LEFT);
 	}
-	/*
-	public static void main(String[] args)
-	{
-		FileHandler fh = new FileHandler();
-		MenuBar mBar = new MenuBar(fh);
-		JFrame frame = new JFrame();
-		JPanel panel = new JPanel();
-		frame.add(panel);
-		panel.add(mBar);
-		frame.pack();
-		frame.setVisible(true);
-	}
-	*/
 
 }

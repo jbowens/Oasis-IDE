@@ -2,6 +2,9 @@ package camel.syntaxhighlighter;
 
 import java.util.EnumMap;
 
+import java.awt.Color;
+import javax.swing.text.JTextComponent;
+
 /**
  * Represents a collection of assignments of token types to
  * text styles.
@@ -16,14 +19,39 @@ public class StyleSet {
 	/* The name of this style set. */
 	protected String name;
 
+	/* The background color for the style */
+	protected Color background;
+
+	/* The background color when text is selected */
+	protected Color selectedBackground;
+
+	/* The color of the caret */
+	protected Color caretColor;
+
 	/**
 	 * Creates a new style set with the given name.
 	 */
 	public StyleSet( String name ) {
 		this.name = name;
 		mapping = new EnumMap<TokenType,TextStyle>(TokenType.class);
+		background = Color.WHITE;
+		selectedBackground = Color.BLUE;
+		caretColor = Color.BLACK;
 	}
-	
+
+	/**
+	 * Applies this style to a text area.
+	 *
+	 * NOTE: The View object that handles drawing the textarea
+	 * 			  must still have this style to completely apply its
+	 *				stylings.
+	 */
+	public void apply(JTextComponent component) {
+		 component.setBackground( background );
+		 component.setSelectionColor( selectedBackground );
+		 component.setCaretColor( caretColor );
+	}
+
 	/**
 	 * Returns the name if the style map.
 	 *
@@ -33,6 +61,41 @@ public class StyleSet {
 		return name;
 	}
 
+	/**
+	 * Returns the background color of this style set.
+	 *
+	 * @return the background color to be used with this style set
+	 */
+	 public Color getBackgroundColor() {
+	 	return background;
+	 }
+
+	 /**
+	  * Sets the background to be the given color.
+	  *
+	  * @param bg the new background color for this style
+	  */
+	 public void setBackground(Color newBg) {
+	 	this.background = newBg;
+	 }
+
+	/**
+	 * Sets the caret color to be the given color.
+	 *
+	 * @param newCaret - the new caret color
+	 */
+	public void setCaretColor(Color newCaret) {
+		caretColor = newCaret;
+	}
+
+	/**
+	 * Sets the selected text background color.
+	 *
+	 * @param newSelectBg the new selected background color
+	 */
+	public void setSelectedBackground(Color newSelectBg) {
+		this.selectedBackground = newSelectBg;
+	}
 
 	/**
 	 * Returns the style associated with the given type.

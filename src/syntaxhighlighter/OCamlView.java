@@ -23,17 +23,17 @@ import java.util.Iterator;
  */
 public class OCamlView extends PlainView {
 
+  /* The set of styling rules to apply to the view */
   protected StyleSet styling;
 
   /**
-   * Constructs a new OCaml view with the given element.
+   * Constructs a new OCaml view with the given element and the given style.
    */
-  public OCamlView(Element element) {
+  public OCamlView(Element element, StyleSet style) {
 
     super(element);
 
-    // For now just assume the simple styling
-    styling = new SimpleStyleSet();
+    styling = style;
 
     // TODO: Change this to use the value loaded from the settings file.
     getDocument().putProperty(PlainDocument.tabSizeAttribute, 4);
@@ -43,8 +43,6 @@ public class OCamlView extends PlainView {
   @Override
   protected int drawUnselectedText(Graphics graphics, int x, int y, int p0, int p1)
                                   throws BadLocationException {
-
-    System.out.println("Drawing text");
 
     // Draw the text, but with the appropriate syntax highlighting
 
@@ -63,17 +61,19 @@ public class OCamlView extends PlainView {
       while (i.hasNext()) {
         Token t = i.next();
 
-        System.out.println("Handling token " + t);
+        // Deal with the token offset
+        int tokenStart = t.getStart();
+        int tokenLength = t.getLength();
 
         // Look for a gap because it's possible for text to not have a token (for example,
         // whitespace is often tokenless)
-        if( start < t.getStart() ) {
-          doc.getText(start, t.getStart() - start, segment);
+        if( start < tokenStart ) {
+          doc.getText(start, tokenStart - start, segment);
           x = styling.getStyle(TokenType.DEFAULT).drawText(segment, x, y, graphics, this, start);
         }
 
-        int length = t.getLength();
-        int tmpStart = t.getStart();
+        int length = tokenLength;
+        int tmpStart = tokenStart;
         if( tmpStart < p0 ) {
           length -= (p0 - tmpStart);
           tmpStart = p0;
@@ -83,8 +83,8 @@ public class OCamlView extends PlainView {
           length = p1 - tmpStart;
         }
         doc.getText(tmpStart, length, segment);
-        x = styling.getStyle(t.getType()).drawText(segment, x, y, graphics, this, t.getStart());
-        start = t.getStart() + t.getLength();
+        x = styling.getStyle(t.getType()).drawText(segment, x, y, graphics, this, tokenStart);
+        start = tokenStart + tokenLength;
       }
 
       // There might be leftover untokenized text
@@ -101,6 +101,13 @@ public class OCamlView extends PlainView {
     }
     
     return x;
+  }
+
+  @Override
+  protected int drawSelectedText(Graphics g, int x, int y, int p0, int p1)
+                  throws BadLocationException {
+    int ret = drawUnselectedText(g, x, y, p0, p1);
+    return ret;
   }
 
   @Override

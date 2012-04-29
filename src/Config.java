@@ -24,8 +24,10 @@ public class Config {
     // The mapping of keys to values
     HashMap<String,String> settings;
 
-    /*
+    /**
      * Loads data from the xml file into the hashmap.
+     *
+     * @param file - the filename of the settings file to load data from
      */
     protected void loadDataFromFile(String file) throws NoSettingsException {
 
@@ -37,26 +39,36 @@ public class Config {
             DocumentBuilder builder = factory.newDocumentBuilder();
             Document doc = builder.parse(new File(file));
 
-            NodeList kvpairs = doc.getElementsByTagName("kvpair");
+            NodeList pairCont = doc.getElementsByTagName("settingData");
+
+            if( pairCont.getLength() == 0 )
+                return;
+
+            System.out.println("here");
+
+            Node settingsData = pairCont.item(0);
+
+            // get all the kvpairs
+            NodeList kvpairs = settingsData.getChildNodes();
 
             for( int i = 0; i < kvpairs.getLength(); i++ ) {
                 Node pairEl = kvpairs.item(i);
-                String key = pairEl.getAttributes().getNamedItem("key").getNodeValue().trim();
-                /* Doesn't make sense to not have a value child node. */
-                if( ! pairEl.hasChildNodes() )
+
+                // Make sure it's an element
+                if( pairEl.getNodeType() != Node.ELEMENT_NODE ) {
                     continue;
+                }
 
-                String value = null;
+                String key = pairEl.getNodeName();
 
+                String value = "";
+
+                // Concatenate child node values together
                 NodeList children = pairEl.getChildNodes();
                 for( int j = 0; j < children.getLength(); j++ )  {
                     Node valueNode = children.item(j);
-                    if( ! valueNode.getNodeName().equals("value") )
-                        continue;
-                    if( ! valueNode.hasChildNodes() )
-                        continue;
-                    value = valueNode.getFirstChild().getNodeValue();
-                    break;
+                    if( valueNode.getNodeValue() != null )
+                        value += valueNode.getNodeValue();
                 }
                 
                 /* Insert the mapping into the table */
@@ -74,7 +86,7 @@ public class Config {
 
     }
 
-    /*
+    /**
      * Constructs a new config object with the values in file.
      */
     public Config(String file) throws NoSettingsException {
@@ -83,14 +95,14 @@ public class Config {
         loadDataFromFile(file);
     }
 
-    /*
+    /**
      * Gets the setting with the provided key as a string value.
      */
     public String getSetting(String key) {
         return settings.get(key);
     }
 
-    /*
+    /**
      * Gets the setting with the provided key as an int value.
      */
     public int getSettingAsInt(String key) {
@@ -99,6 +111,17 @@ public class Config {
         } catch( NumberFormatException e ) {
             return -1;
         }
+    }
+
+    /**
+     * Returns true if the setting exists.
+     *
+     * @param key - the key to lookup
+     *
+     * @return true if the key exists
+     */
+    public boolean settingExists(String key) {
+        return settings.containsKey(key);
     }
 
     /*
@@ -130,9 +153,11 @@ public class Config {
         save(this.fileLocation);
     }
 
-    /*
+    /**
      * Saves the current state of the settings object to the XML file
      * at the filename specified.
+     *
+     * @param filename - the filename of the file to save the settings to
      */
     public void save(String filename) throws SettingsSaveException {
         try {
@@ -153,12 +178,9 @@ public class Config {
 
             /* Add in the actual setting values. */
             for( Map.Entry<String,String> entry : settings.entrySet() ) {
-                Element kvpair = newDoc.createElement("kvpair");
-                kvpair.setAttribute( "key", entry.getKey() );
-                Element valNode = newDoc.createElement("value");
+                Element kvpair = newDoc.createElement(entry.getKey());
                 Text valText = newDoc.createTextNode(entry.getValue());
-                valNode.appendChild(valText);
-                kvpair.appendChild(valNode);
+                kvpair.appendChild(valText);
                 settingData.appendChild(kvpair);
             }
 
@@ -189,7 +211,7 @@ public class Config {
         }
     }
 
-    /*
+    /**
      * Test cases
      */
     public static void main(String args[]) {

@@ -14,8 +14,8 @@ public class SyntaxHighlighterTest {
 		OCamlLexer lexer = new OCamlLexer();
 
 		JEditorPane textPane = new JEditorPane();
-		textPane.setFont( new Font("Monospaced", Font.PLAIN, 14) );
-		textPane.setEditorKit( new OCamlEditorKit( lexer ) );
+		textPane.setFont( new Font("Courier New", Font.PLAIN, 14) );
+		textPane.setEditorKit( new OCamlEditorKit( lexer, new SimpleStyleSet() ) );
 
 		testFrame.getContentPane().add(textPane);
 
