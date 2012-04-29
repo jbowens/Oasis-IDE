@@ -8,9 +8,12 @@ public class OCamlEditorKit extends DefaultEditorKit implements ViewFactory {
 
   protected OCamlLexer lexer;
 
-  public OCamlEditorKit(OCamlLexer lexer) {
-    ocamlViewFactory = new OCamlViewFactory();
+  protected StyleSet style;
+
+  public OCamlEditorKit(OCamlLexer lexer, StyleSet style) {
+    ocamlViewFactory = new OCamlViewFactory(style);
     this.lexer = lexer;
+    this.style = style;
   }
 
   @Override
@@ -32,7 +35,7 @@ public class OCamlEditorKit extends DefaultEditorKit implements ViewFactory {
   }
 
   public View create(Element element) {
-    return new OCamlView(element);
+    return new OCamlView(element, style);
   }
 
 }

@@ -1,6 +1,7 @@
 package camel.gui.code_area;
 
 import java.awt.Font;
+import java.awt.Color;
 import java.awt.BorderLayout;
 import java.io.File;
 
@@ -12,6 +13,8 @@ import javax.swing.BorderFactory;
 import camel.gui.controller.FileHandler;
 import camel.syntaxhighlighter.OCamlLexer;
 import camel.syntaxhighlighter.OCamlEditorKit;
+import camel.syntaxhighlighter.StyleSet;
+import camel.syntaxhighlighter.SimpleStyleSet;
 
 /**
  * A tab in the GUI. A tab has an associated text pane, and optionally, file that
@@ -28,15 +31,19 @@ public class Tab extends JPanel{
 	/* The file associated with this tab */
 	protected File f;
 
+	/* The style used in this tab */
+	protected StyleSet style;
+
 	/**
 	 * Creates a new tab and loads the given file.
 	 *
 	 * @param f - the file to load
 	 * @param fh - the file handler to handle associated i/o operations
 	 */
-	public Tab(File f, FileHandler fh) {
+	public Tab(File f, FileHandler fh, StyleSet s) {
 		this.f = f;
 		this.fh = fh;
+		this.style = s;
 		initialize();
 
 		// Load the given file into the tab
@@ -48,8 +55,9 @@ public class Tab extends JPanel{
 	 *
 	 * @param fh - a filehandler to handle i/o operations for the tab
 	 */
-	public Tab(FileHandler fh) {
+	public Tab(FileHandler fh, StyleSet s) {
 		this.fh = fh;
+		this.style = s;
 		initialize();
 	}
 
@@ -58,20 +66,21 @@ public class Tab extends JPanel{
 	 */
 	protected void initialize() {
 		/* Create the editor pane */
-		JEditorPane textPane = new JEditorPane();
+		textPane = new JEditorPane();
 
 		// Create an OCaml lexer for the syntax highlighter
 		OCamlLexer lexer = new OCamlLexer();
 
-		textPane.setFont( new Font("Courier New", Font.PLAIN, 15) );
+		textPane.setFont( new Font(Font.MONOSPACED, Font.PLAIN, 15) );
+		style.apply( textPane );
+
+		/* Load the syntax highlighter editor kit */
+		textPane.setEditorKit( new OCamlEditorKit( lexer, style ) );
 
 		JScrollPane sc = new JScrollPane(textPane);
 
 		setLayout(new BorderLayout());
 		add(sc);
-
-		/* Load the syntax highlighter editor kit */
-		textPane.setEditorKit( new OCamlEditorKit( lexer ) );
 
 	}
 

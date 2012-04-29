@@ -5,6 +5,8 @@ import javax.swing.*;
 
 import camel.gui.controller.FileHandler;
 import camel.gui.menus.MenuBar;
+import camel.syntaxhighlighter.StyleSet;
+import camel.syntaxhighlighter.SimpleStyleSet;
 
 import java.awt.GridBagLayout;
 import java.io.File;
@@ -13,6 +15,9 @@ public class CodeArea extends JPanel {
 
 	/* The tabbed pane that holds all the existing tabs */
 	protected JTabbedPane tabs;
+
+	/* The current style set being used */
+	protected StyleSet style;
 	
 	public CodeArea() {
 		super(new GridBagLayout());
@@ -23,6 +28,8 @@ public class CodeArea extends JPanel {
 		tabs.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
 		add(tabs,fullFill);
 		setSize(600,600);
+
+		this.style = new SimpleStyleSet();
 	}
 
 	/**
@@ -31,7 +38,7 @@ public class CodeArea extends JPanel {
 	 * @param fh - the associated FileHandler
 	 */
 	public void makeTab(FileHandler fh) {
-		Tab t = new Tab(fh);
+		Tab t = new Tab(fh, style);
 		tabs.addTab("Untitled", t);
 	}
 
@@ -42,7 +49,7 @@ public class CodeArea extends JPanel {
 	 * @param filename - the file path of the file to open
 	 */
 	public void makeTab(FileHandler fh, String filename) {
-		Tab t = new Tab(new File(filename), fh);
+		Tab t = new Tab(new File(filename), fh, style);
 		tabs.addTab(fh.getName(), t);
 	}
 
@@ -53,7 +60,7 @@ public class CodeArea extends JPanel {
 	 * @param file - the file to create the tab from
 	 */
 	public void makeTab(FileHandler fh, File f) {
-		Tab t = new Tab(f, fh);
+		Tab t = new Tab(f, fh, style);
 		tabs.addTab(fh.getName(), t);
 	}
 
@@ -65,7 +72,7 @@ public class CodeArea extends JPanel {
 	 * @param fh - the associated FileHandler
 	 */
 	public void makeTabFromFile(FileHandler fh) {
-		Tab t = new Tab(fh.getFile(), fh);
+		Tab t = new Tab(fh.getFile(), fh, style);
 		tabs.addTab(fh.getName(), t);
 	}
 

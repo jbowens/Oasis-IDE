@@ -23,17 +23,17 @@ import java.util.Iterator;
  */
 public class OCamlView extends PlainView {
 
+  /* The set of styling rules to apply to the view */
   protected StyleSet styling;
 
   /**
-   * Constructs a new OCaml view with the given element.
+   * Constructs a new OCaml view with the given element and the given style.
    */
-  public OCamlView(Element element) {
+  public OCamlView(Element element, StyleSet style) {
 
     super(element);
 
-    // For now just assume the simple styling
-    styling = new SimpleStyleSet();
+    styling = style;
 
     // TODO: Change this to use the value loaded from the settings file.
     getDocument().putProperty(PlainDocument.tabSizeAttribute, 4);
@@ -104,10 +104,10 @@ public class OCamlView extends PlainView {
   }
 
   @Override
-  public void paint(Graphics g, Shape s) {
-    g.setColor(styling.getBackgroundColor());
-    g.fillRect(0, 0, s.getBounds().width, s.getBounds().height);
-    super.paint(g, s);
+  protected int drawSelectedText(Graphics g, int x, int y, int p0, int p1)
+                  throws BadLocationException {
+    int ret = drawUnselectedText(g, x, y, p0, p1);
+    return ret;
   }
 
   @Override
