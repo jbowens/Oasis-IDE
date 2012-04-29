@@ -7,6 +7,7 @@ import java.io.File;
 import javax.swing.JEditorPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.BorderFactory;
 
 import camel.gui.controller.FileHandler;
 import camel.syntaxhighlighter.OCamlLexer;
@@ -62,9 +63,10 @@ public class Tab extends JPanel{
 		// Create an OCaml lexer for the syntax highlighter
 		OCamlLexer lexer = new OCamlLexer();
 
-		textPane.setFont( new Font("Courier New", Font.PLAIN, 14) );
+		textPane.setFont( new Font("Courier New", Font.PLAIN, 15) );
 
 		JScrollPane sc = new JScrollPane(textPane);
+
 		setLayout(new BorderLayout());
 		add(sc);
 

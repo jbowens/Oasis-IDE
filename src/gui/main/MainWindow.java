@@ -50,7 +50,7 @@ public class MainWindow extends JFrame {
 		/* Instantiate the rest of the GUI */
 		ca = new CodeArea();
 		fh = new FileHandler(ca);
-		mb = new MenuBar(fh);
+		mb = new MenuBar(app, this);
 		ft = new FileTree(new File("."));
 		iw = new InteractionsWindow(im);
 		
@@ -78,7 +78,7 @@ public class MainWindow extends JFrame {
 	 * @param filename - the filename to open
 	 */
 	public void open(String filename) {
-		// TODO: Implement
+		ca.makeTab(fh, filename);
 	}
 	
 	/**
@@ -86,6 +86,24 @@ public class MainWindow extends JFrame {
 	 */
 	public void newBlank() {
 		ca.makeTab(fh);
+	}
+
+	/**
+	 * Returns this GUI's file handler.
+	 *
+	 * @return the file handler used by this GUI
+	 */
+	public FileHandler getFileHandler() {
+		return this.fh;
+	}
+
+	/**
+	 * Gets this window's code area.
+	 *
+	 * @return the code area of this window
+	 */
+	public CodeArea getCodeArea() {
+		return this.ca;
 	}
 
 	/**
