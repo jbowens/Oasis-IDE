@@ -16,7 +16,7 @@ public class SimpleStyleSet extends StyleSet {
 
 		/* Set the styles associated with this style set */
 		setStyle(TokenType.DEFAULT, new TextStyle(Color.WHITE, Font.PLAIN));
-		setStyle(TokenType.COMMENT, new TextStyle(new Color(138, 128, 117), Font.ITALIC) );
+		setStyle(TokenType.COMMENT, new TextStyle(new Color(122, 107, 89), Font.ITALIC) );
 		setStyle(TokenType.KEYWORD, new TextStyle(new Color(255, 79, 101), Font.PLAIN));
 		setStyle(TokenType.IDENTIFIER, new TextStyle(new Color(215, 166, 255), Font.PLAIN));
 		setStyle(TokenType.NUMBER, new TextStyle(new Color(28, 238, 231), Font.PLAIN));
