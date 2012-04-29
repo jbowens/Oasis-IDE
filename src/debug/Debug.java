@@ -22,7 +22,7 @@ public class Debug {
     
     public void getStartInfo(){
     	//get the info for the filename
-    	this.filename = "./a.out";
+    	this.filename = "./test-ml/a.out";
     	//this.breakpoints = 
     }
     
@@ -64,14 +64,23 @@ public class Debug {
     }
     
     public String runDebug() throws IOException{
-    	output.write("run");
+    	output.write("run\n");
     	output.flush();
-    	String line = input.readLine();
+        System.out.println("wrote and flushed: run");
+    	String line = ""; //= input.readLine();
     	String outString = "";
-    	while(line != null){
-    		outString += line;
-    		line = input.readLine();
-    	}
+    	line = input.readLine();
+        System.out.println(line);
+        System.out.println("Hello");
+        line = input.readLine();
+        System.out.println(line);
+        line = input.readLine();
+        System.out.println(line);
+        //while(line != null){
+    	//	outString += line;
+        //    System.out.println("outString: " + outString);
+    	//	line = input.readLine();
+    	//}
     	return outString;
     }
     
