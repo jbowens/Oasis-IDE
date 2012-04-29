@@ -47,7 +47,7 @@ public class Application {
      * @param filename a filename to open
      */ 
     public void openFile( String filename ) {
-        // TODO: Implement
+        gui.open(filename);
     }
 
     /**
@@ -64,7 +64,7 @@ public class Application {
      * Creates a new blank file.
      */
     public void openBlankProgram() {
-        // TODO: Implement
+        gui.newBlank();
     }
 
     /**

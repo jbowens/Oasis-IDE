@@ -32,6 +32,13 @@ public class MainWindow extends JFrame {
 	protected FileTree ft;
 	protected InteractionsWindow iw;
 	
+	/**
+	 * Creates a new GUI for the application.
+	 *
+	 * @param app - the application the gui is tied to
+	 * @param config - a config object with the various settings
+	 * @param im - an interactions manager to use when creating interactions
+	 */
 	public MainWindow(Application app, Config config, InteractionsManager im)
 	{
 		super();
@@ -64,7 +71,23 @@ public class MainWindow extends JFrame {
 		setVisible(true);
 
 	}
+
+	/**
+	 * Opens the given filename.
+	 *
+	 * @param filename - the filename to open
+	 */
+	public void open(String filename) {
+		// TODO: Implement
+	}
 	
+	/**
+	 * Creates a new blank tab.
+	 */
+	public void newBlank() {
+		ca.makeTab(fh);
+	}
+
 	/**
 	 * A window listener to listen for when the application should shut down.
 	 * This is necessary to make sure all system resources are freed when the

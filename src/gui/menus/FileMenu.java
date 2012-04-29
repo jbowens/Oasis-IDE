@@ -23,7 +23,7 @@ public class FileMenu extends JMenu implements ActionListener {
 		super("File");
 		setMnemonic('F');
 		_new = new JMenuItem("New", KeyEvent.VK_N);
-		_open = new JMenuItem("Open",KeyEvent.VK_O);
+		_open = new JMenuItem("Open", KeyEvent.VK_O);
 		_save = new JMenuItem("Save", KeyEvent.VK_S);
 		add(_new);
 		add(_open);
@@ -35,14 +35,14 @@ public class FileMenu extends JMenu implements ActionListener {
 	
 	public void actionPerformed(ActionEvent e)
 	{
-		if(e.getSource() == _open)
-		{
+		if(e.getSource() == _open) {
 			_fh.openFile();
 		}
-		if(e.getSource() == _save)
-		{
+
+		if(e.getSource() == _save) {
 			_fh.saveFile();
 		}
+		
 	}
 
 }

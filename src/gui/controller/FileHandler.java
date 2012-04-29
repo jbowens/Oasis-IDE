@@ -19,18 +19,19 @@ import camel.gui.menus.FileMenu;
 
 public class FileHandler {
 	
-	JFileChooser _fc;
-	FileTree ft;
-	BufferedReader br;
-	BufferedWriter bw;
-	File f;
-	CodeArea ca;
+	protected JFileChooser _fc;
+	protected FileTree ft;
+	protected BufferedReader br;
+	protected BufferedWriter bw;
+	protected File f;
+	protected CodeArea ca;
 	
 	public FileHandler(CodeArea ca)
 	{
 		_fc = new JFileChooser();
 		this.ca = ca;
 	}
+
 	public void openFile() 
 	{
 		int val = _fc.showOpenDialog(null);
@@ -40,14 +41,15 @@ public class FileHandler {
 			String path = f.getAbsolutePath();
 			try {
 				br = new BufferedReader(new InputStreamReader(new DataInputStream(new FileInputStream(path))));
-				ca.makeTab(this);
+				ca.makeTab(this, f);
 			} catch (FileNotFoundException e) {
-				System.out.println("Couldn't open file");
+				System.err.println("Couldn't open file");
 			} catch (IOException e) {
-				System.out.println("Error reading from file");
+				System.err.println("Error reading from file");
 			}
 		}
 	}
+
 	public String nextLine() 
 	{
 		try {
@@ -60,10 +62,11 @@ public class FileHandler {
 				return null;
 			}
 		} catch (IOException e) {
-			System.out.println("Error, bufferedreader was not initialized");
+			System.err.println("Error, bufferedreader was not initialized");
 		}
 		return null;
 	}
+
 	public String getName()
 	{
 		return f.getName();
@@ -83,7 +86,7 @@ public class FileHandler {
 			bw.write(curTab.getText());
 			bw.flush();
 		} catch (IOException e) {
-			System.out.println("Error writing to file");
+			System.err.println("Error writing to file");
 		}
 	}
 }

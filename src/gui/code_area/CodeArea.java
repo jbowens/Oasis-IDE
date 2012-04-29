@@ -9,13 +9,12 @@ import camel.gui.menus.MenuBar;
 import java.awt.GridBagLayout;
 import java.io.File;
 
-public class CodeArea extends JPanel{
+public class CodeArea extends JPanel {
 
+	/* The tabbed pane that holds all the existing tabs */
 	protected JTabbedPane tabs;
 	
-	
-	public CodeArea()
-	{
+	public CodeArea() {
 		super(new GridBagLayout());
 		tabs = new JTabbedPane();
 		GridBagConstraints fullFill = new GridBagConstraints();
@@ -25,20 +24,61 @@ public class CodeArea extends JPanel{
 		add(tabs,fullFill);
 		setSize(600,600);
 	}
+
+	/**
+	 * Make a new tab not yet associated with any file.
+	 *
+	 * @param fh - the associated FileHandler
+	 */
 	public void makeTab(FileHandler fh) {
+		Tab t = new Tab(fh);
+		tabs.addTab("Untitled", t);
+	}
+
+	/**
+	 * Make a tab from an already given filename.
+	 *
+	 * @param fh - the associated FileHandler
+	 * @param filename - the file path of the file to open
+	 */
+	public void makeTab(FileHandler fh, String filename) {
+		Tab t = new Tab(new File(filename), fh);
+		tabs.addTab(fh.getName(), t);
+	}
+
+	/**
+	 * Makes a tab from an already given File object.
+	 *
+	 * @param fh - the associated FileHandler
+	 * @param file - the file to create the tab from
+	 */
+	public void makeTab(FileHandler fh, File f) {
+		Tab t = new Tab(f, fh);
+		tabs.addTab(fh.getName(), t);
+	}
+
+	/**
+	 * Makes a new tab from a user-inputted file.
+	 * 
+	 * Note: Prompts for user input of the file.
+	 *
+	 * @param fh - the associated FileHandler
+	 */
+	public void makeTabFromFile(FileHandler fh) {
 		Tab t = new Tab(fh.getFile(), fh);
 		tabs.addTab(fh.getName(), t);
 	}
-	public Tab getCurTab()
-	{
+
+	/**
+	 * Gets the tab that currently has focus.
+	 *
+	 * @return the current tab
+	 */
+	public Tab getCurTab() {
 		return (Tab) tabs.getSelectedComponent();
 	}
 	
-	
-	
-	
-	public static void main(String[] args)
-	{
+	public static void main(String[] args) {
 		//FileHandler fh = new FileHandler();
 		CodeArea ca = new CodeArea();
 		JFrame frame = new JFrame();
