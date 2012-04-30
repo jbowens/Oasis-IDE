@@ -12,6 +12,11 @@ import java.io.File;
 import java.io.IOException;
 import java.awt.Color;
 import java.awt.Font;
+import java.util.Collections;
+import java.util.ArrayList;
+import java.util.List;
+
+import camel.util.StyleFileFilter;
 
 /**
  * A StyleLoader can be used to create StyleSets from their
@@ -19,10 +24,28 @@ import java.awt.Font;
  */
 public class StyleLoader {
 	
+	/* This installation's style directory */
+	protected String styleDirectory;
+
+	/* The styles loaded into memory */
+	protected List<StyleSet> styles;
+
 	/**
 	 * Create a new style loader.
+	 *
+	 * @param the style directory to load styles from
 	 */
-	public StyleLoader() {
+	public StyleLoader(String styleDirectory) {
+		this.styleDirectory = styleDirectory;
+		styles = getStyles(styleDirectory);
+		Collections.sort(styles);
+	}
+
+	/**
+	 * Get available styles
+	 */
+	public List<StyleSet> getAvailableStyles() {
+		return styles;
 	}
 
 	/**
@@ -125,6 +148,25 @@ public class StyleLoader {
 			return Font.BOLD;
 		else
 			return Font.PLAIN;
+	}
+
+	protected List<StyleSet> getStyles(String dir) {
+
+		ArrayList<StyleSet> styles = new ArrayList<StyleSet>();
+
+		File d = new File(dir);
+		if( ! d.isDirectory() )
+			return styles;
+
+		File[] files = d.listFiles(new StyleFileFilter());
+		for( File f : files ) {
+			StyleSet style = loadStyle(f);
+			if( style != null )
+				styles.add( style );
+		}
+
+		return styles;
+
 	}
 
 }

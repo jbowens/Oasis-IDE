@@ -9,7 +9,7 @@ import javax.swing.text.JTextComponent;
  * Represents a collection of assignments of token types to
  * text styles.
  */
-public class StyleSet {
+public class StyleSet implements Comparable {
 
 	public static final TextStyle DEFAULT_STYLE = new TextStyle();
 	
@@ -138,6 +138,10 @@ public class StyleSet {
 	 */
 	public void setStyle(TokenType type, TextStyle style) {
 		mapping.put(type, style);
+	}
+
+	public int compareTo(Object o) {
+		return (getName().compareTo( ((StyleSet) o).getName() ) );
 	}
 
 }
