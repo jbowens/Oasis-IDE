@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<style>
+  <info>
+    <name>Simple Light</name>
+  </info>
+  <mainStyling>
+    <background>FFFFFF</background>
+    <selectedBackground>bdd0ef</selectedBackground>
+    <caret>272727</caret>
+    <lineNumbers>3e3e3e</lineNumbers>
+  </mainStyling>
+  <tokens>
+    <token kind="default">
+      <color>000000</color>
+      <style>plain</style>
+    </token>
+    <token kind="comment">
+      <color>8993a2</color>
+    </token>
+    <token kind="keyword">
+      <color>609711</color>
+    </token>
+    <token kind="identifier">
+      <color>117c97</color>
+    </token>
+    <token kind="number">
+      <color>292d3a</color>
+    </token>
+    <token kind="string">
+      <color>ce6007</color>
+    </token>
+    <token kind="special_value">
+      <color>914545</color>
+    </token>
+    <token kind="operator">
+      <color>615c5c</color>
+    </token>
+    <token kind="type">
+      <color>832380</color>
+    </token>
+    <token kind="delimeter">
+      <color>9d9d9d</color>
+    </token>
+  </tokens>
+</style>
