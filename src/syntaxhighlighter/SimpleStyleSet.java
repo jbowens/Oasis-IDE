@@ -12,7 +12,7 @@ public class SimpleStyleSet extends StyleSet {
 	 * Creates a new simple style set.
 	 */
 	public SimpleStyleSet() {
-		super("Simplicity");
+		super("Simple Dark");
 
 		/* Set the styles associated with this style set */
 		setStyle(TokenType.DEFAULT, new TextStyle(Color.WHITE, Font.PLAIN));

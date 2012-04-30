@@ -42,6 +42,8 @@ public class Token implements Comparable {
   /**
    * Appends text to this token. This is used when
    * constructing unknown tokens before lexing.
+   *
+   * @param text the text to append to the 
    */
   public void appendText(String text) {
     if( text == null )
