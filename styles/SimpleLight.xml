@@ -12,34 +12,42 @@
   <tokens>
     <token kind="default">
       <color>000000</color>
-      <style>plain</style>
+      <style>bold</style>
     </token>
     <token kind="comment">
-      <color>8993a2</color>
+      <color>5A626E</color>
     </token>
     <token kind="keyword">
-      <color>609711</color>
+      <color>486E13</color>
+      <style>bold</style>
     </token>
     <token kind="identifier">
-      <color>117c97</color>
+      <color>166073</color>
+      <style>bold</style>
     </token>
     <token kind="number">
       <color>292d3a</color>
+      <style>bold</style>
     </token>
     <token kind="string">
-      <color>ce6007</color>
+      <color>944200</color>
+      <style>bold</style>
     </token>
     <token kind="special_value">
-      <color>914545</color>
+      <color>732F2F</color>
+      <style>bold</style>
     </token>
     <token kind="operator">
-      <color>615c5c</color>
+      <color>41434F</color>
+      <style>bold</style>
     </token>
     <token kind="type">
-      <color>832380</color>
+      <color>5C1A5A</color>
+      <style>bold</style>
     </token>
     <token kind="delimeter">
-      <color>9d9d9d</color>
+      <color>616161</color>
+      <style>bold</style>
     </token>
   </tokens>
 </style>

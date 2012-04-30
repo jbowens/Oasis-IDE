@@ -7,6 +7,7 @@ import camel.gui.controller.FileHandler;
 import camel.gui.menus.MenuBar;
 import camel.syntaxhighlighter.StyleSet;
 import camel.syntaxhighlighter.SimpleStyleSet;
+import camel.syntaxhighlighter.StyleWrapper;
 
 import java.awt.GridBagLayout;
 import java.io.File;
@@ -17,7 +18,7 @@ public class CodeArea extends JPanel {
 	protected JTabbedPane tabs;
 
 	/* The current style set being used */
-	protected StyleSet style;
+	protected StyleWrapper style;
 	
 	public CodeArea() {
 		super(new GridBagLayout());
@@ -29,7 +30,14 @@ public class CodeArea extends JPanel {
 		add(tabs,fullFill);
 		setSize(600,600);
 
-		this.style = new SimpleStyleSet();
+		this.style = new StyleWrapper( new SimpleStyleSet() );
+	}
+
+	/**
+	 * Switch the style.
+	 */
+	public void switchStyle(StyleSet newStyle) {
+		style.setStyle(newStyle);
 	}
 
 	/**

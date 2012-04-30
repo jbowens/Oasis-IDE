@@ -73,6 +73,13 @@ public class Application {
     }
 
     /**
+     * Gets the style loader for this application.
+     */
+    public StyleLoader getStyleLoader() {
+        return styleLoader;
+    }
+
+    /**
      * Cleans up any system resources held by the application. This
      * needs to be called when the program exists.
      */

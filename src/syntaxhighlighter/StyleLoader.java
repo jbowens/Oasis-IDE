@@ -132,8 +132,9 @@ public class StyleLoader {
 
 	    		try {
 		    		if( prop.getNodeName().equals("color") ) {
-		    			if( prop.getNodeValue() != null )
+		    			if( prop.getFirstChild() != null && prop.getFirstChild().getNodeValue() != null ) {
 		    				c = Color.decode( "0x" + prop.getFirstChild().getNodeValue() );
+		    			}
 		    		} else if( prop.getNodeName().equals( "style" ) )
 		    			fontStyle = getFontStyle( prop.getFirstChild().getNodeValue() );
 		    	} catch(NumberFormatException ex) {
@@ -159,7 +160,7 @@ public class StyleLoader {
 
 	protected TokenType getTokenType( String id ) {
 		try {
-				return TokenType.valueOf( id.toUpperCase() );
+			return TokenType.valueOf( id.toUpperCase() );
 		} catch( IllegalArgumentException e ) {
 			return null;
 		}
