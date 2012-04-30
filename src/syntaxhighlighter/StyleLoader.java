@@ -61,6 +61,8 @@ public class StyleLoader {
 	    DocumentBuilder builder = factory.newDocumentBuilder();
 	    Document doc = builder.parse(f);
 
+	    doc.normalize();
+
 	    /* Get the style information node */
 	    NodeList infoList = doc.getElementsByTagName("info");
 	    if( infoList.getLength() == 0 )
@@ -71,8 +73,12 @@ public class StyleLoader {
 	    NodeList children = info.getChildNodes();
 	    for( int i = 0; i < children.getLength(); i++ ) {
 	    	Node n = children.item(i);
+
+	    	if( n.getFirstChild() == null || n.getFirstChild().getNodeValue() == null )
+	    		continue;
+
 	    	if( n.getNodeName().equals("name") )
-	    		set.setName(n.getNodeValue());
+	    		set.setName(n.getFirstChild().getNodeValue());
 	    }
 
 	    /* Get the main styling data */
@@ -85,12 +91,21 @@ public class StyleLoader {
 	    children = mainStyling.getChildNodes();
 	    for( int i = 0; i < children.getLength(); i++ ) {
 	    	Node n = children.item(i);
-	    	if( n.getNodeName().equals("background") )
-	    		set.setBackground( Color.decode( n.getNodeValue() ) );
-	    	else if( n.getNodeName().equals("selectedBackground") )
-	    		set.setSelectedBackground( Color.decode( n.getNodeValue() ) );
-	    	else if( n.getNodeName().equals("caret") )
-	    		set.setCaretColor( Color.decode( n.getNodeValue() ) );
+
+	    	// Skip any unparsable ones
+	 		if( n.getFirstChild() == null || n.getFirstChild().getNodeValue() == null )
+	 			continue;
+
+	 		try {
+		    	if( n.getNodeName().equals("background") )
+		    		set.setBackground( Color.decode( "0x" + n.getFirstChild().getNodeValue() ) );
+		    	else if( n.getNodeName().equals("selectedBackground") )
+		    		set.setSelectedBackground( Color.decode( "0x" + n.getFirstChild().getNodeValue() ) );
+		    	else if( n.getNodeName().equals("caret") )
+		    		set.setCaretColor( Color.decode( "0x" + n.getFirstChild().getNodeValue() ) );
+		    } catch( NumberFormatException ex ) {
+		    	continue;
+		    }
 	    }
 
 	    /* Get token styles */
@@ -111,10 +126,19 @@ public class StyleLoader {
 	    	NodeList childProps = n.getChildNodes();
 	    	for( int j = 0; j < childProps.getLength(); j++ ) {
 	    		Node prop = childProps.item(j);
-	    		if( prop.getNodeName().equals("color") )
-	    			c = Color.decode( prop.getNodeValue() );
-	    		else if( prop.getNodeName().equals( "style" ) )
-	    			fontStyle = getFontStyle( prop.getNodeValue() );
+
+	    		if( prop.getFirstChild() == null || prop.getFirstChild().getNodeValue() == null )
+	    			continue;
+
+	    		try {
+		    		if( prop.getNodeName().equals("color") ) {
+		    			if( prop.getNodeValue() != null )
+		    				c = Color.decode( "0x" + prop.getFirstChild().getNodeValue() );
+		    		} else if( prop.getNodeName().equals( "style" ) )
+		    			fontStyle = getFontStyle( prop.getFirstChild().getNodeValue() );
+		    	} catch(NumberFormatException ex) {
+		    		continue;
+		    	}
 	    	}
 
 	    	TextStyle textStyle = new TextStyle( c, fontStyle );

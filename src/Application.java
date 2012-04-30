@@ -2,6 +2,7 @@ package camel;
 
 import camel.interactions.*;
 import camel.gui.main.*;
+import camel.syntaxhighlighter.StyleLoader;
 import java.util.*;
 
 /**
@@ -17,6 +18,9 @@ public class Application {
     /* The interactions manager that organizes all interactions with the ocaml REPL */
     protected InteractionsManager interactionsManager;
 
+    /* A style loader to load styles from the file system */
+    protected StyleLoader styleLoader;
+
     /* The main GUI class */
     protected MainWindow gui;
 
@@ -31,6 +35,7 @@ public class Application {
         // TODO: Add test to ensure OCaml is installed / find the ocaml executable
         this.config = new Config( settingsFile );
         this.interactionsManager = new InteractionsManager("ocaml");
+        styleLoader = new StyleLoader( "./styles" );
         setupGui();
     }
 
