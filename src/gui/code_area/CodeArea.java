@@ -8,9 +8,11 @@ import camel.gui.menus.MenuBar;
 import camel.syntaxhighlighter.StyleSet;
 import camel.syntaxhighlighter.SimpleStyleSet;
 import camel.syntaxhighlighter.StyleWrapper;
+import camel.Application;
 
 import java.awt.GridBagLayout;
 import java.io.File;
+import java.util.List;
 
 public class CodeArea extends JPanel {
 
@@ -20,7 +22,10 @@ public class CodeArea extends JPanel {
 	/* The current style set being used */
 	protected StyleWrapper style;
 	
-	public CodeArea() {
+	/* The application this Code Area is tied to */
+	protected Application app;
+
+	public CodeArea(Application app) {
 		super(new GridBagLayout());
 		tabs = new JTabbedPane();
 		GridBagConstraints fullFill = new GridBagConstraints();
@@ -30,7 +35,21 @@ public class CodeArea extends JPanel {
 		add(tabs,fullFill);
 		setSize(600,600);
 
-		this.style = new StyleWrapper( new SimpleStyleSet() );
+		this.app = app;
+
+		/* Load the user's preferred default style if it's available */
+		StyleSet initialStyle = new SimpleStyleSet();
+
+		String configStyle = app.getConfig().getSetting("styleset");
+
+		for( StyleSet s : app.getStyleLoader().getAvailableStyles() ) {
+			if( s.getName() != null && s.getName().equals(configStyle) ) {
+				initialStyle = s;
+				break;
+			}
+		}
+
+		this.style = new StyleWrapper( initialStyle );
 	}
 
 	/**
@@ -39,6 +58,8 @@ public class CodeArea extends JPanel {
 	public void switchStyle(StyleSet newStyle) {
 		style.setStyle(newStyle);
 		this.repaint();
+		if( newStyle != null && newStyle.getName() != null )
+			app.getConfig().setSetting("styleset", newStyle.getName());
 	}
 
 	/**
@@ -49,6 +70,7 @@ public class CodeArea extends JPanel {
 	public void makeTab(FileHandler fh) {
 		Tab t = new Tab(fh, style);
 		tabs.addTab("Untitled", t);
+		tabs.setSelectedComponent(t);
 	}
 
 	/**
@@ -60,6 +82,7 @@ public class CodeArea extends JPanel {
 	public void makeTab(FileHandler fh, String filename) {
 		Tab t = new Tab(new File(filename), fh, style);
 		tabs.addTab(fh.getName(), t);
+		tabs.setSelectedComponent(t);
 	}
 
 	/**
@@ -71,6 +94,7 @@ public class CodeArea extends JPanel {
 	public void makeTab(FileHandler fh, File f) {
 		Tab t = new Tab(f, fh, style);
 		tabs.addTab(fh.getName(), t);
+		tabs.setSelectedComponent(t);
 	}
 
 	/**
@@ -83,6 +107,7 @@ public class CodeArea extends JPanel {
 	public void makeTabFromFile(FileHandler fh) {
 		Tab t = new Tab(fh.getFile(), fh, style);
 		tabs.addTab(fh.getName(), t);
+		tabs.setSelectedComponent(t);
 	}
 
 	/**
@@ -93,22 +118,5 @@ public class CodeArea extends JPanel {
 	public Tab getCurTab() {
 		return (Tab) tabs.getSelectedComponent();
 	}
-	
-	public static void main(String[] args) {
-		//FileHandler fh = new FileHandler();
-		CodeArea ca = new CodeArea();
-		JFrame frame = new JFrame();
-		frame.add(ca);
-		JPanel panel = new JPanel();
-		JTextArea ta = new JTextArea();
-		ta.append("testing");
-		JScrollPane sc = new JScrollPane(ta);
-		panel.setLayout(new BorderLayout());
-		panel.add(sc);
-		ca.tabs.addTab("test", panel);
-		frame.pack();
-		frame.setVisible(true);
-	}
-
 
 }

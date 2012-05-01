@@ -48,7 +48,7 @@ public class MainWindow extends JFrame {
 		this.im = im;
 
 		/* Instantiate the rest of the GUI */
-		ca = new CodeArea();
+		ca = new CodeArea(app);
 		fh = new FileHandler(ca);
 		mb = new MenuBar(app, this);
 		ft = new FileTree(new File("."));

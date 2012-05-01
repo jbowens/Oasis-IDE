@@ -37,6 +37,9 @@ public class Application {
         this.interactionsManager = new InteractionsManager("ocaml");
         styleLoader = new StyleLoader( "./styles" );
         setupGui();
+
+        /* Make sure we always clean up after starting up */
+         Runtime.getRuntime().addShutdownHook( new ShutdownCleaner(this) );
     }
 
     /**
@@ -77,6 +80,13 @@ public class Application {
      */
     public StyleLoader getStyleLoader() {
         return styleLoader;
+    }
+
+    /**
+     * Gets this applications config object.
+     */
+    public Config getConfig() {
+        return config;
     }
 
     /**
