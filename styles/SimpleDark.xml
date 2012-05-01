@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<style>
+	<info>
+		<name>Simple Dark</name>
+	</info>
+	<mainStyling>
+		<background>232323</background>
+		<selectedBackground>434343</selectedBackground>
+		<caret>FFFFFF</caret>
+		<lineNumbers>B5B5B5</lineNumbers>
+	</mainStyling>
+	<tokens>
+		<token kind="default">
+			<color>FFFFFF</color>
+			<style>plain</style>
+		</token>
+		<token kind="comment">
+			<color>938573</color>
+		</token>
+		<token kind="keyword">
+			<color>FF4F65</color>
+		</token>
+		<token kind="identifier">
+			<color>E0BAE1</color>
+		</token>
+		<token kind="number">
+			<color>1CEEE7</color>
+		</token>
+		<token kind="string">
+			<color>FBAD49</color>
+		</token>
+		<token kind="special_value">
+			<color>51E886</color>
+		</token>
+		<token kind="operator">
+			<color>FFFFFF</color>
+		</token>
+		<token kind="type">
+			<color>64E8D6</color>
+		</token>
+		<token kind="delimeter">
+			<color>E1D8E8</color>
+		</token>
+	</tokens>
+</style>

@@ -9,7 +9,7 @@ import javax.swing.text.JTextComponent;
  * Represents a collection of assignments of token types to
  * text styles.
  */
-public class StyleSet {
+public class StyleSet implements Comparable {
 
 	public static final TextStyle DEFAULT_STYLE = new TextStyle();
 	
@@ -61,6 +61,10 @@ public class StyleSet {
 		return name;
 	}
 
+	public void setName(String newName) {
+		this.name = newName;
+	}
+
 	/**
 	 * Returns the background color of this style set.
 	 *
@@ -79,6 +83,13 @@ public class StyleSet {
 	 	this.background = newBg;
 	 }
 
+	 /**
+	  * Gets the caret color
+	  */
+	 public Color getCaretColor() {
+	 	return caretColor;
+	 }
+
 	/**
 	 * Sets the caret color to be the given color.
 	 *
@@ -86,6 +97,13 @@ public class StyleSet {
 	 */
 	public void setCaretColor(Color newCaret) {
 		caretColor = newCaret;
+	}
+
+	/**
+	 * Gets the set selected background color.
+	 */
+	public Color getSelectedBackground() {
+		return selectedBackground;
 	}
 
 	/**
@@ -120,6 +138,10 @@ public class StyleSet {
 	 */
 	public void setStyle(TokenType type, TextStyle style) {
 		mapping.put(type, style);
+	}
+
+	public int compareTo(Object o) {
+		return (getName().compareTo( ((StyleSet) o).getName() ) );
 	}
 
 }

@@ -15,7 +15,7 @@ public class Token implements Comparable {
   protected int length;
 
   /* The raw text of the token */
-  protected String text = "";
+  protected StringBuilder text;
 
   /* The pair number of this token. */
   protected byte pair;
@@ -27,7 +27,7 @@ public class Token implements Comparable {
     this.type = type;
     this.length = length;
     this.startChar = startChar;
-    text = "";
+    text = new StringBuilder();
   }
 
   public Token(TokenType type, int startChar, int length, byte pair) {
@@ -36,17 +36,20 @@ public class Token implements Comparable {
     this.startChar = startChar;
     this.type = type;
     this.pair = pair;
+    text = new StringBuilder();
   }
 
   /**
    * Appends text to this token. This is used when
    * constructing unknown tokens before lexing.
+   *
+   * @param text the text to append to the 
    */
   public void appendText(String text) {
     if( text == null )
       return;
       
-    this.text = this.text + text;
+    this.text.append(text);
     this.length += text.length();
   }
 
@@ -56,7 +59,7 @@ public class Token implements Comparable {
    * type UNKNOWN.
    */
   public String getText() {
-    return this.text;
+    return this.text.toString();
   }
 
   /**
