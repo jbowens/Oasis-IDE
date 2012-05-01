@@ -9,6 +9,7 @@ import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JCheckBoxMenuItem;
 
 import camel.gui.controller.FileHandler;
 import camel.gui.code_area.CodeArea;
@@ -26,6 +27,8 @@ public class ViewMenu extends JMenu  {
 	protected JMenu _styles;
 
 	protected JMenu _font;
+
+	protected JMenuItem _lineNumbers;
 
 	protected CodeArea _codeArea;
 
@@ -58,9 +61,12 @@ public class ViewMenu extends JMenu  {
 
 		_font = new JMenu("Font");
 
+		_lineNumbers = new JCheckBoxMenuItem("Line Numbers", false);
+
 		add(_styles);
 		add(_font);
-		
+		add(_lineNumbers);
+
 	}
 
 	protected class StyleSwitchListener implements ActionListener {

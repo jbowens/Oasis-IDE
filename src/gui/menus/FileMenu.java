@@ -21,6 +21,7 @@ public class FileMenu extends JMenu implements ActionListener {
 	protected JMenuItem _save;
 	protected JMenuItem _saveAs;
 	protected JMenuItem _saveAll;
+	protected JMenuItem _newWindow;
 	protected FileHandler _fh;
 	protected CodeArea _codeArea;
 
@@ -39,16 +40,19 @@ public class FileMenu extends JMenu implements ActionListener {
 		_save = new JMenuItem("Save", KeyEvent.VK_S);
 		_saveAs = new JMenuItem("Save As...");
 		_saveAll = new JMenuItem("Save All");
+		_newWindow = new JMenuItem("New Window");
 		
 		add(_new);
 		add(_open);
 		add(_save);
 		add(_saveAs);
 		add(_saveAll);
+		add(_newWindow);
 		
 		_open.addActionListener(this);
 		_save.addActionListener(this);
 		_new.addActionListener(this);
+		_newWindow.addActionListener(this);
 
 	}
 	
@@ -64,6 +68,10 @@ public class FileMenu extends JMenu implements ActionListener {
 
 		if(e.getSource() == _new) {
 			_codeArea.makeTab(_fh);
+		}
+
+		if(e.getSource() == _newWindow) {
+			_codeArea.getApplication().createNewWindow();
 		}
 
 	}

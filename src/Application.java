@@ -50,6 +50,13 @@ public class Application {
     }
 
     /**
+     * Creates another window.
+     */
+    public void createNewWindow() {
+        new MainWindow(this, config, interactionsManager);
+    }
+
+    /**
      * Opens a file.
      *
      * @param filename a filename to open

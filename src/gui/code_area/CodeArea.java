@@ -53,6 +53,13 @@ public class CodeArea extends JPanel {
 	}
 
 	/**
+	 * Returns this code area's corresponding application
+	 */
+	public Application getApplication() {
+		return app;
+	}
+
+	/**
 	 * Switch the style.
 	 */
 	public void switchStyle(StyleSet newStyle) {
