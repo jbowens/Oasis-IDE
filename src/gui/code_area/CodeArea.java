@@ -38,6 +38,7 @@ public class CodeArea extends JPanel {
 	 */
 	public void switchStyle(StyleSet newStyle) {
 		style.setStyle(newStyle);
+		this.repaint();
 	}
 
 	/**
