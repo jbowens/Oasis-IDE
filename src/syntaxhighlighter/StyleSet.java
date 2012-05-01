@@ -28,6 +28,9 @@ public class StyleSet implements Comparable {
 	/* The color of the caret */
 	protected Color caretColor;
 
+	/* The color of the line numbers */
+	protected Color lineNumbersColor;
+
 	/**
 	 * Creates a new style set with the given name.
 	 */
@@ -113,6 +116,32 @@ public class StyleSet implements Comparable {
 	 */
 	public void setSelectedBackground(Color newSelectBg) {
 		this.selectedBackground = newSelectBg;
+	}
+
+	/**
+	 * Sets the line numbers color.
+	 *
+	 * @param lineNumColor the new line numbers color
+	 */
+	public void setLineNumbersColor( Color newColor ) {
+		this.lineNumbersColor = newColor;
+	}
+
+	/**
+	 * Gets the line numbers color. NOTE: This will return a color even if this
+	 * hasn't been set. The line numbers color takes priority if it is set. Otherwise,
+	 * it will try to use the DEFAULT token type color. Lastly, it'll use the default
+	 * textstyle's color.
+	 *
+	 * @return the color that line numbers should be displayed in
+	 */
+	public Color getLineNumbersColor() {
+		if( lineNumbersColor != null )
+			return lineNumbersColor;
+		if( mapping.containsKey(TokenType.DEFAULT) )
+			return mapping.get(TokenType.DEFAULT).getColor();
+		else
+			return DEFAULT_STYLE.getColor();
 	}
 
 	/**

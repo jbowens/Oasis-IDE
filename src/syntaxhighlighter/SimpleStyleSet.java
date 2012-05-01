@@ -29,6 +29,7 @@ public class SimpleStyleSet extends StyleSet {
 		setBackground( new Color(35, 35, 35) );
 		setSelectedBackground( new Color( 67, 67, 67 ) );
 		setCaretColor( Color.WHITE );
+		setLineNumbersColor( new Color(147, 133, 115) );
 
 	}
 

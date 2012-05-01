@@ -124,7 +124,7 @@ public class OCamlView extends PlainView {
    *
    * @param graphics a Graphics object to apply the hints to
    */
-  protected void setRenderingHints(Graphics graphics) {
+  public static void setRenderingHints(Graphics graphics) {
     Graphics2D g = (Graphics2D) graphics;
     RenderingHints currentHints = g.getRenderingHints();
     currentHints.put(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);

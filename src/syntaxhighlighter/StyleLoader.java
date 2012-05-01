@@ -97,12 +97,14 @@ public class StyleLoader {
 	 			continue;
 
 	 		try {
-		    	if( n.getNodeName().equals("background") )
+		    	if( n.getNodeName().equalsIgnoreCase("background") )
 		    		set.setBackground( Color.decode( "0x" + n.getFirstChild().getNodeValue() ) );
-		    	else if( n.getNodeName().equals("selectedBackground") )
+		    	else if( n.getNodeName().equalsIgnoreCase("selectedBackground") )
 		    		set.setSelectedBackground( Color.decode( "0x" + n.getFirstChild().getNodeValue() ) );
-		    	else if( n.getNodeName().equals("caret") )
+		    	else if( n.getNodeName().equalsIgnoreCase("caret") )
 		    		set.setCaretColor( Color.decode( "0x" + n.getFirstChild().getNodeValue() ) );
+		    	else if( n.getNodeName().equalsIgnoreCase("lineNumbers") )
+		    		set.setLineNumbersColor( Color.decode( "0x" + n.getFirstChild().getNodeValue() ) );
 		    } catch( NumberFormatException ex ) {
 		    	continue;
 		    }

@@ -182,4 +182,25 @@ public class OCamlDocument extends PlainDocument {
     super.fireRemoveUpdate(e);
   }
 
+  /**
+   * Counts the number of lines in the document.
+   */
+  public int countLines() {
+    int len = getLength();
+    try {
+      if( len == 0 )
+        return 1;
+      else {
+        String txt = getText(0, len);
+        int count = 1;
+        for( int i = 0; i < len; i++ )
+          if( txt.charAt(i) == '\n' )
+            count++;
+        return count;
+      }
+    } catch( BadLocationException ex ) {
+      return 0;
+    }
+  }
+
 }

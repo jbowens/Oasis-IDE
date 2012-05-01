@@ -3,10 +3,11 @@
 <info/>
 <settingData>
 <wordwrap>true</wordwrap>
-<initial_width>800</initial_width>
+<initial_width>1000</initial_width>
 <tabwidth>4</tabwidth>
-<initial_height>600</initial_height>
+<initial_height>800</initial_height>
 <font_size>15</font_size>
 <styleset>Simple Dark</styleset>
+<linenumbers>true</linenumbers>
 </settingData>
 </settings>

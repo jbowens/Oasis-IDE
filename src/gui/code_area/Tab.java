@@ -3,6 +3,7 @@ package camel.gui.code_area;
 import java.awt.Font;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.FlowLayout;
 import java.awt.BorderLayout;
 import java.io.File;
 
@@ -21,7 +22,7 @@ import camel.syntaxhighlighter.SimpleStyleSet;
  * A tab in the GUI. A tab has an associated text pane, and optionally, file that
  * the content of the tab is associated with.
  */
-public class Tab extends JPanel{
+public class Tab extends JPanel {
 
 	/* The text pane to be displayed in this tab */
 	protected JEditorPane textPane;
@@ -71,8 +72,12 @@ public class Tab extends JPanel{
 	 * Initializes the tab.
 	 */
 	protected void initialize() {
+
+		setLayout(new BorderLayout());
+
 		/* Create the editor pane */
 		textPane = new JEditorPane();
+		textPane.setBorder( BorderFactory.createEmptyBorder(3, 3, 3, 3) );
 
 		// Create an OCaml lexer for the syntax highlighter
 		OCamlLexer lexer = new OCamlLexer();
@@ -84,9 +89,15 @@ public class Tab extends JPanel{
 		textPane.setEditorKit( new OCamlEditorKit( lexer, style ) );
 
 		JScrollPane sc = new JScrollPane(textPane);
+		sc.setBorder(BorderFactory.createEmptyBorder());
 
-		setLayout(new BorderLayout());
-		add(sc);
+		/* This must happen AFTER setting the editor kit to the OCaml Editor kit */
+		LineNumbersRuler lineNums = new LineNumbersRuler(style);
+		lineNums.install(textPane);
+
+		sc.setRowHeaderView(lineNums);
+		sc.getViewport().setView(textPane);
+		add(sc, BorderLayout.CENTER);
 
 	}
 
