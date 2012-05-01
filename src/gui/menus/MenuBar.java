@@ -13,13 +13,29 @@ import camel.gui.controller.FileHandler;
 import camel.gui.main.MainWindow;
 import camel.Application;
 
-public class MenuBar extends JMenuBar{
+public class MenuBar extends JMenuBar {
+
 	FileMenu _fMenu;
-	
+	EditMenu _eMenu;
+	OCamlMenu _ocamlMenu;
+	ViewMenu _vMenu;
+
 	public MenuBar(Application app, MainWindow window)
 	{
+
 		_fMenu = new FileMenu(window.getCodeArea(), window.getFileHandler());
-		add(_fMenu,FlowLayout.LEFT);
+		
+		_eMenu = new EditMenu(this);
+
+		_ocamlMenu = new OCamlMenu(this);
+
+		_vMenu = new ViewMenu(this, app.getStyleLoader(), window.getCodeArea());
+
+		add(_vMenu, FlowLayout.LEFT);
+		add(_ocamlMenu, FlowLayout.LEFT);
+		add(_eMenu, FlowLayout.LEFT);
+		add(_fMenu, FlowLayout.LEFT);
+	
 	}
 
 }

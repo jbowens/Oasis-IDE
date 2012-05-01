@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<style>
+	<info>
+		<name>Homebrew</name>
+	</info>
+	<mainStyling>
+		<background>000000</background>
+		<selectedBackground>333333</selectedBackground>
+		<caret>28FC03</caret>
+		<lineNumbers>28FC03</lineNumbers>
+	</mainStyling>
+	<tokens>
+		<token kind="default">
+			<color>28FC03</color>
+			<style>plain</style>
+		</token>
+		<token kind="comment">
+			<color>919191</color>
+		</token>
+		<token kind="keyword">
+			<color>26FF00</color>
+			<style>bold</style>
+		</token>
+		<token kind="identifier">
+			<color>26FF00</color>
+		</token>
+		<token kind="number">
+			<color>E1FFDB</color>
+		</token>
+		<token kind="string">
+			<color>E1FFDB</color>
+		</token>
+		<token kind="special_value">
+			<color>E1FFDB</color>
+		</token>
+		<token kind="operator">
+			<color>26FF00</color>
+		</token>
+		<token kind="type">
+			<color>1EC700</color>
+		</token>
+		<token kind="delimeter">
+			<color>2BFF05</color>
+		</token>
+	</tokens>
+</style>

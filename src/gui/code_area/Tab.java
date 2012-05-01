@@ -2,6 +2,7 @@ package camel.gui.code_area;
 
 import java.awt.Font;
 import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.BorderLayout;
 import java.io.File;
 
@@ -59,6 +60,11 @@ public class Tab extends JPanel{
 		this.fh = fh;
 		this.style = s;
 		initialize();
+	}
+
+	public void paint(Graphics g) {
+		style.apply( textPane );
+		super.paint(g);
 	}
 
 	/**

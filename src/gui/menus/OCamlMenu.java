@@ -12,25 +12,23 @@ import javax.swing.JMenuItem;
 import camel.gui.controller.FileHandler;
 
 /**
- * The edit menu.
+ * The OCaml menu.
  */
-public class EditMenu extends JMenu  {
+public class OCamlMenu extends JMenu  {
 
 	/* The menu bar this menu is a part of */
 	protected MenuBar parentBar;
 
 	/**
-	 * Create a new menu bar
+	 * Create a new menu 
 	 *
 	 * @param parentBar the parent menubar of this menu
 	 */
-	public EditMenu(MenuBar parentBar) {
+	public OCamlMenu(MenuBar parentBar) {
 		
-		super("Edit");
+		super("OCaml");
 
 		this.parentBar = parentBar;
-
-		setMnemonic('E');
 
 	}
 

@@ -22,7 +22,7 @@ public class Debug {
     
     public void getStartInfo(){
     	//get the info for the filename
-    	this.filename = "/gpfs/main/home/mkantesa/course/cs032/Camel/Camel/test-ml/a.out";
+    	this.filename = "./../test-ml/a.out";
     	//this.breakpoints = 
     }
     
@@ -108,6 +108,20 @@ public class Debug {
     		line = input.readLine();
     	}
     	return outString;
+    }
+
+        public String runQuit() throws IOException{
+        output.write("quit");
+        output.flush();
+        output.write("y");
+        output.flush();
+        String line = input.readLine();
+        String outString = "";
+        while(line != null){
+            outString += line;
+            line = input.readLine();
+        }
+        return outString;
     }
 
 	public String getStepInfo() throws IOException{
