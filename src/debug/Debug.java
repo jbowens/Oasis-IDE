@@ -22,7 +22,7 @@ public class Debug {
     
     public void getStartInfo(){
     	//get the info for the filename
-    	this.filename = "./test-ml/a.out";
+    	this.filename = "/gpfs/main/home/mkantesa/course/cs032/Camel/Camel/test-ml/a.out";
     	//this.breakpoints = 
     }
     
@@ -66,6 +66,8 @@ public class Debug {
     public String runDebug() throws IOException{
     	output.write("run\n");
     	output.flush();
+	output.write("\n");
+	output.flush();
         System.out.println("wrote and flushed: run");
     	String line = ""; //= input.readLine();
     	String outString = "";
