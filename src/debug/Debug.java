@@ -23,10 +23,10 @@ public class Debug {
     public void getStartInfo(){
     	//get the info for the filename
     	this.filename = "./../test-ml/a.out";
-    	this.breakpoints = getBreakPoints;
+    	this.breakpoints = getBreakPoints();
     }
 
-    public void getBreakPoints(){
+    public String[] getBreakPoints(){
         return breakpoints;
     }
     
@@ -75,13 +75,16 @@ public class Debug {
         System.out.println("wrote and flushed: run");
     	String line = ""; //= input.readLine();
     	String outString = "";
-    	line = input.readLine();
-        System.out.println(line);
-        System.out.println("Hello");
-        line = input.readLine();
-        System.out.println(line);
-        line = input.readLine();
-        System.out.println(line);
+    	while(input.ready()){
+            line = input.readLine();
+            System.out.println(line);
+            outString += line;
+        }
+        //System.out.println("Hello");
+        //line = input.readLine();
+        //System.out.println(line);
+        //line = input.readLine();
+        //System.out.println(line);
         //while(line != null){
     	//	outString += line;
         //    System.out.println("outString: " + outString);
