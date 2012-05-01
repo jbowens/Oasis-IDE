@@ -19,6 +19,8 @@ public class FileMenu extends JMenu implements ActionListener {
 	protected JMenuItem _new;
 	protected JMenuItem _open;
 	protected JMenuItem _save;
+	protected JMenuItem _saveAs;
+	protected JMenuItem _saveAll;
 	protected FileHandler _fh;
 	protected CodeArea _codeArea;
 
@@ -32,13 +34,17 @@ public class FileMenu extends JMenu implements ActionListener {
 
 		setMnemonic('F');
 
-		_new = new JMenuItem("New", KeyEvent.VK_N);
-		_open = new JMenuItem("Open", KeyEvent.VK_O);
+		_new = new JMenuItem("New File", KeyEvent.VK_N);
+		_open = new JMenuItem("Open File", KeyEvent.VK_O);
 		_save = new JMenuItem("Save", KeyEvent.VK_S);
+		_saveAs = new JMenuItem("Save As...");
+		_saveAll = new JMenuItem("Save All");
 		
 		add(_new);
 		add(_open);
 		add(_save);
+		add(_saveAs);
+		add(_saveAll);
 		
 		_open.addActionListener(this);
 		_save.addActionListener(this);

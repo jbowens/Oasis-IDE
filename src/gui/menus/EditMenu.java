@@ -19,6 +19,12 @@ public class EditMenu extends JMenu  {
 	/* The menu bar this menu is a part of */
 	protected MenuBar parentBar;
 
+	protected JMenuItem _copy;
+	protected JMenuItem _cut;
+	protected JMenuItem _paste;
+
+	protected JMenuItem _undo;
+
 	/**
 	 * Create a new menu bar
 	 *
@@ -31,6 +37,16 @@ public class EditMenu extends JMenu  {
 		this.parentBar = parentBar;
 
 		setMnemonic('E');
+
+		_copy = new JMenuItem("Copy", KeyEvent.VK_C);
+		_cut = new JMenuItem("Cut", KeyEvent.VK_X);
+		_paste = new JMenuItem("Paste", KeyEvent.VK_V);
+		_undo = new JMenuItem("Undo", KeyEvent.VK_Z);
+
+		add(_copy);
+		add(_cut);
+		add(_paste);
+		add(_undo);
 
 	}
 

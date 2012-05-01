@@ -25,6 +25,8 @@ public class ViewMenu extends JMenu  {
 
 	protected JMenu _styles;
 
+	protected JMenu _font;
+
 	protected CodeArea _codeArea;
 
 	protected StyleLoader _styleLoader;
@@ -54,8 +56,11 @@ public class ViewMenu extends JMenu  {
 			menuItem.addActionListener(new StyleSwitchListener(codeArea, s));
 		}
 
-		add(_styles);
+		_font = new JMenu("Font");
 
+		add(_styles);
+		add(_font);
+		
 	}
 
 	protected class StyleSwitchListener implements ActionListener {

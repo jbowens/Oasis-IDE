@@ -19,6 +19,9 @@ public class OCamlMenu extends JMenu  {
 	/* The menu bar this menu is a part of */
 	protected MenuBar parentBar;
 
+	protected JMenuItem _run;
+	protected JMenuItem _debug;
+
 	/**
 	 * Create a new menu 
 	 *
@@ -29,6 +32,12 @@ public class OCamlMenu extends JMenu  {
 		super("OCaml");
 
 		this.parentBar = parentBar;
+
+		_run = new JMenuItem("Run", KeyEvent.VK_R);
+		_debug = new JMenuItem("Debug", KeyEvent.VK_D);
+
+		add(_run);
+		add(_debug);
 
 	}
 
