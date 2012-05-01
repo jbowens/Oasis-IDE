@@ -40,13 +40,13 @@ public class Debug {
     		debugArgs[0] = "ocamldebug";
     		debugArgs[1] = filename;
     		proc = Runtime.getRuntime().exec(debugArgs);
-            System.out.println("Proc Started");
+            //System.out.println("Proc Started");
             assert(proc != null);
     		input = new BufferedReader( new InputStreamReader( proc.getInputStream() ));
     		output = new BufferedWriter( new OutputStreamWriter( proc.getOutputStream() ));
-            System.out.println("Before readline");
+            //System.out.println("Before readline");
     		String line = input.readLine();
-            System.out.println("After read line: " + line);
+            System.out.println(line);
             line += input.readLine();
             System.out.println(line);
     		//while(!line.equals("")){
@@ -58,7 +58,7 @@ public class Debug {
     		//while(line != null){
     			//args.write(getStepInfo());
     		//}
-            System.out.println("passed while loop");
+            //System.out.println("passed while loop");
         
     	}
     	catch(IOException e){
@@ -67,29 +67,35 @@ public class Debug {
     	}
     }
     
-    public String runDebug() throws IOException{
-    	output.write("run\n");
-    	output.flush();
-	output.write("\n");
-	output.flush();
-        System.out.println("wrote and flushed: run");
-    	String line = ""; //= input.readLine();
-    	String outString = "";
-    	while(input.ready()){
-            line = input.readLine();
-            System.out.println(line);
-            outString += line;
+    public String runDebug() throws IOException, InterruptedException{
+        output.write("run\n");
+        output.flush();
+	    output.write("\n");
+	    output.flush();
+    	String line =  input.readLine();
+    	String outString = line;
+        try{
+            while (input.ready() == false) {
+                Thread.sleep(100);
+            }   
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            System.out.println("Exception");
         }
-        //System.out.println("Hello");
-        //line = input.readLine();
-        //System.out.println(line);
-        //line = input.readLine();
-        //System.out.println(line);
-        //while(line != null){
-    	//	outString += line;
-        //    System.out.println("outString: " + outString);
-    	//	line = input.readLine();
-    	//}
+        int readin = 1;
+        while(input.ready()){
+            if(line.equals("-1")){
+                System.out.println("break");
+            }
+            outString = outString + line;
+            readin = input.read();
+            if(readin != -1){
+                char c = (char) readin;
+                line = "" + c;
+            }
+        }
+        System.out.println("Passed that awful loop");
+        System.out.println("outString: \n" + outString);
     	return outString;
     }
     

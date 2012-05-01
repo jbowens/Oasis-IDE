@@ -5,4 +5,4 @@ let rec func n =
 
 print_int(func(5));;
 print_string("\n");;
-print_int(func(0));;
+(*print_int(func(0));;*)
