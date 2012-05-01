@@ -58,6 +58,11 @@ public class StyleWrapper extends StyleSet {
   }
 
   @Override
+  public Color getLineNumbersColor() {
+    return style.getLineNumbersColor();
+  }
+
+  @Override
   public TextStyle getStyle(TokenType type) {
     return style.getStyle(type);
   }

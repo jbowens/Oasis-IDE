@@ -106,6 +106,7 @@ public class LineNumbersRuler extends JPanel implements DocumentListener {
     OCamlView.setRenderingHints(g);
 
     g.setFont( pane.getFont() );
+    System.out.println("Found style line numbers color of " + style.getLineNumbersColor() );
     g.setColor( style.getLineNumbersColor() );
 
     // print the lines
