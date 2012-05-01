@@ -8,6 +8,9 @@ import java.awt.Dimension;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.JEditorPane;
+import javax.swing.SwingUtilities;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import camel.syntaxhighlighter.OCamlView;
 import camel.syntaxhighlighter.OCamlDocument;
@@ -16,7 +19,7 @@ import camel.syntaxhighlighter.StyleSet;
 /**
  * Displays line numbers on a text component.
  */
-public class LineNumbersRuler extends JPanel {
+public class LineNumbersRuler extends JPanel implements DocumentListener {
 
   protected static final int MIN_WIDTH = 3;
   
@@ -26,7 +29,11 @@ public class LineNumbersRuler extends JPanel {
   /* The pane the ruler is currently applied to */
   protected JEditorPane pane;
 
+  /* How we should format line strings */
   protected String numbersFormat = "%" + MIN_WIDTH + "d";
+
+  /* The last recorded height */
+  protected int height;
 
   /**
    * Creates a new line numbers ruler with the given style set.
@@ -47,7 +54,12 @@ public class LineNumbersRuler extends JPanel {
     this.pane = pane;
 
     /* How large should we be? */
+    height = pane.getPreferredSize().height;
+
     OCamlDocument doc = (OCamlDocument) pane.getDocument();
+
+    doc.addDocumentListener( this );
+
     int lineCount = doc.countLines();
 
     int charWidth = Math.max(String.valueOf(lineCount).length(), MIN_WIDTH);
@@ -58,7 +70,7 @@ public class LineNumbersRuler extends JPanel {
     int newWidth = insets.left + pixelWidth + insets.right;
 
     Dimension d = getPreferredSize();
-    d.setSize(newWidth, 10000);
+    d.setSize(newWidth, height);
     setPreferredSize(d);
     setMinimumSize(d);
     setSize(d);
@@ -103,6 +115,40 @@ public class LineNumbersRuler extends JPanel {
       g.drawString(lineString, insets.left, verticalOffset);
     }
 
+  }
+
+  @Override
+  public void changedUpdate(DocumentEvent e) {
+    respondToDocumentChange();
+  }
+
+  @Override
+  public void insertUpdate(DocumentEvent e) {
+    respondToDocumentChange();
+  }
+
+  @Override
+  public void removeUpdate(DocumentEvent e) {
+    respondToDocumentChange();
+  }
+
+  /**
+   * The ruler needs to update when the document changes.
+   */
+  protected void respondToDocumentChange() {
+    SwingUtilities.invokeLater(new Runnable() {
+      @Override
+      public void run() {
+        int newHeight = pane.getPreferredSize().height;
+        if( height != newHeight ) {
+          repaint();
+          height = newHeight;
+          Dimension d = getPreferredSize();
+          d.height = height;
+          setPreferredSize(d);
+        }
+      }
+    });
   }
 
 }
