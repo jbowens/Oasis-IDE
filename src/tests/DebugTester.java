@@ -13,7 +13,7 @@ public class DebugTester{
 		myDebug.getStartInfo();
 		myDebug.callDebug();
 		myDebug.runDebug();
-		myDebug.runQuit();
+		myDebug.Quit();
 
 	}
 }

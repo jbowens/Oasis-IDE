@@ -23,7 +23,11 @@ public class Debug {
     public void getStartInfo(){
     	//get the info for the filename
     	this.filename = "./../test-ml/a.out";
-    	//this.breakpoints = 
+    	this.breakpoints = getBreakPoints;
+    }
+
+    public void getBreakPoints(){
+        return breakpoints;
     }
     
     public void callDebug() throws IOException{
@@ -96,8 +100,8 @@ public class Debug {
     	return outString;
     }
     
-    public String runBack() throws IOException{
-    	output.write("bt");
+    public String Back() throws IOException{
+    	output.write("back");
     	output.flush();
     	String line = input.readLine();
     	String outString = "";
@@ -108,10 +112,22 @@ public class Debug {
     	return outString;
     }
 
-        public String runQuit() throws IOException{
+        public String Quit() throws IOException{
         output.write("quit");
         output.flush();
         output.write("y");
+        output.flush();
+        String line = input.readLine();
+        String outString = "";
+        while(line != null){
+            outString += line;
+            line = input.readLine();
+        }
+        return outString;
+    }
+
+    public String Step() throws IOException{
+        output.write("step");
         output.flush();
         String line = input.readLine();
         String outString = "";
