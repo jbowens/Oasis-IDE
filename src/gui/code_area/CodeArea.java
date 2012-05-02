@@ -10,12 +10,18 @@ import camel.syntaxhighlighter.SimpleStyleSet;
 import camel.syntaxhighlighter.StyleWrapper;
 import camel.Application;
 
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
 import java.awt.GridBagLayout;
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.ArrayList;
 
 public class CodeArea extends JPanel {
+
+	protected static final String DEFAULT_FONT_LOC = "fonts/monaco.ttf";
+	protected static final int DEFAULT_FONT_SIZE = 13;
 
 	/* The tabbed pane that holds all the existing tabs */
 	protected JTabbedPane tabs;
@@ -28,6 +34,9 @@ public class CodeArea extends JPanel {
 	
 	/* The application this Code Area is tied to */
 	protected Application app;
+
+	/* The font to use */
+	protected Font font;
 
 	public CodeArea(Application app) {
 		super(new GridBagLayout());
@@ -55,6 +64,8 @@ public class CodeArea extends JPanel {
 		}
 
 		this.style = new StyleWrapper( initialStyle );
+
+		loadFont();
 	}
 
 	/**
@@ -139,6 +150,23 @@ public class CodeArea extends JPanel {
 		for( Tab t : tabList )
 			t.updateDisplayPreferences();
 		repaint();
+	}
+
+	public Font getFont() {
+		return font;
+	}
+
+	protected void loadFont() {
+
+		try {
+			Font loadFont = Font.createFont(Font.TRUETYPE_FONT, new BufferedInputStream( new FileInputStream( DEFAULT_FONT_LOC ) ));
+			loadFont = loadFont.deriveFont( (float) DEFAULT_FONT_SIZE );
+			font = loadFont;
+		} catch( Exception ex ) {
+			System.err.println("Unable to load font "  + DEFAULT_FONT_LOC + " " + ex.getClass() );
+			font = new Font(Font.MONOSPACED, Font.PLAIN, DEFAULT_FONT_SIZE);
+		} 
+
 	}
 
 }

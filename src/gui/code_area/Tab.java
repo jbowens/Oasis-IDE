@@ -95,7 +95,7 @@ public class Tab extends JPanel {
 		// Create an OCaml lexer for the syntax highlighter
 		OCamlLexer lexer = new OCamlLexer();
 
-		textPane.setFont( new Font(Font.MONOSPACED, Font.PLAIN, 14) );
+		textPane.setFont( codeArea.getFont() );
 		style.apply( textPane );
 
 		/* Load the syntax highlighter editor kit */
