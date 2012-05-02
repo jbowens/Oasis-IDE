@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<style>
+  <info>
+    <name>Brown</name>
+  </info>
+  <mainStyling>
+    <background>231d1a</background>
+    <selectedBackground>342b26</selectedBackground>
+    <caret>FFFFFF</caret>
+    <lineNumbers>e7dcd5</lineNumbers>
+  </mainStyling>
+  <tokens>
+    <token kind="default">
+      <color>FFFFFF</color>
+      <style>plain</style>
+    </token>
+    <token kind="comment">
+      <color>907a6a</color>
+    </token>
+    <token kind="keyword">
+      <color>96efff</color>
+    </token>
+    <token kind="identifier">
+      <color>b4ff30</color>
+    </token>
+    <token kind="number">
+      <color>FFFFFF</color>
+    </token>
+    <token kind="string">
+      <color>30dfff</color>
+    </token>
+    <token kind="special_value">
+      <color>b9fffe</color>
+    </token>
+    <token kind="operator">
+      <color>FFFFFF</color>
+    </token>
+    <token kind="type">
+      <color>ff968e</color>
+    </token>
+    <token kind="delimeter">
+      <color>e3e3e3</color>
+    </token>
+  </tokens>
+</style>

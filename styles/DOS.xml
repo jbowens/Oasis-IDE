@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<style>
+  <info>
+    <name>DOS</name>
+  </info>
+  <mainStyling>
+    <background>0000ff</background>
+    <selectedBackground>333333</selectedBackground>
+    <caret>FFFFFF</caret>
+    <lineNumbers>FFFFFF</lineNumbers>
+  </mainStyling>
+  <tokens>
+    <token kind="default">
+      <color>FFFFFF</color>
+      <style>bold</style>
+    </token>
+    <token kind="comment">
+      <color>9e9eff</color>
+      <style>bold</style>
+    </token>
+    <token kind="keyword">
+      <color>d7d7d7</color>
+      <style>bold</style>
+    </token>
+    <token kind="identifier">
+      <color>FFFFFF</color>
+      <style>bold</style>
+    </token>
+    <token kind="number">
+      <color>FFFFFF</color>
+      <style>bold</style>
+    </token>
+    <token kind="string">
+      <color>90d6e0</color>
+      <style>bold</style>
+    </token>
+    <token kind="special_value">
+      <color>e5e5e5</color>
+      <style>bold</style>
+    </token>
+    <token kind="operator">
+      <color>FFFFFF</color>
+      <style>bold</style>
+    </token>
+    <token kind="type">
+      <color>e5e5e5</color>
+      <style>bold</style>
+    </token>
+    <token kind="delimeter">
+      <color>e5e5e5</color>
+      <style>bold</style>
+    </token>
+  </tokens>
+</style>
