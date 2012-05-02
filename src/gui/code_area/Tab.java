@@ -175,6 +175,13 @@ public class Tab extends JPanel {
 	}
 	
 	/**
+	 * Gets the text pane of this tab.
+	 */
+	public JEditorPane getTextPane() {
+		return textPane;
+	}
+
+	/**
 	 * Gets the path associated with the file's tab, if any.
 	 *
 	 * @return the path of this tab's file

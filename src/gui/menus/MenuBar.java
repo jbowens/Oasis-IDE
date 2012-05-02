@@ -25,7 +25,7 @@ public class MenuBar extends JMenuBar {
 
 		_fMenu = new FileMenu(window.getCodeArea(), window.getFileHandler());
 		
-		_eMenu = new EditMenu(this);
+		_eMenu = new EditMenu(this, window.getCodeArea());
 
 		_ocamlMenu = new OCamlMenu(this);
 
