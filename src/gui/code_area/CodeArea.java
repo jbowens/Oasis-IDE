@@ -13,11 +13,15 @@ import camel.Application;
 import java.awt.GridBagLayout;
 import java.io.File;
 import java.util.List;
+import java.util.ArrayList;
 
 public class CodeArea extends JPanel {
 
 	/* The tabbed pane that holds all the existing tabs */
 	protected JTabbedPane tabs;
+
+	/* The tab lists */
+	protected ArrayList<Tab> tabList;
 
 	/* The current style set being used */
 	protected StyleWrapper style;
@@ -27,6 +31,7 @@ public class CodeArea extends JPanel {
 
 	public CodeArea(Application app) {
 		super(new GridBagLayout());
+		tabList = new ArrayList<Tab>();
 		tabs = new JTabbedPane();
 		GridBagConstraints fullFill = new GridBagConstraints();
 		fullFill.weighty = fullFill.weightx = 1.0; 
@@ -75,9 +80,10 @@ public class CodeArea extends JPanel {
 	 * @param fh - the associated FileHandler
 	 */
 	public void makeTab(FileHandler fh) {
-		Tab t = new Tab(fh, style);
+		Tab t = new Tab(this, fh, style);
 		tabs.addTab("Untitled", t);
 		tabs.setSelectedComponent(t);
+		tabList.add(t);
 	}
 
 	/**
@@ -87,9 +93,10 @@ public class CodeArea extends JPanel {
 	 * @param filename - the file path of the file to open
 	 */
 	public void makeTab(FileHandler fh, String filename) {
-		Tab t = new Tab(new File(filename), fh, style);
+		Tab t = new Tab(this, new File(filename), fh, style);
 		tabs.addTab(fh.getName(), t);
 		tabs.setSelectedComponent(t);
+		tabList.add(t);
 	}
 
 	/**
@@ -99,9 +106,10 @@ public class CodeArea extends JPanel {
 	 * @param file - the file to create the tab from
 	 */
 	public void makeTab(FileHandler fh, File f) {
-		Tab t = new Tab(f, fh, style);
+		Tab t = new Tab(this, f, fh, style);
 		tabs.addTab(fh.getName(), t);
 		tabs.setSelectedComponent(t);
+		tabList.add(t);
 	}
 
 	/**
@@ -112,9 +120,10 @@ public class CodeArea extends JPanel {
 	 * @param fh - the associated FileHandler
 	 */
 	public void makeTabFromFile(FileHandler fh) {
-		Tab t = new Tab(fh.getFile(), fh, style);
+		Tab t = new Tab(this, fh.getFile(), fh, style);
 		tabs.addTab(fh.getName(), t);
 		tabs.setSelectedComponent(t);
+		tabList.add(t);
 	}
 
 	/**
@@ -124,6 +133,12 @@ public class CodeArea extends JPanel {
 	 */
 	public Tab getCurTab() {
 		return (Tab) tabs.getSelectedComponent();
+	}
+
+	public void updateDisplayPreferences() {
+		for( Tab t : tabList )
+			t.updateDisplayPreferences();
+		repaint();
 	}
 
 }

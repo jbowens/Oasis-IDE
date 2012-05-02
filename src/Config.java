@@ -44,8 +44,6 @@ public class Config {
             if( pairCont.getLength() == 0 )
                 return;
 
-            System.out.println("here");
-
             Node settingsData = pairCont.item(0);
 
             // get all the kvpairs
@@ -128,7 +126,8 @@ public class Config {
      * Sets the provided key to map to the provided value.
      */
     public void setSetting(String key, String val) {
-        settings.put(key, val);
+        if( val != null )
+            settings.put(key, val);
     }
 
     /*

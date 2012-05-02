@@ -12,7 +12,9 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.BorderFactory;
 
+import camel.Config;
 import camel.gui.controller.FileHandler;
+import camel.gui.code_area.CodeArea;
 import camel.syntaxhighlighter.OCamlLexer;
 import camel.syntaxhighlighter.OCamlEditorKit;
 import camel.syntaxhighlighter.StyleSet;
@@ -36,13 +38,23 @@ public class Tab extends JPanel {
 	/* The style used in this tab */
 	protected StyleSet style;
 
+	/* The line numbers */
+	protected LineNumbersRuler lineNums;
+
+	/* The code area the tab belongs to */
+	protected CodeArea codeArea;
+
+	/* The scroll pane */
+	protected JScrollPane sc;
+
 	/**
 	 * Creates a new tab and loads the given file.
 	 *
 	 * @param f - the file to load
 	 * @param fh - the file handler to handle associated i/o operations
 	 */
-	public Tab(File f, FileHandler fh, StyleSet s) {
+	public Tab(CodeArea codeArea, File f, FileHandler fh, StyleSet s) {
+		this.codeArea = codeArea;
 		this.f = f;
 		this.fh = fh;
 		this.style = s;
@@ -57,7 +69,8 @@ public class Tab extends JPanel {
 	 *
 	 * @param fh - a filehandler to handle i/o operations for the tab
 	 */
-	public Tab(FileHandler fh, StyleSet s) {
+	public Tab(CodeArea codeArea, FileHandler fh, StyleSet s) {
+		this.codeArea = codeArea;
 		this.fh = fh;
 		this.style = s;
 		initialize();
@@ -88,17 +101,59 @@ public class Tab extends JPanel {
 		/* Load the syntax highlighter editor kit */
 		textPane.setEditorKit( new OCamlEditorKit( lexer, style ) );
 
-		JScrollPane sc = new JScrollPane(textPane);
+		sc = new JScrollPane(textPane);
 		sc.setBorder(BorderFactory.createEmptyBorder());
 
 		/* This must happen AFTER setting the editor kit to the OCaml Editor kit */
-		LineNumbersRuler lineNums = new LineNumbersRuler(style);
+		lineNums = new LineNumbersRuler(style);
 		lineNums.install(textPane);
 
 		sc.setRowHeaderView(lineNums);
+
 		sc.getViewport().setView(textPane);
+
+		updateDisplayPreferences();
+
 		add(sc, BorderLayout.CENTER);
 
+	}
+
+	/**
+	 * Responds to a change in display preferences.
+	 */
+	public void updateDisplayPreferences() {
+		if( lineNumbersEnabled() )
+			showLineNumbers();
+		else
+			hideLineNumbers();
+	}
+
+	/**
+	 * Determines if line numbers are enabled.
+	 */
+	public boolean lineNumbersEnabled() {
+		Config c = codeArea.getApplication().getConfig();
+
+		if( ! c.settingExists("linenumbers") )
+			return true;
+		else
+			return c.getSetting("linenumbers").equalsIgnoreCase("true");
+
+	}
+
+	/**
+	 * Shows the line numbers
+	 */
+	public void showLineNumbers() {
+		System.out.println("showing line nums");
+		lineNums.setVisible(true);
+	}
+
+	/**
+	 * Hides the line numbers
+	 */
+	public void hideLineNumbers() {
+		lineNums.setVisible(false);
 	}
 
 	/**

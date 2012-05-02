@@ -15,11 +15,12 @@ import camel.gui.controller.FileHandler;
 import camel.gui.code_area.CodeArea;
 import camel.syntaxhighlighter.StyleLoader;
 import camel.syntaxhighlighter.StyleSet;
+import camel.Config;
 
 /**
  * The view menu.
  */
-public class ViewMenu extends JMenu  {
+public class ViewMenu extends JMenu implements ActionListener {
 
 	/* The menu bar this menu is a part of */
 	protected MenuBar parentBar;
@@ -28,23 +29,26 @@ public class ViewMenu extends JMenu  {
 
 	protected JMenu _font;
 
-	protected JMenuItem _lineNumbers;
+	protected JCheckBoxMenuItem _lineNumbers;
 
 	protected CodeArea _codeArea;
 
 	protected StyleLoader _styleLoader;
+
+	protected Config _config;
 
 	/**
 	 * Create a new menu bar
 	 *
 	 * @param parentBar the parent menubar of this menu
 	 */
-	public ViewMenu(MenuBar parentBar, StyleLoader styleLoader, CodeArea codeArea) {
+	public ViewMenu(MenuBar parentBar, Config config, StyleLoader styleLoader, CodeArea codeArea) {
 		
 		super("View");
 
 		this.parentBar = parentBar;
 		_codeArea = codeArea;
+		_config = config;
 		_styleLoader = styleLoader;
 
 		setMnemonic('V');
@@ -61,11 +65,15 @@ public class ViewMenu extends JMenu  {
 
 		_font = new JMenu("Font");
 
-		_lineNumbers = new JCheckBoxMenuItem("Line Numbers", false);
+		boolean lineNums = ! config.settingExists("linenumbers") || config.getSetting("linenumbers").equals("true");
+
+		_lineNumbers = new JCheckBoxMenuItem("Line Numbers", lineNums);
 
 		add(_styles);
 		add(_font);
 		add(_lineNumbers);
+
+		_lineNumbers.addActionListener(this);
 
 	}
 
@@ -84,6 +92,16 @@ public class ViewMenu extends JMenu  {
 			codeArea.switchStyle(style);
 		}
 
+	}
+
+	public void actionPerformed(ActionEvent e) {
+		if( e.getSource() == _lineNumbers ) {
+			if( _lineNumbers.getState() )
+				_config.setSetting("linenumbers", "true");
+			else
+				_config.setSetting("linenumbers", "false");
+			_codeArea.updateDisplayPreferences();
+		}
 	}
 
 }
