@@ -112,7 +112,8 @@ public class Tab extends JPanel {
 
 		sc.getViewport().setView(textPane);
 
-		updateDisplayPreferences();
+		if( ! lineNumbersEnabled() )
+			hideLineNumbers();
 
 		add(sc, BorderLayout.CENTER);
 
@@ -145,15 +146,14 @@ public class Tab extends JPanel {
 	 * Shows the line numbers
 	 */
 	public void showLineNumbers() {
-		System.out.println("showing line nums");
-		lineNums.setVisible(true);
+		sc.getRowHeader().add(lineNums);
 	}
 
 	/**
 	 * Hides the line numbers
 	 */
 	public void hideLineNumbers() {
-		lineNums.setVisible(false);
+		sc.getRowHeader().remove(lineNums);
 	}
 
 	/**
