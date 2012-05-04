@@ -6,7 +6,7 @@ import java.awt.BorderLayout;
 
 import java.io.File;
 
-import javax.swing.JFrame;
+import javax.swing.*;
 
 import camel.gui.interactions.InteractionsWindow;
 import camel.gui.controller.FileHandler;
@@ -31,6 +31,8 @@ public class MainWindow extends JFrame {
 	protected FileHandler fh;
 	protected FileTree ft;
 	protected InteractionsWindow iw;
+	protected JSplitPane s1;
+	protected JSplitPane s2;
 	
 	/**
 	 * Creates a new GUI for the application.
@@ -53,11 +55,15 @@ public class MainWindow extends JFrame {
 		mb = new MenuBar(app, this);
 		ft = new FileTree(new File("."));
 		iw = new InteractionsWindow(im);
-		
+		s1 = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, ft, ca);
+		s2 = new JSplitPane(JSplitPane.VERTICAL_SPLIT, s1, iw);
+		s1.setDividerSize(5);
+		s2.setDividerSize(5);
 		add(mb,BorderLayout.NORTH);
-		add(ca,BorderLayout.CENTER);
-		add(ft,BorderLayout.WEST);
-		add(iw,BorderLayout.SOUTH);
+		add(s2,BorderLayout.CENTER);
+		//add(ca,BorderLayout.CENTER);
+		//add(ft,BorderLayout.WEST);
+		//add(iw,BorderLayout.SOUTH);
 
 		pack();
 
