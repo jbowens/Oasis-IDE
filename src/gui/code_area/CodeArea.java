@@ -169,4 +169,11 @@ public class CodeArea extends JPanel {
 
 	}
 
+	public void setTabTitle(Tab t, String title) {
+		int index = tabs.indexOfComponent(t);
+		if( index == -1 )
+			return;
+		tabs.setTitleAt(index, title);
+	}
+
 }

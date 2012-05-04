@@ -192,6 +192,15 @@ public class Tab extends JPanel {
 		return f.getAbsolutePath();
 	}
 
+	/**
+	 * Gets the file associated with the tab's
+	 *
+	 * @return the file of this tab
+	 */
+	public File getFile() {
+		return f;
+	}
+
 	/** 
 	 * Return the currently stored in the file.
 	 *
@@ -201,4 +210,14 @@ public class Tab extends JPanel {
 		return textPane.getText();
 	}
 	
+	/**
+	 * Set the file location associated with this tab/file.
+	 *
+	 * @param file the new file location
+	 */
+	public void setFileLocation(File file) {
+		f = file;
+		codeArea.setTabTitle(this, file.getName());
+	}
+
 }

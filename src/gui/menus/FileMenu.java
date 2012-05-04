@@ -51,6 +51,7 @@ public class FileMenu extends JMenu implements ActionListener {
 		
 		_open.addActionListener(this);
 		_save.addActionListener(this);
+		_saveAs.addActionListener(this);
 		_new.addActionListener(this);
 		_newWindow.addActionListener(this);
 
@@ -64,6 +65,10 @@ public class FileMenu extends JMenu implements ActionListener {
 
 		if(e.getSource() == _save) {
 			_fh.saveFile();
+		}
+
+		if(e.getSource() == _saveAs) {
+			_fh.saveAs();
 		}
 
 		if(e.getSource() == _new) {
