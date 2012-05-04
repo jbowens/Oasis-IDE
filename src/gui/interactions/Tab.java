@@ -23,7 +23,7 @@ public class Tab extends JPanel implements TextOutputListener {
 		textPane.setEditable(false);
 		JScrollPane sc = new JScrollPane(textPane);
 		setLayout(new BorderLayout());
-		add(sc,BorderLayout.NORTH);
+		add(sc,BorderLayout.CENTER);
 		this._im = im;
 		inputBar = new JTextField();
 		inputBar.addKeyListener(new enterListener());
