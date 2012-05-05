@@ -146,7 +146,7 @@ public class FileHandler {
 			// Set this new file location to be the tab's file loc
 			tabToSave.setFileLocation( _fc.getSelectedFile() );
 			// Do a regular save
-			saveFile();
+			saveFile(tabToSave);
 
 		}
 	}

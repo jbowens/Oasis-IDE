@@ -8,6 +8,7 @@ import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JSeparator;
 
 import camel.gui.controller.FileHandler;
 import camel.gui.code_area.CodeArea;
@@ -53,12 +54,14 @@ public class FileMenu extends JMenu implements ActionListener {
 		add(_saveAs);
 		add(_saveAll);
 		add(_closeFile);
+		add(new JSeparator());
 		add(_newWindow);
 		add(_closeWindow);
 		
 		_open.addActionListener(this);
 		_save.addActionListener(this);
 		_saveAs.addActionListener(this);
+		_saveAll.addActionListener(this);
 		_closeFile.addActionListener(this);
 		_new.addActionListener(this);
 		_newWindow.addActionListener(this);
@@ -78,6 +81,10 @@ public class FileMenu extends JMenu implements ActionListener {
 
 		if(e.getSource() == _saveAs) {
 			_fh.saveAs();
+		}
+
+		if(e.getSource() == _saveAll) {
+			_codeArea.saveAll();
 		}
 
 		if(e.getSource() == _closeFile) {

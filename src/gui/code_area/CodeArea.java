@@ -200,6 +200,18 @@ public class CodeArea extends JPanel {
 	}
 
 	/**
+	 * Saves all the code area's tabs
+	 */
+	public void saveAll() {
+		for( Tab t : tabList ) {
+			if( tabs.indexOfComponent(t) != -1 ) {
+				setCurrentTab(t);
+				fh.saveFile(t);
+			}
+		}
+	}
+
+	/**
 	 * Sets the given tab's title to the given title.
 	 *
 	 * @param t the tab whose title should be updated
