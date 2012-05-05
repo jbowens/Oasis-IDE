@@ -3,7 +3,6 @@ package camel.gui.main;
 import java.awt.event.WindowListener;
 import java.awt.event.WindowEvent;
 import java.awt.BorderLayout;
-
 import java.io.File;
 
 import javax.swing.*;
@@ -16,6 +15,8 @@ import camel.interactions.*;
 import camel.*;
 
 public class MainWindow extends JFrame {
+
+	protected static final double DEFAULT_SPLIT = 1.0;
 
 	/* The application this GUI is tied to */
 	protected Application app;
@@ -73,6 +74,14 @@ public class MainWindow extends JFrame {
 
 		// Set the width and height
 		setBounds( 100, 100, width, height );
+
+		/* Load the desired split for the main window */
+		double interactionsSplit = DEFAULT_SPLIT;
+		if( config.settingExists("interactionsSplit") )
+			interactionsSplit = Double.parseDouble( config.getSetting("interactionsSplit") ); 
+		s2.setDividerLocation(interactionsSplit);
+
+		repaint();
 
 		setVisible(true);
 
