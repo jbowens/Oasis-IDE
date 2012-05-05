@@ -10,7 +10,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import camel.interactions.*;
 
-public class Tab extends JPanel implements TextOutputListener {
+public class InteractionsPanel extends JPanel implements TextOutputListener {
 
 	protected JEditorPane textPane;
 	protected JTextField inputBar;
@@ -18,15 +18,18 @@ public class Tab extends JPanel implements TextOutputListener {
 	protected int _handle;
 	protected String query;
 
-	public Tab(InteractionsManager im, String filePath) {
+	public InteractionsPanel(InteractionsManager im, String filePath) {
+		this._im = im;
+
 		textPane = new JEditorPane();
 		textPane.setEditable(false);
+
 		JScrollPane sc = new JScrollPane(textPane);
 		setLayout(new BorderLayout());
 		add(sc,BorderLayout.CENTER);
-		this._im = im;
+		
 		inputBar = new JTextField();
-		inputBar.addKeyListener(new enterListener());
+		inputBar.addKeyListener(new EnterListener());
 		add(inputBar,BorderLayout.SOUTH);
 		textPane.addKeyListener(new KListener());
 		try {
@@ -73,9 +76,10 @@ public class Tab extends JPanel implements TextOutputListener {
 	    public void keyReleased(KeyEvent e) {
 	    }
 	}
-	public class enterListener implements KeyListener
+	
+	public class EnterListener implements KeyListener
 	{
-		public enterListener()
+		public EnterListener()
 		{
 
 		}

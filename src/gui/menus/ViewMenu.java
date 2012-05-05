@@ -63,14 +63,12 @@ public class ViewMenu extends JMenu implements ActionListener {
 			menuItem.addActionListener(new StyleSwitchListener(codeArea, s));
 		}
 
-		_font = new JMenu("Font");
 
 		boolean lineNums = ! config.settingExists("linenumbers") || config.getSetting("linenumbers").equals("true");
 
 		_lineNumbers = new JCheckBoxMenuItem("Line Numbers", lineNums);
 
 		add(_styles);
-		add(_font);
 		add(_lineNumbers);
 
 		_lineNumbers.addActionListener(this);

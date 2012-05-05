@@ -17,8 +17,6 @@ import camel.*;
 
 public class MainWindow extends JFrame {
 
-	protected static final double DEFAULT_SPLIT = 1.0;
-
 	/* The application this GUI is tied to */
 	protected Application app;
 
@@ -34,7 +32,6 @@ public class MainWindow extends JFrame {
 	protected FileTree ft;
 	protected InteractionsWindow iw;
 	protected JSplitPane s1;
-	protected JSplitPane s2;
 
 	protected boolean closed = false;
 	
@@ -60,14 +57,9 @@ public class MainWindow extends JFrame {
 		ft = new FileTree(new File("."));
 		iw = new InteractionsWindow(im);
 		s1 = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, ft, ca);
-		s2 = new JSplitPane(JSplitPane.VERTICAL_SPLIT, s1, iw);
 		s1.setDividerSize(5);
-		s2.setDividerSize(5);
 		add(mb,BorderLayout.NORTH);
-		add(s2,BorderLayout.CENTER);
-		//add(ca,BorderLayout.CENTER);
-		//add(ft,BorderLayout.WEST);
-		//add(iw,BorderLayout.SOUTH);
+		add(s1,BorderLayout.CENTER);
 
 		pack();
 
@@ -77,12 +69,6 @@ public class MainWindow extends JFrame {
 
 		// Set the width and height
 		setBounds( 100, 100, width, height );
-
-		/* Load the desired split for the main window */
-		double interactionsSplit = DEFAULT_SPLIT;
-		if( config.settingExists("interactionsSplit") )
-			interactionsSplit = Double.parseDouble( config.getSetting("interactionsSplit") ); 
-		s2.setDividerLocation(interactionsSplit);
 
 		repaint();
 
@@ -133,6 +119,15 @@ public class MainWindow extends JFrame {
 	 */
 	public Application getApplication() {
 		return app;
+	}
+
+	/**
+	 * Gets this window's interactions manager.
+	 *
+	 * @return the window's interactions manager
+	 */
+	public InteractionsManager getInteractionsManager() {
+		return im;
 	}
 
 	/**

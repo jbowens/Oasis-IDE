@@ -14,8 +14,10 @@ import javax.swing.BorderFactory;
 import javax.swing.text.Document;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.DocumentEvent;
+import javax.swing.JSplitPane;
 
 import camel.Config;
+import camel.gui.interactions.InteractionsPanel;
 import camel.gui.controller.FileHandler;
 import camel.gui.code_area.CodeArea;
 import camel.syntaxhighlighter.OCamlLexer;
@@ -28,6 +30,8 @@ import camel.syntaxhighlighter.SimpleStyleSet;
  * the content of the tab is associated with.
  */
 public class Tab extends JPanel implements DocumentListener {
+
+	protected static final double DEFAULT_SPLIT = .8;
 
 	/* The text pane to be displayed in this tab */
 	protected JEditorPane textPane;
@@ -49,6 +53,12 @@ public class Tab extends JPanel implements DocumentListener {
 
 	/* The scroll pane */
 	protected JScrollPane sc;
+
+	/* The interactions panel of this tab */
+	protected InteractionsPanel interactionsPanel;
+
+	/* The split pane for the tab */
+	protected JSplitPane splitPane;
 
 	/* Whether or not changes have been made since the last save */
 	protected boolean changes = false;
@@ -124,10 +134,25 @@ public class Tab extends JPanel implements DocumentListener {
 		if( ! lineNumbersEnabled() )
 			hideLineNumbers();
 
-		add(sc, BorderLayout.CENTER);
+		// Create the interactions panel
+		interactionsPanel = new InteractionsPanel(codeArea.getWindow().getInteractionsManager(), null);
+
+		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, sc, interactionsPanel);
+		splitPane.setDividerSize(5);
+		add(splitPane, BorderLayout.CENTER);
+
+		repaint();
+
+		/* Load the desired split for the main window */
+		double interactionsSplit = DEFAULT_SPLIT;
+		if( codeArea.getApplication().getConfig().settingExists("interactionsSplit") )
+			interactionsSplit = Double.parseDouble( codeArea.getApplication().getConfig().getSetting("interactionsSplit") );
+		splitPane.setResizeWeight(interactionsSplit);
 
 		/* Begin listening to the document changes */
 		textPane.getDocument().addDocumentListener( this );
+
+		repaint();
 
 	}
 
