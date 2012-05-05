@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.awt.event.*;
+import java.awt.Font;
 import javax.swing.JEditorPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -18,17 +19,19 @@ public class InteractionsPanel extends JPanel implements TextOutputListener {
 	protected int _handle;
 	protected String query;
 
-	public InteractionsPanel(InteractionsManager im, String filePath) {
+	public InteractionsPanel(InteractionsManager im, String filePath, Font font) {
 		this._im = im;
 
 		textPane = new JEditorPane();
 		textPane.setEditable(false);
+		textPane.setFont(font);
 
 		JScrollPane sc = new JScrollPane(textPane);
 		setLayout(new BorderLayout());
 		add(sc,BorderLayout.CENTER);
 		
 		inputBar = new JTextField();
+		inputBar.setFont(font);
 		inputBar.addKeyListener(new EnterListener());
 		add(inputBar,BorderLayout.SOUTH);
 		textPane.addKeyListener(new KListener());
@@ -47,6 +50,35 @@ public class InteractionsPanel extends JPanel implements TextOutputListener {
 	{
 		textPane.setText(textPane.getText() + evt.getText());
         textPane.setCaretPosition(textPane.getText().length());	
+	}
+
+	/**
+	 * Resets the interactions panel with the given filename as the
+	 * definitions file.
+	 *
+	 * @param defs the OCaml definitions file to load
+	 */
+	public void reset(String defs) {
+		/* Close the existing interactions instance */
+		try {
+			_im.closeInteractionsInstance( _handle );
+			_im.removeOutputListener( this, _handle );
+		} catch( InvalidInteractionsIdException ex ) {}
+
+		// Clear the text accumulated from the last instance
+		textPane.setText("");
+
+		// Start the new interactions instance
+		try {
+			_handle = _im.newInteractionsInstance(defs);
+			_im.registerOutputListener(this, _handle);
+		} catch (InvalidInteractionsIdException ex) {
+		} catch (FileNotFoundException ex) {
+			// TODO: Alert user
+		} catch (InteractionsUnavailableException ex) {
+			// TODO: Alert user
+		}
+
 	}
 
 	public String getText()
@@ -76,7 +108,7 @@ public class InteractionsPanel extends JPanel implements TextOutputListener {
 	    public void keyReleased(KeyEvent e) {
 	    }
 	}
-	
+
 	public class EnterListener implements KeyListener
 	{
 		public EnterListener()

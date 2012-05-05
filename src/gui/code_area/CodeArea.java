@@ -212,6 +212,18 @@ public class CodeArea extends JPanel {
 	}
 
 	/**
+	 * Runs the current file.
+	 */
+	public void runCurrentFile() {
+		Tab current = getCurTab();
+		if( current == null ) {
+			getWindow().displayErrorMessage("There is no open file to run.");
+			return;
+		}
+		current.run();
+	}
+
+	/**
 	 * Sets the given tab's title to the given title.
 	 *
 	 * @param t the tab whose title should be updated
@@ -238,6 +250,8 @@ public class CodeArea extends JPanel {
 	 * Closes the currently open file/tab.
 	 */
 	public void closeCurrentTab() throws CloseDeniedException {
+		if( getCurTab() == null )
+			getWindow().displayErrorMessage("No tabs to close");
 		closeTab(getCurTab());
 	}
 

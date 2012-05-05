@@ -39,12 +39,32 @@ public class InteractionsManager {
      * @param def the filename of the OCaml file definitions to load or null if there are none.
      *
      * @return a new handle
+     *
+     * @throws FileNotFoundException when the given definitions file does not exist
+     * @throws InteractionsUnavailableException if unable to create a new interactions instance
      */
     public int newInteractionsInstance( String def ) throws FileNotFoundException, InteractionsUnavailableException {
         int index = currIndex++;
         Interactions newInstance = new Interactions(ocamlLoc, def, index);
-	interactions.add(newInstance);
+	   interactions.add(newInstance);
         return index;
+    }
+
+    /**
+     * Closes an existing Interactions REPL instance. This is often called when
+     * a user closes tab or window.
+     *
+     * @param id the handle for the interactions instance that should be closed
+     *
+     * @throws InvalidInteractionsIdException if the given handle is invalid
+     */
+    public void closeInteractionsInstance( int id ) throws InvalidInteractionsIdException {
+        if( id < 0 || id > interactions.size() - 1)
+            throw new InvalidInteractionsIdException();
+
+        // Tell the interactions instance to close
+        // Note: We can't remove it because we rely on the arraylist indexing.
+        interactions.get(id).close();
     }
 
     /**

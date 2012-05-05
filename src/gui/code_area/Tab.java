@@ -135,7 +135,7 @@ public class Tab extends JPanel implements DocumentListener {
 			hideLineNumbers();
 
 		// Create the interactions panel
-		interactionsPanel = new InteractionsPanel(codeArea.getWindow().getInteractionsManager(), null);
+		interactionsPanel = new InteractionsPanel(codeArea.getWindow().getInteractionsManager(), null, codeArea.getFont());
 
 		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, sc, interactionsPanel);
 		splitPane.setDividerSize(5);
@@ -210,6 +210,7 @@ public class Tab extends JPanel implements DocumentListener {
 		textPane.setText(output);
 
 		changes = false;
+
 	}
 	
 	/**
@@ -266,6 +267,21 @@ public class Tab extends JPanel implements DocumentListener {
 	 */
 	public boolean unsavedChanges() {
 		return changes;
+	}
+
+	/**
+	 * Runs the tab's program in its interactions window.
+	 */
+	public void run() {
+		// The file must be saved to be run
+		if( unsavedChanges() || getFile() == null )
+			fh.saveFile(this);
+
+		// If they cancelled, we can't run so just return
+		if( unsavedChanges() || getFile() == null )
+			return;
+
+		interactionsPanel.reset(getFile().getAbsolutePath());
 	}
 
 	/**

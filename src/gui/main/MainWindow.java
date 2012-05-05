@@ -131,6 +131,17 @@ public class MainWindow extends JFrame {
 	}
 
 	/**
+	 * Displays a generic error message.
+	 *
+	 * @param message the error message to display
+	 */
+	public void displayErrorMessage(String errorMessage) {
+
+		JOptionPane.showMessageDialog(this, errorMessage, "Error", JOptionPane.ERROR_MESSAGE);
+
+	}
+
+	/**
 	 * A window listener to listen for when the application should shut down.
 	 * This is necessary to make sure all system resources are freed when the
 	 * program is exited.
