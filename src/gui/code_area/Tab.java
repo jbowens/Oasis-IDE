@@ -11,6 +11,9 @@ import javax.swing.JEditorPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.BorderFactory;
+import javax.swing.text.Document;
+import javax.swing.event.DocumentListener;
+import javax.swing.event.DocumentEvent;
 
 import camel.Config;
 import camel.gui.controller.FileHandler;
@@ -24,7 +27,7 @@ import camel.syntaxhighlighter.SimpleStyleSet;
  * A tab in the GUI. A tab has an associated text pane, and optionally, file that
  * the content of the tab is associated with.
  */
-public class Tab extends JPanel {
+public class Tab extends JPanel implements DocumentListener {
 
 	/* The text pane to be displayed in this tab */
 	protected JEditorPane textPane;
@@ -46,6 +49,9 @@ public class Tab extends JPanel {
 
 	/* The scroll pane */
 	protected JScrollPane sc;
+
+	/* Whether or not changes have been made since the last save */
+	protected boolean changes = false;
 
 	/**
 	 * Creates a new tab and loads the given file.
@@ -76,6 +82,9 @@ public class Tab extends JPanel {
 		initialize();
 	}
 
+	/**
+	 * Paints the tab
+	 */
 	public void paint(Graphics g) {
 		style.apply( textPane );
 		super.paint(g);
@@ -116,6 +125,9 @@ public class Tab extends JPanel {
 			hideLineNumbers();
 
 		add(sc, BorderLayout.CENTER);
+
+		/* Begin listening to the document changes */
+		textPane.getDocument().addDocumentListener( this );
 
 	}
 
@@ -172,6 +184,7 @@ public class Tab extends JPanel {
 		}
 		textPane.setText(output);
 
+		changes = false;
 	}
 	
 	/**
@@ -218,6 +231,42 @@ public class Tab extends JPanel {
 	public void setFileLocation(File file) {
 		f = file;
 		codeArea.setTabTitle(this, file.getName());
+		changes = false;
+	}
+
+	/**
+	 * Determines whether or not changes have been made since this tab was last saved.
+	 * 
+	 * @return true if there are unsaved changes, false otherwise
+	 */
+	public boolean unsavedChanges() {
+		return changes;
+	}
+
+	/**
+	 * Called whenever this tab is going to be closed. The tab should try to
+	 * get its affairs in order before it dies.
+	 */
+	public void close() {
+		// TODO: Implement
+	}
+
+	/**
+	 * Called whenever the document contained changes.
+	 */
+	protected void documentChanged() {
+		changes = true;
+	}
+
+	/* DocumentListener interface methods */
+	public void changedUpdate(DocumentEvent evt) {
+		documentChanged();
+	}
+	public void insertUpdate(DocumentEvent evt) {
+		documentChanged();
+	}
+	public void removeUpdate(DocumentEvent evt) {
+		documentChanged();
 	}
 
 }

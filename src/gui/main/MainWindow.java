@@ -11,6 +11,7 @@ import javax.swing.*;
 import camel.gui.interactions.InteractionsWindow;
 import camel.gui.controller.FileHandler;
 import camel.gui.code_area.CodeArea;
+import camel.gui.code_area.CloseDeniedException;
 import camel.gui.menus.MenuBar;
 import camel.interactions.*;
 import camel.*;
@@ -33,6 +34,8 @@ public class MainWindow extends JFrame {
 	protected InteractionsWindow iw;
 	protected JSplitPane s1;
 	protected JSplitPane s2;
+
+	protected boolean closed = false;
 	
 	/**
 	 * Creates a new GUI for the application.
@@ -50,7 +53,7 @@ public class MainWindow extends JFrame {
 		this.im = im;
 
 		/* Instantiate the rest of the GUI */
-		ca = new CodeArea(app);
+		ca = new CodeArea(app, this);
 		fh = new FileHandler(ca);
 		mb = new MenuBar(app, this);
 		ft = new FileTree(new File("."));
@@ -74,6 +77,8 @@ public class MainWindow extends JFrame {
 		// Set the width and height
 		setBounds( 100, 100, width, height );
 
+		addWindowListener(new ShutdownListener(this));
+		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		setVisible(true);
 
 	}
@@ -113,34 +118,68 @@ public class MainWindow extends JFrame {
 	}
 
 	/**
+	 * Gets this window's application/
+	 *
+	 * @return the application tired to this window
+	 */
+	public Application getApplication() {
+		return app;
+	}
+
+	/**
 	 * A window listener to listen for when the application should shut down.
 	 * This is necessary to make sure all system resources are freed when the
 	 * program is exited.
 	 */
 	public class ShutdownListener implements WindowListener {
 	
-		/* The relevant application */
-		protected Application app;
+		/* The relevant MainWindow being listenerd to */
+		protected MainWindow mainWindow;
 
 		/**
 		 * Creates a new shutdown listener.
 		 *
 		 * @param app - the application to close on window close
 		 */
-		public ShutdownListener(Application app) {
-			this.app = app;
+		public ShutdownListener(MainWindow mainWindow) {
+			this.mainWindow = mainWindow;
 		}
 
 		public void windowActivated(WindowEvent e) {}
 		public void windowClosed(WindowEvent e) {
 			// Notify the application to shut down as well
-			app.close();
+			if( ! mainWindow.isClosed() ) {
+				mainWindow.getApplication().guiClosed();
+				mainWindow.dispose();
+			}
 		}
-		public void windowClosing(WindowEvent e) {}
+		public void windowClosing(WindowEvent e) {
+			try {
+				mainWindow.getCodeArea().close();
+			} catch( CloseDeniedException ex ) {
+				return;
+			}
+			mainWindow.close();
+		}
 		public void windowDeactivated(WindowEvent e) {}
 		public void windowDeiconified(WindowEvent e) {}
 		public void windowIconified(WindowEvent e) {}
 		public void windowOpened(WindowEvent e) {}
+	}
+
+	/**
+	 * Returns true if this window has been closed.
+	 */
+	public boolean isClosed() {
+		return closed;
+	}
+
+	/**
+	 * Tells this window to close itself.
+	 */
+	public void close() {
+		processWindowEvent( new WindowEvent( this, WindowEvent.WINDOW_CLOSED ) );
+		closed = true;
 	}
 
 }
