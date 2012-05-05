@@ -9,6 +9,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
+import javax.swing.KeyStroke;
 
 import camel.gui.controller.FileHandler;
 import camel.gui.code_area.CodeArea;
@@ -40,11 +41,16 @@ public class FileMenu extends JMenu implements ActionListener {
 		setMnemonic('F');
 
 		_new = new JMenuItem("New File", KeyEvent.VK_N);
+		_new.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, ActionEvent.CTRL_MASK));
 		_open = new JMenuItem("Open File", KeyEvent.VK_O);
+		_open.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, ActionEvent.CTRL_MASK));
 		_save = new JMenuItem("Save", KeyEvent.VK_S);
+		_save.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
 		_saveAs = new JMenuItem("Save As...");
+		_saveAs.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK + ActionEvent.SHIFT_MASK));
 		_saveAll = new JMenuItem("Save All");
 		_closeFile = new JMenuItem("Close File");
+		_closeFile.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W, ActionEvent.CTRL_MASK));
 		_newWindow = new JMenuItem("New Window");
 		_closeWindow = new JMenuItem("Close Window");
 		
