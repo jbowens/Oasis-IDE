@@ -15,6 +15,7 @@ import javax.swing.text.Document;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.JSplitPane;
+import javax.swing.JOptionPane;
 
 import camel.Config;
 import camel.gui.interactions.InteractionsPanel;
@@ -270,18 +271,39 @@ public class Tab extends JPanel implements DocumentListener {
 	}
 
 	/**
+	 * Called to let the tab know that its contents were just saved to disk.
+	 */
+	public void justSaved() {
+		changes = false;
+	}
+
+	/**
 	 * Runs the tab's program in its interactions window.
 	 */
 	public void run() {
 		// The file must be saved to be run
-		if( unsavedChanges() || getFile() == null )
-			fh.saveFile(this);
+		if( unsavedChanges() || getFile() == null ) {
+			
+			int userInput = JOptionPane.showConfirmDialog(codeArea.getWindow(),
+										    			  "The file must be saved to run the program. Save now?",
+										  				  "Save file to run",
+										  				  JOptionPane.YES_NO_OPTION);
+			if( userInput == JOptionPane.YES_OPTION )
+				fh.saveFile(this);
+			else
+				return;
+
+		}
 
 		// If they cancelled, we can't run so just return
 		if( unsavedChanges() || getFile() == null )
 			return;
 
 		interactionsPanel.reset(getFile().getAbsolutePath());
+	}
+
+	public void resetInteractions() {
+		interactionsPanel.reset(null);
 	}
 
 	/**

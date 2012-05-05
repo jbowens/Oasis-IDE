@@ -51,6 +51,8 @@ public class OCamlMenu extends JMenu implements ActionListener {
 		add(_resetInteractions);
 
 		_run.addActionListener( this );
+		_debug.addActionListener( this );
+		_resetInteractions.addActionListener( this );
 
 	}
 
@@ -65,7 +67,7 @@ public class OCamlMenu extends JMenu implements ActionListener {
 		}
 
 		if(evt.getSource() == _resetInteractions) {
-			// TODO: reset interactions
+			codeArea.resetInteractions();
 		}
 
 

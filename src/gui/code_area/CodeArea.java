@@ -224,6 +224,17 @@ public class CodeArea extends JPanel {
 	}
 
 	/**
+	 * Resets the current tab's interactions window.
+	 */
+	public void resetInteractions() {
+		Tab current = getCurTab();
+		if( current == null ) {
+			return;
+		}
+		current.resetInteractions();
+	}
+
+	/**
 	 * Sets the given tab's title to the given title.
 	 *
 	 * @param t the tab whose title should be updated
@@ -243,7 +254,8 @@ public class CodeArea extends JPanel {
 	 * @param tabToFocus the tab that should now the current tab
 	 */
 	public void setCurrentTab(Tab newCurrent) {
-		tabs.setSelectedComponent(newCurrent);
+		if( tabs.indexOfComponent(newCurrent) != -1 )
+			tabs.setSelectedComponent(newCurrent);
 	}
 
 	/**

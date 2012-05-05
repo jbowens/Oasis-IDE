@@ -90,13 +90,14 @@ public class FileHandler {
 	public void saveFile(Tab tabToSave) {
 
 		// Can't save the tab if there is no tab!
-		if( tabToSave == null )
+		if( tabToSave == null ) {
 			return;
+		}
 
 		// Make sure this file already has a path
 		if( tabToSave.getPath() == null ) {
 			// This file hasn't been saved yet, so do a save-as
-			saveAs();
+			saveAs(tabToSave);
 			return;
 		}
 
@@ -109,6 +110,7 @@ public class FileHandler {
 			bw.write(tabToSave.getText());
 			bw.flush();
 			bw.close();
+			tabToSave.justSaved();
 		} catch (IOException e) {
 			System.err.println("Error writing to file");
 		}
