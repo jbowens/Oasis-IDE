@@ -21,7 +21,7 @@ import java.util.ArrayList;
 
 public class CodeArea extends JPanel {
 
-	protected static final String DEFAULT_FONT_LOC = "fonts/monaco.ttf";
+	protected static final String DEFAULT_FONT_LOC = "fonts/DejaVuSansMono.ttf";
 	protected static final int DEFAULT_FONT_SIZE = 13;
 
 	/* The tabbed pane that holds all the existing tabs */

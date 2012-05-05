@@ -1,5 +1,6 @@
 package camel.gui.interactions;
 
+import java.util.Stack;
 import java.awt.BorderLayout;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -18,9 +19,11 @@ public class InteractionsPanel extends JPanel implements TextOutputListener {
 	protected InteractionsManager _im;
 	protected int _handle;
 	protected String query;
+	protected Stack<String> commands;
 
 	public InteractionsPanel(InteractionsManager im, String filePath, Font font) {
 		this._im = im;
+		commands = new Stack<String>();
 
 		textPane = new JEditorPane();
 		textPane.setEditable(false);
@@ -122,6 +125,7 @@ public class InteractionsPanel extends JPanel implements TextOutputListener {
         		{
         			_im.processUserInput(_handle, inputBar.getText());
 					_im.processUserInput(_handle,'\n');
+					commands.push(inputBar.getText());
 					inputBar.setText("");
         		}
         	} catch(Exception e2) {}
@@ -129,6 +133,9 @@ public class InteractionsPanel extends JPanel implements TextOutputListener {
 
 	    /** Handle the key-pressed event from the text field. */
 	    public void keyPressed(KeyEvent e) {
+	    	if( (e.getKeyCode() == KeyEvent.VK_KP_UP || e.getKeyCode() == KeyEvent.VK_UP) && !commands.empty() ) {
+        			inputBar.setText(commands.pop());
+        	}
 	    }
 
 	    /** Handle the key-released event from the text field. */
