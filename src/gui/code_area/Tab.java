@@ -135,7 +135,7 @@ public class Tab extends JPanel implements DocumentListener {
 			hideLineNumbers();
 
 		// Create the interactions panel
-		interactionsPanel = new InteractionsPanel(codeArea.getWindow().getInteractionsManager(), null, codeArea.getFont());
+		interactionsPanel = new InteractionsPanel(codeArea.getWindow().getInteractionsManager(), null, codeArea.getFont(), style);
 
 		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, sc, interactionsPanel);
 		splitPane.setDividerSize(5);

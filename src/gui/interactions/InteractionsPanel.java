@@ -6,11 +6,14 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.awt.event.*;
 import java.awt.Font;
+import java.awt.Graphics;
 import javax.swing.JEditorPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.BorderFactory;
 import camel.interactions.*;
+import camel.syntaxhighlighter.StyleSet;
 
 public class InteractionsPanel extends JPanel implements TextOutputListener {
 
@@ -20,22 +23,32 @@ public class InteractionsPanel extends JPanel implements TextOutputListener {
 	protected int _handle;
 	protected String query;
 	protected Stack<String> commands;
+	protected StyleSet style;
 
-	public InteractionsPanel(InteractionsManager im, String filePath, Font font) {
+	public InteractionsPanel(InteractionsManager im, String filePath, Font font, StyleSet style) {
+
+		setLayout(new BorderLayout());
+
+		this.style = style;
 		this._im = im;
 		commands = new Stack<String>();
 
 		textPane = new JEditorPane();
 		textPane.setEditable(false);
 		textPane.setFont(font);
+		textPane.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
+		style.apply(textPane);
 
 		JScrollPane sc = new JScrollPane(textPane);
-		setLayout(new BorderLayout());
+		sc.setBorder(BorderFactory.createEmptyBorder());
+		sc.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER );
 		add(sc,BorderLayout.CENTER);
-		
+
 		inputBar = new JTextField();
+		inputBar.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
 		inputBar.setFont(font);
 		inputBar.addKeyListener(new EnterListener());
+		style.apply(inputBar);
 		add(inputBar,BorderLayout.SOUTH);
 		textPane.addKeyListener(new KListener());
 		try {
@@ -43,6 +56,14 @@ public class InteractionsPanel extends JPanel implements TextOutputListener {
 			_im.registerOutputListener(this, _handle);
 		} catch(Exception e) {}
 
+	}
+
+	@Override
+	public void paint(Graphics g) {
+		style.apply(inputBar);
+		style.apply(textPane);
+		inputBar.setBackground(style.getSelectedBackground());
+		super.paint(g);
 	}
 
 	/**
