@@ -24,6 +24,9 @@ public class Application {
     /* The main GUI class */
     protected MainWindow gui;
 
+    /* The number of open windows */
+    protected int guiCounter;;
+
     /**
      * Creates a new Application from the given settings file.
      *
@@ -47,6 +50,7 @@ public class Application {
      */
     protected void setupGui() {
         gui = new MainWindow(this, config, interactionsManager);
+        guiCounter = 1;
     }
 
     /**
@@ -54,6 +58,7 @@ public class Application {
      */
     public void createNewWindow() {
         new MainWindow(this, config, interactionsManager);
+        guiCounter++;
     }
 
     /**
@@ -94,6 +99,16 @@ public class Application {
      */
     public Config getConfig() {
         return config;
+    }
+
+    /**
+     * Tells the application that a gui (usually a MainWindow) has been closed.
+     * If all the guis are closed, we should quit.
+     */
+    public void guiClosed() {
+        guiCounter--;
+        if( guiCounter <= 0 )
+            close();
     }
 
     /**

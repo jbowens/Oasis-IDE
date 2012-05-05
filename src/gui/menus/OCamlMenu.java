@@ -8,6 +8,7 @@ import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.KeyStroke;
 
 import camel.gui.controller.FileHandler;
 
@@ -34,7 +35,9 @@ public class OCamlMenu extends JMenu  {
 		this.parentBar = parentBar;
 
 		_run = new JMenuItem("Run", KeyEvent.VK_R);
+		_run.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, ActionEvent.CTRL_MASK));
 		_debug = new JMenuItem("Debug", KeyEvent.VK_D);
+		_debug.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, ActionEvent.CTRL_MASK));
 
 		add(_run);
 		add(_debug);

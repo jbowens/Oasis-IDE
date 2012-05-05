@@ -80,7 +80,6 @@ public class ReplListener extends Thread {
 
             } catch( IOException e) {
                 // Eat the exception and end execution
-		        e.printStackTrace();
                 return;
             }
         }

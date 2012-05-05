@@ -83,20 +83,18 @@ public class FileHandler {
 	{
 		return f;
 	}
-	
+
 	/**
-	 * Save the file to its current location on the disk.
+	 * Save the given tab/file to its current location on the disk.
 	 */
-	public void saveFile()
-	{
-		Tab curTab = ca.getCurTab();
+	public void saveFile(Tab tabToSave) {
 
 		// Can't save the tab if there is no tab!
-		if( curTab == null )
+		if( tabToSave == null )
 			return;
 
 		// Make sure this file already has a path
-		if( curTab.getPath() == null ) {
+		if( tabToSave.getPath() == null ) {
 			// This file hasn't been saved yet, so do a save-as
 			saveAs();
 			return;
@@ -104,28 +102,37 @@ public class FileHandler {
 
 		try {
 			//Save the current directory
-			directory = new File(curTab.getPath()).getParentFile();
+			directory = new File(tabToSave.getPath()).getParentFile();
 
 			// Save the file
-			bw = new BufferedWriter(new FileWriter(curTab.getPath()));
-			bw.write(curTab.getText());
+			bw = new BufferedWriter(new FileWriter(tabToSave.getPath()));
+			bw.write(tabToSave.getText());
 			bw.flush();
 			bw.close();
 		} catch (IOException e) {
 			System.err.println("Error writing to file");
 		}
 	}
+	
+	/**
+	 * Save the current file/tab to its current location on the disk.
+	 */
+	public void saveFile()
+	{
+		Tab curTab = ca.getCurTab();
+		saveFile(curTab);
+	}
 
 	/**
-	 * Prompt the user for a new file location and save it there.
+	 * Prompts the user for a new file location and then saves the given file/tab
+	 * that file location.
+	 *
+	 * @param tabToSave the tab that should be saved.
 	 */
-	public void saveAs() {
-
-		// Get the current tab
-		Tab currTab = ca.getCurTab();
+	public void saveAs(Tab tabToSave) {
 
 		// Can't save a nonexistent tab
-		if( currTab == null )
+		if( tabToSave == null )
 			return;
 
 		// Set the default save location
@@ -137,12 +144,20 @@ public class FileHandler {
 		if( _fc.showSaveDialog(ca) == JFileChooser.APPROVE_OPTION ) {
 
 			// Set this new file location to be the tab's file loc
-			currTab.setFileLocation( _fc.getSelectedFile() );
+			tabToSave.setFileLocation( _fc.getSelectedFile() );
 			// Do a regular save
-			saveFile();
+			saveFile(tabToSave);
 
 		}
+	}
 
+	/**
+	 * Prompt the user for a new file location and saves the currently open
+	 * file/tab there.
+	 */
+	public void saveAs() {
+		Tab currTab = ca.getCurTab();
+		saveAs(currTab);
 	}
 }
 
