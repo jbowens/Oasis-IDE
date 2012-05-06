@@ -87,7 +87,7 @@ public class DebugManager{
 	/**
 	*Removes an output listener for the specified Debug instance.
 	*
-	*@parma o - the TextOutputListener to remove
+	*@param o - the TextOutputListener to remove
 	*@param id - the handle from which to remove the TextOutputListener
 	*/
 	public void removeOutputListener(TextOutputListener o, int id) throws InvalidDebuggerException{
