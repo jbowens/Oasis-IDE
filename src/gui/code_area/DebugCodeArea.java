@@ -24,9 +24,7 @@ public class DebugCodeArea extends CodeArea {
 	DebugTab onlyTab;
 	
 	public DebugCodeArea(Application app, MainWindow mainwindow) {
-
 		super(app, mainwindow);
-		
 	}
 
 	/**

@@ -31,6 +31,7 @@ public class DebugWindow extends MainWindow {
 		super(app, config, im);
 		this.setTitle("Debug Mode");
 		this.remove(super.s1);
+		this.remove(super.mb);
 		this.remove(super.statusBar);
 
 		this.dca = new DebugCodeArea(super.app, this);
@@ -45,8 +46,8 @@ public class DebugWindow extends MainWindow {
 		}
 
 		this.step = new DebugStepper(this);
-		this.setVisible(true);
 		this.pack();
+		this.setVisible(true);
 		
 	}
 

@@ -70,12 +70,14 @@ public class Debug extends Thread {
     *
     */ 
     protected void compile() throws FileNotFoundException, DebuggerCompilationException{
-        String[] compileArgs = new String[3];
+        String[] compileArgs = new String[5];
         String cOutFile = Integer.toString(handle);
-        String outArg = "-o " + cOutFile;
-        compileArgs[0] = ocamlCompileC;
-        compileArgs[1] = filename;
-        compileArgs[2] = outArg;
+        String outArg = cOutFile;
+        compileArgs[0] = "ocamlc";
+	compileArgs[1] = "-g";
+        compileArgs[2] = filename;
+	compileArgs[3] = "-o";
+        compileArgs[4] = outArg;
         outFile = cOutFile;
 
         /* Start the ocamlc compiler */
@@ -83,6 +85,8 @@ public class Debug extends Thread {
         try{
             compileProcess = runtime.exec(compileArgs);
         }catch(IOException e){
+		System.out.println("HERE");
+		e.printStackTrace();
             throw new DebuggerCompilationException();
         //}catch(FileNotFoundException f){
         //    throw new FileNotFoundException();
@@ -110,6 +114,7 @@ public class Debug extends Thread {
             try{
                 debugger = runtime.exec(debugArgs);
             }catch(IOException e){
+		    //e.printStackTrace();
                 throw new DebuggerCompilationException();
             }
             debugWriter = new OutputStreamWriter(debugger.getOutputStream());
