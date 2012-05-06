@@ -25,8 +25,8 @@ public class DebugManager{
 	*@param ocamlLocation - the location of OCaml on the system
 	*/
 	public DebugManager(String ocamlLocation){
-		ocamlCompileC = ocamlLocation + " " + "ocamlc -g ";
-		ocamlDebugC = ocamlLocation + " " + "ocamldebug ";
+		ocamlCompileC = ocamlLocation + "ocamlc";
+		ocamlDebugC = ocamlLocation + "ocamldebug";
 		debuggers = new ArrayList<Debug>();
 		currIndex = 0;
 	}
@@ -54,6 +54,8 @@ public class DebugManager{
 	*@param cmd  - the command from the GUI
 	*/
 	public void processGUIInput(int id, String cmd) throws InvalidInteractionsException {
+		System.out.println("ProcessGuiInput DebugManager");
+		
 		/* Make sure the debugger instance exists */
 		if(id > debuggers.size() - 1){
 			throw new InvalidInteractionsException();
@@ -87,7 +89,7 @@ public class DebugManager{
 	/**
 	*Removes an output listener for the specified Debug instance.
 	*
-	*@parma o - the TextOutputListener to remove
+	*@param o - the TextOutputListener to remove
 	*@param id - the handle from which to remove the TextOutputListener
 	*/
 	public void removeOutputListener(TextOutputListener o, int id) throws InvalidDebuggerException{

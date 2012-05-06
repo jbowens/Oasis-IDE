@@ -5,24 +5,39 @@ import java.util.*;
 import camel.interactions.TextOutputListener;
 
 
-/*
+/**
  *Represents an indivdual debug instance.
  */
 public class Debug extends Thread {
-	private Runtime runtime;
-    //private BufferedWriter output;
-    //private BufferedReader input;
+	/*The Runtime of the class */
+    private Runtime runtime;
+    
+    /*The ocamldebug Process */
     private Process debugger;
-    String filename;
-    private String[] breakpoints = {"1", "3"};
+
+    /*The list of observers to send the output to. Given to Debug Listener */
     protected List<TextOutputListener> observers;
-    String ocamlCompileC;
-    String ocamlDebugC;
-    int handle;
-    String outFile;
+
+    /*The writer to ocamldebug */
     OutputStreamWriter debugWriter;
+
+    /*The listener from ocamldebug */
     DebugListener debugReader;
 
+    /* The name of the file to compile */
+    String filename;
+
+    /*The ocamlc comand */
+    String ocamlCompileC;
+
+    /*The ocamldebug command */ 
+    String ocamlDebugC;
+
+    /*The name of the compiled outfile */
+    String outFile;
+
+    /*The handle number of this debug instance */
+    int handle;
     
     /**
     *Creates a new Debug backend.
@@ -35,7 +50,6 @@ public class Debug extends Thread {
     public Debug(String ocamlCompileC, String ocamlDebugC, String filename, int handle) 
     throws IOException, FileNotFoundException, DebuggerCompilationException{
         observers = new ArrayList<TextOutputListener>();
-        //observers.add(0, this);
         this.ocamlCompileC = ocamlCompileC;
         this.ocamlDebugC = ocamlDebugC;
 
@@ -56,12 +70,14 @@ public class Debug extends Thread {
     *
     */ 
     protected void compile() throws FileNotFoundException, DebuggerCompilationException{
-        String[] compileArgs = new String[3];
+        String[] compileArgs = new String[5];
         String cOutFile = Integer.toString(handle);
-        String outArg = "-o " + cOutFile;
-        compileArgs[0] = ocamlCompileC;
-        compileArgs[1] = filename;
-        compileArgs[2] = outArg;
+        String outArg = cOutFile;
+        compileArgs[0] = "ocamlc";
+	compileArgs[1] = "-g";
+        compileArgs[2] = filename;
+	compileArgs[3] = "-o";
+        compileArgs[4] = outArg;
         outFile = cOutFile;
 
         /* Start the ocamlc compiler */
@@ -69,6 +85,8 @@ public class Debug extends Thread {
         try{
             compileProcess = runtime.exec(compileArgs);
         }catch(IOException e){
+		System.out.println("HERE");
+		e.printStackTrace();
             throw new DebuggerCompilationException();
         //}catch(FileNotFoundException f){
         //    throw new FileNotFoundException();
@@ -96,6 +114,7 @@ public class Debug extends Thread {
             try{
                 debugger = runtime.exec(debugArgs);
             }catch(IOException e){
+		    //e.printStackTrace();
                 throw new DebuggerCompilationException();
             }
             debugWriter = new OutputStreamWriter(debugger.getOutputStream());
@@ -138,11 +157,17 @@ public class Debug extends Thread {
     *@param cmd - the string that we are writing
     */
     void processGUIInput(String cmd){
+        System.out.println("ProcessGuiInput Debug");
         try{
-            debugWriter.write(cmd);
-            debugWriter.flush();
+	       //char[] cmdArr = cmd.toCharArray();
+	       //for (int i = 0; i < cmdArr.length; i++) {
+                System.out.println("cmd: " + cmd);
+                debugWriter.write(cmd);
+                debugWriter.flush();
+	       //}
         }catch(IOException e){
             //Eat it
+	       e.printStackTrace();
             //throw new InvalidInteractionsException();
         }
     }

@@ -56,9 +56,9 @@ public class DebugListener extends Thread {
 					close(); return;
 				}
 
-				int c = debugStreamReader.read();
-				char theChar = (char) c;
-				buffer.append(theChar);
+				int c;// = debugStreamReader.read();
+				char theChar;// = (char) c;
+				//buffer.append(theChar);
 
 				while(debugStreamReader.ready()){
 					c = debugStreamReader.read();
