@@ -13,7 +13,7 @@ public class DebugTester implements TextOutputListener{
 	public static void main(String[] args) throws Exception {
 		
 		//dbman instance
-		DebugManager dbMan = new DebugManager("");
+		DebugManager dbMan = new DebugManager("/usr/bin/");
 
 		//new debugger instance
 		int handle = dbMan.newDebuggerInstance("../test-ml/test.ml");
@@ -29,6 +29,9 @@ public class DebugTester implements TextOutputListener{
 		dbMan.processGUIInput(handle, "next\n");
 		dbMan.processGUIInput(handle, "next\n");
 		dbMan.processGUIInput(handle, "next\n");
+
+		Thread.sleep(2000);
+		dbMan.close();
 
 	}
 

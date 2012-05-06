@@ -54,8 +54,6 @@ public class DebugManager{
 	*@param cmd  - the command from the GUI
 	*/
 	public void processGUIInput(int id, String cmd) throws InvalidInteractionsException {
-		System.out.println("ProcessGuiInput DebugManager");
-		
 		/* Make sure the debugger instance exists */
 		if(id > debuggers.size() - 1){
 			throw new InvalidInteractionsException();

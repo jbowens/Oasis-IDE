@@ -76,7 +76,7 @@ public class Debug extends Thread {
         String[] compileArgs = new String[5];
         String cOutFile = Integer.toString(handle);//filename + Integer.toString(handle);
         String outArg = cOutFile;
-        compileArgs[0] = "/usr/bin/ocamlc";
+        compileArgs[0] = ocamlCompileC;
         compileArgs[1] = "-g";
         compileArgs[2] = filename;
         compileArgs[3] = "-o";
@@ -86,12 +86,9 @@ public class Debug extends Thread {
         /* Start the ocamlc compiler */
         Process compileProcess;
         try{
-
             compileProcess = runtime.exec(compileArgs);
             String tester = "cp " + filename + " ./";
-            System.out.println("Move command: " + tester);
             runtime.exec(tester);
-            //System.out.println("Compiled");
         }catch(IOException e){
 		System.out.println("HERE");
             throw new DebuggerCompilationException();
@@ -106,11 +103,13 @@ public class Debug extends Thread {
         DebugListener compileReader = new DebugListener(processInputStream, this.observers, handle);
 
         compileReader.start();
+        
         try{
             Thread.sleep(2000);
         }catch(Exception e){
 
         }
+
     }
 
     /**
@@ -173,11 +172,7 @@ public class Debug extends Thread {
     *@param cmd - the string that we are writing
     */
     void processGUIInput(String cmd){
-        System.out.println("ProcessGuiInput Debug");
         try{
-	       //char[] cmdArr = cmd.toCharArray();
-	       //for (int i = 0; i < cmdArr.length; i++) {
-                System.out.println("cmd: " + cmd);
                 debugWriter.write(cmd);
                 debugWriter.flush();
 	       //}
@@ -203,6 +198,7 @@ public class Debug extends Thread {
             debugReader.kill();
             debugger.destroy();
         }catch(IOException e){
+            System.out.println("Close exception");
             //Eat it
         }
     }
