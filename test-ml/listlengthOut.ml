@@ -14,6 +14,6 @@ print_int(a);;
 (** #untrace myListLength;; *)
 print_string("\n");;
 let list2 = [4; 5; 6; 7; 8];;
-let b = myListLength(list2);;
+let b = myListLength(list2);;vv
 print_int(b);;
 print_string("\n");;

@@ -68,8 +68,8 @@ public class MainWindow extends JFrame {
 		ca = new CodeArea(app, this);
 		fh = new FileHandler(ca);
 		mb = new MenuBar(app, this);
-		ft = new FileTree(new File("."));
-		s1 = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, ft, ca);
+		ft = new FileTree(fh);
+		s1 = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, ft.sp, ca);
 		s1.setDividerSize(5);
 		add(mb,BorderLayout.NORTH);
 		add(s1,BorderLayout.CENTER);

@@ -46,6 +46,7 @@ public class FileHandler {
 				// Get the absolute path so we can open
 				String path = f.getAbsolutePath();
 				try {
+					System.out.println("1 "+path);
 					br = new BufferedReader(new InputStreamReader(new DataInputStream(new FileInputStream(path))));
 					ca.makeTab(this, f);
 				} catch (FileNotFoundException e) {
@@ -54,6 +55,23 @@ public class FileHandler {
 					System.err.println("Error reading from file");
 				}
 			}
+		}
+	}
+	public void openFTFile(String fPath)
+	{
+		f = new File(fPath);
+		if(f != null)
+		{
+			// Save the default directory
+				directory = f.getParentFile();
+				try {
+					br = new BufferedReader(new InputStreamReader(new DataInputStream(new FileInputStream(fPath))));
+					ca.makeTab(this, f);
+				} catch (FileNotFoundException e) {
+					System.err.println("Couldn't open file");
+				} catch (IOException e) {
+					System.err.println("Error reading from file");
+				}
 		}
 	}
 
