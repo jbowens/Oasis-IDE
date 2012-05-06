@@ -45,8 +45,6 @@ public class OCamlDocument extends PlainDocument {
 
   /**
    * This class is used to iterate over tokens between two positions
-   *
-   * ADAPTED FROM JSYNTAXPANE SOURCE
    */
   class TokenIterator implements ListIterator<Token> {
 
@@ -200,6 +198,71 @@ public class OCamlDocument extends PlainDocument {
       }
     } catch( BadLocationException ex ) {
       return 0;
+    }
+  }
+
+  /**
+   * Gets the line position associated with a caret position
+   *
+   * @param charOffset the number of characters from the start
+   * @return the line number the given position is on
+   */
+  public int getLinePosition( int charOffset ) {
+    CaretPosition caretPos = getCaretPosition(charOffset);
+    if( caretPos == null )
+      return -1;
+    else
+      return caretPos.line;
+  }
+
+  /**
+   * Gets the column position associated with a caret position
+   *
+   * @param charOffset the number of characters from the start
+   * @return the column number the given position is on
+   */
+  public int getColumnPosition( int charOffset ) {
+    CaretPosition caretPos = getCaretPosition(charOffset);
+    if( caretPos == null )
+      return -1;
+    else
+      return caretPos.column;
+  }
+
+  /**
+   * Gets the caret position from a character offset.
+   *
+   * @param charOffset the number of characters from the start
+   * @return a CaretPosition object representing the line and column
+   */
+  public CaretPosition getCaretPosition( int charOffset ) {
+    int len = getLength();
+    try {
+      String txt = getText(0, len);
+      int line = 1;
+      int column = 1;
+      for( int i = 0; i < len && i < charOffset; i++ ) {
+        if( txt.charAt(i) == '\n' ) {
+          line++;
+          column = 1;
+        } else
+          column++;
+      }
+      return new CaretPosition(line, column);
+    } catch( BadLocationException ex ) {
+      return null;
+    }
+  }
+
+  /**
+   * A utility class for representing a line and column pair.
+   */
+  public class CaretPosition {
+    public final int line;
+    public final int column;
+    public CaretPosition(int l, int c) {
+      line = l;
+      column = c;
     }
   }
 

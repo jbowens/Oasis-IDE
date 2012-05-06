@@ -61,9 +61,6 @@ public class Tab extends JPanel implements DocumentListener {
 	/* The split pane for the tab */
 	protected JSplitPane splitPane;
 
-	/* The status bar for the tab */
-	protected StatusBar statusBar;
-
 	protected JPanel middlePanel;
 
 	/* Whether or not changes have been made since the last save */
@@ -121,6 +118,10 @@ public class Tab extends JPanel implements DocumentListener {
 		textPane = new JEditorPane();
 		textPane.setBorder( BorderFactory.createEmptyBorder(3, 3, 3, 3) );
 
+		// Add the status bar as a caret listener
+		if( codeArea.getWindow().getStatusBar() != null )
+			textPane.addCaretListener( codeArea.getWindow().getStatusBar() );
+
 		// Create an OCaml lexer for the syntax highlighter
 		OCamlLexer lexer = new OCamlLexer();
 
@@ -144,9 +145,8 @@ public class Tab extends JPanel implements DocumentListener {
 		if( ! lineNumbersEnabled() )
 			hideLineNumbers();
 
-		statusBar = new StatusBar(this);
 		middlePanel.add(sc, BorderLayout.CENTER);
-		middlePanel.add(statusBar, BorderLayout.SOUTH);
+		//middlePanel.add(statusBar, BorderLayout.SOUTH);
 
 		// Create the interactions panel
 		interactionsPanel = new InteractionsPanel(codeArea.getWindow().getInteractionsManager(), null, codeArea.getFont(), style);
@@ -224,7 +224,7 @@ public class Tab extends JPanel implements DocumentListener {
 		textPane.setText(output);
 
 		changes = false;
-
+		codeArea.getWindow().getStatusBar().displayStatus("Opened " + f.getName());
 	}
 	
 	/**
@@ -288,6 +288,7 @@ public class Tab extends JPanel implements DocumentListener {
 	 */
 	public void justSaved() {
 		changes = false;
+		codeArea.getWindow().getStatusBar().displayStatus("Saved " + f.getName());
 	}
 
 	/**
@@ -313,10 +314,12 @@ public class Tab extends JPanel implements DocumentListener {
 			return;
 
 		interactionsPanel.reset(getFile().getAbsolutePath());
+		codeArea.getWindow().getStatusBar().displayStatus("Running " + getFile().getName());
 	}
 
 	public void resetInteractions() {
 		interactionsPanel.reset(null);
+		codeArea.getWindow().getStatusBar().displayStatus("Interactions reset");
 	}
 
 	/**

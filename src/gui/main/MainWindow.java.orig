@@ -3,25 +3,21 @@ package camel.gui.main;
 import java.awt.event.WindowListener;
 import java.awt.event.WindowEvent;
 import java.awt.BorderLayout;
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
-import java.awt.Font;
 import java.io.File;
 
 import javax.swing.*;
 
+import camel.gui.interactions.InteractionsWindow;
 import camel.gui.controller.FileHandler;
 import camel.gui.code_area.CodeArea;
 import camel.gui.code_area.CloseDeniedException;
 import camel.gui.menus.MenuBar;
-import camel.gui.code_area.StatusBar;
 import camel.interactions.*;
 import camel.*;
 
 public class MainWindow extends JFrame {
 
-	protected static final String DEFAULT_FONT_LOC = "fonts/DejaVuSansMono.ttf";
-	protected static final int DEFAULT_FONT_SIZE = 13;
+	protected static final double DEFAULT_SPLIT = 1.0;
 
 	/* The application this GUI is tied to */
 	protected Application app;
@@ -32,17 +28,13 @@ public class MainWindow extends JFrame {
 	/* Interactions manager for getting input from the OCaml REPL */
 	protected InteractionsManager im;
 
-	/* The status bar for the window */
-	protected StatusBar statusBar;
-
-	/* The default font to use */
-	protected Font font;
-
 	protected CodeArea ca;
 	protected MenuBar mb;
 	protected FileHandler fh;
 	protected FileTree ft;
+	protected InteractionsWindow iw;
 	protected JSplitPane s1;
+	protected JSplitPane s2;
 
 	protected boolean closed = false;
 	
@@ -61,19 +53,21 @@ public class MainWindow extends JFrame {
 		this.config = config;
 		this.im = im;
 
-		loadFont();
-
 		/* Instantiate the rest of the GUI */
-		statusBar = new StatusBar(this);
 		ca = new CodeArea(app, this);
 		fh = new FileHandler(ca);
 		mb = new MenuBar(app, this);
 		ft = new FileTree(new File("."));
+		iw = new InteractionsWindow(im);
 		s1 = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, ft, ca);
+		s2 = new JSplitPane(JSplitPane.VERTICAL_SPLIT, s1, iw);
 		s1.setDividerSize(5);
+		s2.setDividerSize(5);
 		add(mb,BorderLayout.NORTH);
-		add(s1,BorderLayout.CENTER);
-		add(statusBar, BorderLayout.SOUTH);
+		add(s2,BorderLayout.CENTER);
+		//add(ca,BorderLayout.CENTER);
+		//add(ft,BorderLayout.WEST);
+		//add(iw,BorderLayout.SOUTH);
 
 		pack();
 
@@ -84,10 +78,19 @@ public class MainWindow extends JFrame {
 		// Set the width and height
 		setBounds( 100, 100, width, height );
 
+<<<<<<< HEAD
+		/* Load the desired split for the main window */
+		double interactionsSplit = DEFAULT_SPLIT;
+		if( config.settingExists("interactionsSplit") )
+			interactionsSplit = Double.parseDouble( config.getSetting("interactionsSplit") ); 
+		s2.setDividerLocation(interactionsSplit);
+
 		repaint();
 
+=======
 		addWindowListener(new ShutdownListener(this));
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+>>>>>>> fbe106b5519bd1ac8cdae61566024a2c60187b46
 		setVisible(true);
 
 	}
@@ -127,46 +130,12 @@ public class MainWindow extends JFrame {
 	}
 
 	/**
-	 * Gets this window's application
+	 * Gets this window's application/
 	 *
 	 * @return the application tired to this window
 	 */
 	public Application getApplication() {
 		return app;
-	}
-
-	/**
-	 * Gets the status bar
-	 */ 
-	public StatusBar getStatusBar() {
-		return statusBar;
-	}
-
-	/**
-	 * Gets the default font
-	 */
-	public Font getFont() {
-		return font;
-	}
-
-	/**
-	 * Gets this window's interactions manager.
-	 *
-	 * @return the window's interactions manager
-	 */
-	public InteractionsManager getInteractionsManager() {
-		return im;
-	}
-
-	/**
-	 * Displays a generic error message.
-	 *
-	 * @param message the error message to display
-	 */
-	public void displayErrorMessage(String errorMessage) {
-
-		JOptionPane.showMessageDialog(this, errorMessage, "Error", JOptionPane.ERROR_MESSAGE);
-
 	}
 
 	/**
@@ -209,23 +178,6 @@ public class MainWindow extends JFrame {
 		public void windowIconified(WindowEvent e) {}
 		public void windowOpened(WindowEvent e) {}
 	}
-
-	/**
-	 * Loads the default font from the file system.
-	 */
-	protected void loadFont() {
-
-		try {
-			Font loadFont = Font.createFont(Font.TRUETYPE_FONT, new BufferedInputStream( new FileInputStream( DEFAULT_FONT_LOC ) ));
-			loadFont = loadFont.deriveFont( (float) DEFAULT_FONT_SIZE );
-			font = loadFont;
-		} catch( Exception ex ) {
-			System.err.println("Unable to load font "  + DEFAULT_FONT_LOC + " " + ex.getClass() );
-			font = new Font(Font.MONOSPACED, Font.PLAIN, DEFAULT_FONT_SIZE);
-		} 
-
-	}
-
 
 	/**
 	 * Returns true if this window has been closed.

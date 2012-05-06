@@ -11,8 +11,6 @@ import camel.syntaxhighlighter.SimpleStyleSet;
 import camel.syntaxhighlighter.StyleWrapper;
 import camel.Application;
 
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
 import java.awt.GridBagLayout;
 import java.io.File;
 import java.io.IOException;
@@ -20,9 +18,6 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class CodeArea extends JPanel {
-
-	protected static final String DEFAULT_FONT_LOC = "fonts/DejaVuSansMono.ttf";
-	protected static final int DEFAULT_FONT_SIZE = 13;
 
 	/* The tabbed pane that holds all the existing tabs */
 	protected JTabbedPane tabs;
@@ -39,9 +34,6 @@ public class CodeArea extends JPanel {
 	/* The application this Code Area is tied to */
 	protected Application app;
 
-	/* The font to use */
-	protected Font font;
-
 	/* Default file handler for this code area */
 	protected FileHandler fh;
 
@@ -53,6 +45,11 @@ public class CodeArea extends JPanel {
 	 */
 	public CodeArea(Application app, MainWindow mainWindow) {
 		super(new GridBagLayout());
+
+		this.app = app;
+		this.mainWindow = mainWindow;
+		this.fh = new FileHandler(this);
+
 		tabList = new ArrayList<Tab>();
 		tabs = new JTabbedPane();
 		GridBagConstraints fullFill = new GridBagConstraints();
@@ -61,10 +58,6 @@ public class CodeArea extends JPanel {
 		tabs.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
 		add(tabs,fullFill);
 		setSize(600,600);
-
-		this.app = app;
-		this.mainWindow = mainWindow;
-		this.fh = new FileHandler(this);
 
 		/* Load the user's preferred default style if it's available */
 		StyleSet initialStyle = new SimpleStyleSet();
@@ -80,7 +73,6 @@ public class CodeArea extends JPanel {
 
 		this.style = new StyleWrapper( initialStyle );
 
-		loadFont();
 	}
 
 	/**
@@ -180,23 +172,10 @@ public class CodeArea extends JPanel {
 	 * Gets the current font used by the code area.
 	 */
 	public Font getFont() {
-		return font;
-	}
-
-	/**
-	 * Loads the default font from the file system.
-	 */
-	protected void loadFont() {
-
-		try {
-			Font loadFont = Font.createFont(Font.TRUETYPE_FONT, new BufferedInputStream( new FileInputStream( DEFAULT_FONT_LOC ) ));
-			loadFont = loadFont.deriveFont( (float) DEFAULT_FONT_SIZE );
-			font = loadFont;
-		} catch( Exception ex ) {
-			System.err.println("Unable to load font "  + DEFAULT_FONT_LOC + " " + ex.getClass() );
-			font = new Font(Font.MONOSPACED, Font.PLAIN, DEFAULT_FONT_SIZE);
-		} 
-
+		if( getWindow() == null )
+			return super.getFont();
+		else
+			return getWindow().getFont();
 	}
 
 	/**
