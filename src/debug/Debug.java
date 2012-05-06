@@ -1,164 +1,168 @@
 package camel.debug;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
+import java.util.*;
+import camel.interactions.TextOutputListener;
 
-public class Debug {
-    // I commented this out because it had compilation errors. - jackson 
-	private Process proc;
-    private BufferedWriter output;
-    private BufferedReader input;
-    private String filename;
+
+/*
+ *Represents an indivdual debug instance.
+ */
+public class Debug extends Thread {
+	private Runtime runtime;
+    //private BufferedWriter output;
+    //private BufferedReader input;
+    private Process debugger;
+    String filename;
     private String[] breakpoints = {"1", "3"};
-    
-    public Debug(String path) throws IOException{
-        
-    }
-    
-    public void getStartInfo(){
-    	//get the info for the filename
-    	this.filename = "./../test-ml/a.out";
-    	this.breakpoints = getBreakPoints();
-    }
+    protected List<TextOutputListener> observers;
+    String ocamlCompileC;
+    String ocamlDebugC;
+    int handle;
+    String outFile;
+    OutputStreamWriter debugWriter;
+    DebugListener debugReader;
 
-    public String[] getBreakPoints(){
-        return breakpoints;
+    
+    /**
+    *Creates a new Debug backend.
+    *
+    *@param ocamlCompile - the command for compiling the ocaml file
+    *@parma ocamlDebug - the command for running the debugger
+    *@param filename - the name of the file that is being debugged
+    *@param handle - the id of the Debug instance
+    */
+    public Debug(String ocamlCompileC, String ocamlDebugC, String filename, int handle) 
+    throws IOException, FileNotFoundException, DebuggerCompilationException{
+        observers = new ArrayList<TextOutputListener>();
+        //observers.add(0, this);
+        this.ocamlCompileC = ocamlCompileC;
+        this.ocamlDebugC = ocamlDebugC;
+
+        if(filename.equals("")){
+            this.filename = null;
+        }else{
+            this.filename = filename;
+        }
+        this.runtime = Runtime.getRuntime();
+        compile();
+        callDebug();
     }
     
-    public void callDebug() throws IOException{
-    	getStartInfo();
-    	try{
-    		String debugArgs[] = new String[breakpoints.length + 2];
-    		for(int i = 0; i < breakpoints.length; i++){
-    			debugArgs[i + 2] = breakpoints[i];
-    		}
-    		debugArgs[0] = "ocamldebug";
-    		debugArgs[1] = filename;
-    		proc = Runtime.getRuntime().exec(debugArgs);
-            //System.out.println("Proc Started");
-            assert(proc != null);
-    		input = new BufferedReader( new InputStreamReader( proc.getInputStream() ));
-    		output = new BufferedWriter( new OutputStreamWriter( proc.getOutputStream() ));
-            //System.out.println("Before readline");
-    		String line = input.readLine();
-            System.out.println(line);
-            line += input.readLine();
-            System.out.println(line);
-    		//while(!line.equals("")){
-            //    System.out.println("in while loop");
-            //	line = line + input.readLine();
-            //    System.out.println("line: " + line);
-    		//}
-    		//displayInput(line);
-    		//while(line != null){
-    			//args.write(getStepInfo());
-    		//}
-            //System.out.println("passed while loop");
-        
-    	}
-    	catch(IOException e){
-    		e.printStackTrace();
-    		System.out.print("Debug failed to initilize");
-    	}
-    }
-    
-    public String runDebug() throws IOException, InterruptedException{
-        output.write("run\n");
-        output.flush();
-	    output.write("\n");
-	    output.flush();
-    	String line =  input.readLine();
-    	String outString = line;
+    /**
+    *This method is called when the debugger starts. This method attempts to compile
+    *the code that is given by the current module. The compiler is called and the 
+    *file takes the name of the handle of the Debug instance.
+    *
+    */ 
+    protected void compile() throws FileNotFoundException, DebuggerCompilationException{
+        String[] compileArgs = new String[3];
+        String cOutFile = Integer.toString(handle);
+        String outArg = "-o " + cOutFile;
+        compileArgs[0] = ocamlCompileC;
+        compileArgs[1] = filename;
+        compileArgs[2] = outArg;
+        outFile = cOutFile;
+
+        /* Start the ocamlc compiler */
+        Process compileProcess;
         try{
-            while (input.ready() == false) {
-                Thread.sleep(100);
-            }   
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            System.out.println("Exception");
+            compileProcess = runtime.exec(compileArgs);
+        }catch(IOException e){
+            throw new DebuggerCompilationException();
+        //}catch(FileNotFoundException f){
+        //    throw new FileNotFoundException();
         }
-        int readin = 1;
-        while(input.ready()){
-            if(line.equals("-1")){
-                System.out.println("break");
+        OutputStreamWriter compileWriter = new OutputStreamWriter(compileProcess.getOutputStream());
+
+        InputStream processInputStream = compileProcess.getInputStream();
+
+        /* Create a DebugListener to read the output */
+        DebugListener compileReader = new DebugListener(processInputStream, this.observers, handle);
+
+        compileReader.start();
+    }
+
+    /**
+    *This method starts and instance of the command line debugger for ocaml. The method
+    *calls the debugger and throws an exceptioon if it cannot find the file or if the 
+    *debugger cannot be called for some reason.
+    */
+    public void callDebug() throws IOException, FileNotFoundException, DebuggerCompilationException{
+    	//try{
+    		String debugArgs[] = new String[2];
+    		debugArgs[0] = ocamlDebugC;
+            debugArgs[1] = outFile;
+            try{
+                debugger = runtime.exec(debugArgs);
+            }catch(IOException e){
+                throw new DebuggerCompilationException();
             }
-            outString = outString + line;
-            readin = input.read();
-            if(readin != -1){
-                char c = (char) readin;
-                line = "" + c;
-            }
+            debugWriter = new OutputStreamWriter(debugger.getOutputStream());
+
+            InputStream debuggerInputStream = debugger.getInputStream();
+            debugReader = new DebugListener(debuggerInputStream, this.observers, handle);
+            debugReader.start();
+        //}catch(IOException e){
+        //    throw new FileNotFoundException();
+        //}
+    }
+
+    /**
+    *Adds an output listener to the list of listeners to be notified when new text is 
+    *available from the debugger. Listeners are not necessarily immediately notifed. 
+    *Output is buffered and sent to listeners oly when no additional output is expected
+    *soon.
+    *
+    *@param o - the TextOutputListener
+    */
+    void registerOutputListener(TextOutputListener o){
+        if(observers.contains(o)){
+            return;
         }
-        System.out.println("Passed that awful loop");
-        System.out.println("outString: \n" + outString);
-    	return outString;
-    }
-    
-    public String runStep() throws IOException{
-    	output.write("s");
-    	output.flush();
-    	String line = input.readLine();
-    	String outString = "";
-    	while(line != null){
-    		outString += line;
-    		line = input.readLine();
-    	}
-    	return outString;
-    }
-    
-    public String Back() throws IOException{
-    	output.write("back");
-    	output.flush();
-    	String line = input.readLine();
-    	String outString = "";
-    	while(line != null){
-    		outString += line;
-    		line = input.readLine();
-    	}
-    	return outString;
+        observers.add(o);
     }
 
-        public String Quit() throws IOException{
-        output.write("quit");
-        output.flush();
-        output.write("y");
-        output.flush();
-        String line = input.readLine();
-        String outString = "";
-        while(line != null){
-            outString += line;
-            line = input.readLine();
+    /**
+    *Removes an output listener from the list
+    *
+    *@param o - the TextOutputListener
+    */
+    void removeOutputListener(TextOutputListener o){
+        observers.remove(o);
+    }
+
+    /**
+    *Sends input from the GUI and to the debugger.
+    *
+    *@param cmd - the string that we are writing
+    */
+    void processGUIInput(String cmd){
+        try{
+            debugWriter.write(cmd);
+            debugWriter.flush();
+        }catch(IOException e){
+            //Eat it
+            //throw new InvalidInteractionsException();
         }
-        return outString;
     }
 
-    public String Step() throws IOException{
-        output.write("step");
-        output.flush();
-        String line = input.readLine();
-        String outString = "";
-        while(line != null){
-            outString += line;
-            line = input.readLine();
+    /**
+    *Closes the processes and exits the debugger
+    */
+    void close(){
+        try{
+            debugWriter.write("quit");
+            debugWriter.flush();
+            debugWriter.write("yes");
+            debugWriter.flush();
+            debugWriter.close();
+            debugReader.kill();
+            debugReader.interrupt();
+            debugReader.kill();
+            debugger.destroy();
+        }catch(IOException e){
+            //Eat it
         }
-        return outString;
     }
-
-	public String getStepInfo() throws IOException{
-		// TODO Auto-generated method stub
-		//THis method gets the next step command from the gui
-		return null;
-	}
-
-	public void displayInput(String line) {
-		// TODO Auto-generated method stub
-		//This method parses the output for thd gui to use
-	}
-    //
-    
 }
