@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.awt.Toolkit;
 
 import javax.swing.JFileChooser;
 import javax.swing.JMenu;
@@ -41,9 +42,9 @@ public class OCamlMenu extends JMenu implements ActionListener {
 		this.codeArea = codeArea;
 
 		_run = new JMenuItem("Run", KeyEvent.VK_R);
-		_run.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, ActionEvent.CTRL_MASK));
+		_run.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 		_debug = new JMenuItem("Debug", KeyEvent.VK_D);
-		_debug.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, ActionEvent.CTRL_MASK));
+		_debug.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 		_resetInteractions = new JMenuItem("Reset Interactions");
 
 		add(_run);
