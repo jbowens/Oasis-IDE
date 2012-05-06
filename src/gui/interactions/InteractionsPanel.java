@@ -144,8 +144,7 @@ public class InteractionsPanel extends JPanel implements TextOutputListener {
 				//System.out.println("Sending " + e.getKeyChar());
 				if(e.getKeyChar() == '\n')
         		{
-        			_im.processUserInput(_handle, inputBar.getText());
-					_im.processUserInput(_handle,'\n');
+        			_im.processUserInput(_handle, inputBar.getText() + "\n");
 					commands.push(inputBar.getText());
 					inputBar.setText("");
         		}

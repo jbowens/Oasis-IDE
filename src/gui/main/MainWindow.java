@@ -7,7 +7,6 @@ import java.io.File;
 
 import javax.swing.*;
 
-import camel.gui.interactions.InteractionsWindow;
 import camel.gui.controller.FileHandler;
 import camel.gui.code_area.CodeArea;
 import camel.gui.code_area.CloseDeniedException;
@@ -30,7 +29,6 @@ public class MainWindow extends JFrame {
 	protected MenuBar mb;
 	protected FileHandler fh;
 	protected FileTree ft;
-	protected InteractionsWindow iw;
 	protected JSplitPane s1;
 
 	protected boolean closed = false;
@@ -55,7 +53,6 @@ public class MainWindow extends JFrame {
 		fh = new FileHandler(ca);
 		mb = new MenuBar(app, this);
 		ft = new FileTree(new File("."));
-		iw = new InteractionsWindow(im);
 		s1 = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, ft, ca);
 		s1.setDividerSize(5);
 		add(mb,BorderLayout.NORTH);

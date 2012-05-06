@@ -72,9 +72,11 @@ public class ReplListener extends Thread {
         		if( buffer.length() > 0 ) {
         		    String output = buffer.toString();
         		    TextOutputEvent event = new TextOutputEvent( output, handle );
-        		    for( TextOutputListener listener : observers ) {
-        		        listener.receiveOutput( event );
-        		    }
+                    synchronized(observers) {
+            		    for( TextOutputListener listener : observers ) {
+            		        listener.receiveOutput( event );
+            		    }
+                    }
         		    buffer.delete(0, buffer.length());
         		}
 

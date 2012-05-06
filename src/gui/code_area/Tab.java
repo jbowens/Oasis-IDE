@@ -61,6 +61,11 @@ public class Tab extends JPanel implements DocumentListener {
 	/* The split pane for the tab */
 	protected JSplitPane splitPane;
 
+	/* The status bar for the tab */
+	protected StatusBar statusBar;
+
+	protected JPanel middlePanel;
+
 	/* Whether or not changes have been made since the last save */
 	protected boolean changes = false;
 
@@ -98,6 +103,7 @@ public class Tab extends JPanel implements DocumentListener {
 	 */
 	public void paint(Graphics g) {
 		style.apply( textPane );
+		middlePanel.setBackground(style.getBackgroundColor());
 		super.paint(g);
 	}
 
@@ -107,6 +113,9 @@ public class Tab extends JPanel implements DocumentListener {
 	protected void initialize() {
 
 		setLayout(new BorderLayout());
+
+		middlePanel = new JPanel();
+		middlePanel.setLayout(new BorderLayout());
 
 		/* Create the editor pane */
 		textPane = new JEditorPane();
@@ -135,10 +144,14 @@ public class Tab extends JPanel implements DocumentListener {
 		if( ! lineNumbersEnabled() )
 			hideLineNumbers();
 
+		statusBar = new StatusBar(this);
+		middlePanel.add(sc, BorderLayout.CENTER);
+		middlePanel.add(statusBar, BorderLayout.SOUTH);
+
 		// Create the interactions panel
 		interactionsPanel = new InteractionsPanel(codeArea.getWindow().getInteractionsManager(), null, codeArea.getFont(), style);
 
-		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, sc, interactionsPanel);
+		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, middlePanel, interactionsPanel);
 		splitPane.setDividerSize(5);
 		add(splitPane, BorderLayout.CENTER);
 

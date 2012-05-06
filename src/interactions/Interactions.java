@@ -80,16 +80,20 @@ public class Interactions {
      * no additional output is expected soon.
      */
     void registerOutputListener(TextOutputListener o) {
-        if( observers.contains( o ) )
-            return;
-        observers.add( o );
+        synchronized(observers) {
+            if( observers.contains( o ) )
+                return;
+            observers.add( o );
+        }
     }
 
     /*
      * Desubsribes an output listener.
      */
     void removeOutputListener(TextOutputListener o) {
-        observers.remove( o );
+        synchronized(observers) {
+            observers.remove( o );
+        }
     }
 
     /*
