@@ -23,6 +23,7 @@ public class DebugTester implements TextOutputListener{
 		dbMan.registerOutputListener(listener,handle);
 
 		dbMan.processGUIInput(handle,"break @ Test 1\n");
+		dbMan.processGUIInput(handle, "run\n");
 
 	}
 
