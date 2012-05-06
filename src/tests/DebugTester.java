@@ -4,6 +4,7 @@ import java.io.*;
 import camel.debug.*;
 
 public class DebugTester{
+	/*
 	public static void main(String[] args) throws IOException, InterruptedException{
 		Debug myDebug = new Debug("/test-ml");
 		assert(myDebug != null);
@@ -16,4 +17,5 @@ public class DebugTester{
 		myDebug.Quit();
 
 	}
+	*/
 }
