@@ -25,8 +25,8 @@ public class DebugManager{
 	*@param ocamlLocation - the location of OCaml on the system
 	*/
 	public DebugManager(String ocamlLocation){
-		ocamlCompileC = ocamlLocation + " " + "ocamlc -g ";
-		ocamlDebugC = ocamlLocation + " " + "ocamldebug ";
+		ocamlCompileC = ocamlLocation + "ocamlc";
+		ocamlDebugC = ocamlLocation + "ocamldebug";
 		debuggers = new ArrayList<Debug>();
 		currIndex = 0;
 	}
