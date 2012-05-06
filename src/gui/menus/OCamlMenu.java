@@ -13,6 +13,7 @@ import javax.swing.KeyStroke;
 
 import camel.gui.controller.FileHandler;
 import camel.gui.code_area.CodeArea;
+import camel.*;
 
 /**
  * The OCaml menu.
@@ -25,6 +26,9 @@ public class OCamlMenu extends JMenu implements ActionListener {
 	/* The code area of this menu's gui */
 	protected CodeArea codeArea;
 
+	/*Application*/
+	protected Application app;
+
 	protected JMenuItem _run;
 	protected JMenuItem _debug;
 	protected JMenuItem _resetInteractions;
@@ -34,12 +38,13 @@ public class OCamlMenu extends JMenu implements ActionListener {
 	 *
 	 * @param parentBar the parent menubar of this menu
 	 */
-	public OCamlMenu(MenuBar parentBar, CodeArea codeArea) {
+	public OCamlMenu(MenuBar parentBar, CodeArea codeArea, Application app) {
 		
 		super("OCaml");
 
 		this.parentBar = parentBar;
 		this.codeArea = codeArea;
+		this.app = app;
 
 		_run = new JMenuItem("Run", KeyEvent.VK_R);
 		_run.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
@@ -65,6 +70,7 @@ public class OCamlMenu extends JMenu implements ActionListener {
 
 		if(evt.getSource() == _debug) {
 			// TODO: launch debugger
+			app.openDebug();
 		}
 
 		if(evt.getSource() == _resetInteractions) {

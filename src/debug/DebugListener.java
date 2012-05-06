@@ -53,8 +53,7 @@ public class DebugListener extends Thread {
 			try{
 				/*make sure we are alive */
 				if(!alive){
-					close();
-					return;
+					close(); return;
 				}
 
 				int c = debugStreamReader.read();
