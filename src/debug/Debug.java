@@ -5,24 +5,39 @@ import java.util.*;
 import camel.interactions.TextOutputListener;
 
 
-/*
+/**
  *Represents an indivdual debug instance.
  */
 public class Debug extends Thread {
-	private Runtime runtime;
-    //private BufferedWriter output;
-    //private BufferedReader input;
+	/*The Runtime of the class */
+    private Runtime runtime;
+    
+    /*The ocamldebug Process */
     private Process debugger;
-    String filename;
-    private String[] breakpoints = {"1", "3"};
+
+    /*The list of observers to send the output to. Given to Debug Listener */
     protected List<TextOutputListener> observers;
-    String ocamlCompileC;
-    String ocamlDebugC;
-    int handle;
-    String outFile;
+
+    /*The writer to ocamldebug */
     OutputStreamWriter debugWriter;
+
+    /*The listener from ocamldebug */
     DebugListener debugReader;
 
+    /* The name of the file to compile */
+    String filename;
+
+    /*The ocamlc comand */
+    String ocamlCompileC;
+
+    /*The ocamldebug command */ 
+    String ocamlDebugC;
+
+    /*The name of the compiled outfile */
+    String outFile;
+
+    /*The handle number of this debug instance */
+    int handle;
     
     /**
     *Creates a new Debug backend.
@@ -35,7 +50,6 @@ public class Debug extends Thread {
     public Debug(String ocamlCompileC, String ocamlDebugC, String filename, int handle) 
     throws IOException, FileNotFoundException, DebuggerCompilationException{
         observers = new ArrayList<TextOutputListener>();
-        //observers.add(0, this);
         this.ocamlCompileC = ocamlCompileC;
         this.ocamlDebugC = ocamlDebugC;
 
