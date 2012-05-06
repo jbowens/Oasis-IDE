@@ -24,6 +24,9 @@ public class Debug extends Thread {
     /*The listener from ocamldebug */
     DebugListener debugReader;
 
+    /* The listener from ocamldebug ErrorStream */
+    DebugListener debugErrorReader;
+
     /* The name of the file to compile */
     String filename;
 
@@ -71,22 +74,26 @@ public class Debug extends Thread {
     */ 
     protected void compile() throws FileNotFoundException, DebuggerCompilationException{
         String[] compileArgs = new String[5];
-        String cOutFile = Integer.toString(handle);
+        String cOutFile = Integer.toString(handle);//filename + Integer.toString(handle);
         String outArg = cOutFile;
-        compileArgs[0] = "ocamlc";
-	compileArgs[1] = "-g";
+        compileArgs[0] = "/usr/bin/ocamlc";
+        compileArgs[1] = "-g";
         compileArgs[2] = filename;
-	compileArgs[3] = "-o";
-        compileArgs[4] = outArg;
+        compileArgs[3] = "-o";
+        compileArgs[4] = cOutFile;
         outFile = cOutFile;
 
         /* Start the ocamlc compiler */
         Process compileProcess;
         try{
+
             compileProcess = runtime.exec(compileArgs);
+            String tester = "cp " + filename + " ./";
+            System.out.println("Move command: " + tester);
+            runtime.exec(tester);
+            //System.out.println("Compiled");
         }catch(IOException e){
 		System.out.println("HERE");
-		e.printStackTrace();
             throw new DebuggerCompilationException();
         //}catch(FileNotFoundException f){
         //    throw new FileNotFoundException();
@@ -99,6 +106,11 @@ public class Debug extends Thread {
         DebugListener compileReader = new DebugListener(processInputStream, this.observers, handle);
 
         compileReader.start();
+        try{
+            Thread.sleep(2000);
+        }catch(Exception e){
+
+        }
     }
 
     /**
@@ -120,8 +132,12 @@ public class Debug extends Thread {
             debugWriter = new OutputStreamWriter(debugger.getOutputStream());
 
             InputStream debuggerInputStream = debugger.getInputStream();
+            InputStream debuggerErrorStream = debugger.getErrorStream();
             debugReader = new DebugListener(debuggerInputStream, this.observers, handle);
             debugReader.start();
+            debugErrorReader = new DebugListener(debuggerErrorStream, this.observers, handle);
+            debugErrorReader.start();
+
         //}catch(IOException e){
         //    throw new FileNotFoundException();
         //}
