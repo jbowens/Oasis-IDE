@@ -1,32 +1,54 @@
 package camel.gui.interactions;
 
+import java.util.Stack;
 import java.awt.BorderLayout;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.awt.event.*;
+import java.awt.Font;
+import java.awt.Graphics;
 import javax.swing.JEditorPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.BorderFactory;
 import camel.interactions.*;
+import camel.syntaxhighlighter.StyleSet;
 
-public class Tab extends JPanel implements TextOutputListener {
+public class InteractionsPanel extends JPanel implements TextOutputListener {
 
 	protected JEditorPane textPane;
 	protected JTextField inputBar;
 	protected InteractionsManager _im;
 	protected int _handle;
 	protected String query;
+	protected Stack<String> commands;
+	protected StyleSet style;
 
-	public Tab(InteractionsManager im, String filePath) {
+	public InteractionsPanel(InteractionsManager im, String filePath, Font font, StyleSet style) {
+
+		setLayout(new BorderLayout());
+
+		this.style = style;
+		this._im = im;
+		commands = new Stack<String>();
+
 		textPane = new JEditorPane();
 		textPane.setEditable(false);
+		textPane.setFont(font);
+		textPane.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
+		style.apply(textPane);
+
 		JScrollPane sc = new JScrollPane(textPane);
-		setLayout(new BorderLayout());
+		sc.setBorder(BorderFactory.createEmptyBorder());
+		sc.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER );
 		add(sc,BorderLayout.CENTER);
-		this._im = im;
+
 		inputBar = new JTextField();
-		inputBar.addKeyListener(new enterListener());
+		inputBar.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
+		inputBar.setFont(font);
+		inputBar.addKeyListener(new EnterListener());
+		style.apply(inputBar);
 		add(inputBar,BorderLayout.SOUTH);
 		textPane.addKeyListener(new KListener());
 		try {
@@ -34,6 +56,14 @@ public class Tab extends JPanel implements TextOutputListener {
 			_im.registerOutputListener(this, _handle);
 		} catch(Exception e) {}
 
+	}
+
+	@Override
+	public void paint(Graphics g) {
+		style.apply(inputBar);
+		style.apply(textPane);
+		inputBar.setBackground(style.getSelectedBackground());
+		super.paint(g);
 	}
 
 	/**
@@ -44,6 +74,35 @@ public class Tab extends JPanel implements TextOutputListener {
 	{
 		textPane.setText(textPane.getText() + evt.getText());
         textPane.setCaretPosition(textPane.getText().length());	
+	}
+
+	/**
+	 * Resets the interactions panel with the given filename as the
+	 * definitions file.
+	 *
+	 * @param defs the OCaml definitions file to load
+	 */
+	public void reset(String defs) {
+		/* Close the existing interactions instance */
+		try {
+			_im.closeInteractionsInstance( _handle );
+			_im.removeOutputListener( this, _handle );
+		} catch( InvalidInteractionsIdException ex ) {}
+
+		// Clear the text accumulated from the last instance
+		textPane.setText("");
+
+		// Start the new interactions instance
+		try {
+			_handle = _im.newInteractionsInstance(defs);
+			_im.registerOutputListener(this, _handle);
+		} catch (InvalidInteractionsIdException ex) {
+		} catch (FileNotFoundException ex) {
+			// TODO: Alert user
+		} catch (InteractionsUnavailableException ex) {
+			// TODO: Alert user
+		}
+
 	}
 
 	public String getText()
@@ -73,9 +132,10 @@ public class Tab extends JPanel implements TextOutputListener {
 	    public void keyReleased(KeyEvent e) {
 	    }
 	}
-	public class enterListener implements KeyListener
+
+	public class EnterListener implements KeyListener
 	{
-		public enterListener()
+		public EnterListener()
 		{
 
 		}
@@ -86,6 +146,7 @@ public class Tab extends JPanel implements TextOutputListener {
         		{
         			_im.processUserInput(_handle, inputBar.getText());
 					_im.processUserInput(_handle,'\n');
+					commands.push(inputBar.getText());
 					inputBar.setText("");
         		}
         	} catch(Exception e2) {}
@@ -93,6 +154,9 @@ public class Tab extends JPanel implements TextOutputListener {
 
 	    /** Handle the key-pressed event from the text field. */
 	    public void keyPressed(KeyEvent e) {
+	    	if( (e.getKeyCode() == KeyEvent.VK_KP_UP || e.getKeyCode() == KeyEvent.VK_UP) && !commands.empty() ) {
+        			inputBar.setText(commands.pop());
+        	}
 	    }
 
 	    /** Handle the key-released event from the text field. */

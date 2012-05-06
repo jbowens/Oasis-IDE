@@ -63,6 +63,11 @@ public class StyleWrapper extends StyleSet {
   }
 
   @Override
+  public Color getDefaultTextColor() {
+    return style.getDefaultTextColor();
+  }
+
+  @Override
   public TextStyle getStyle(TokenType type) {
     return style.getStyle(type);
   }

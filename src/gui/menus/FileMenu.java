@@ -8,9 +8,12 @@ import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JSeparator;
+import javax.swing.KeyStroke;
 
 import camel.gui.controller.FileHandler;
 import camel.gui.code_area.CodeArea;
+import camel.gui.code_area.CloseDeniedException;
 /**
  * The 'File' menu in the menu bar.
  */
@@ -21,7 +24,9 @@ public class FileMenu extends JMenu implements ActionListener {
 	protected JMenuItem _save;
 	protected JMenuItem _saveAs;
 	protected JMenuItem _saveAll;
+	protected JMenuItem _closeFile;
 	protected JMenuItem _newWindow;
+	protected JMenuItem _closeWindow;
 	protected FileHandler _fh;
 	protected CodeArea _codeArea;
 
@@ -36,24 +41,37 @@ public class FileMenu extends JMenu implements ActionListener {
 		setMnemonic('F');
 
 		_new = new JMenuItem("New File", KeyEvent.VK_N);
+		_new.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, ActionEvent.CTRL_MASK));
 		_open = new JMenuItem("Open File", KeyEvent.VK_O);
+		_open.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, ActionEvent.CTRL_MASK));
 		_save = new JMenuItem("Save", KeyEvent.VK_S);
+		_save.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
 		_saveAs = new JMenuItem("Save As...");
+		_saveAs.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK + ActionEvent.SHIFT_MASK));
 		_saveAll = new JMenuItem("Save All");
+		_closeFile = new JMenuItem("Close File");
+		_closeFile.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W, ActionEvent.CTRL_MASK));
 		_newWindow = new JMenuItem("New Window");
+		_closeWindow = new JMenuItem("Close Window");
 		
 		add(_new);
 		add(_open);
 		add(_save);
 		add(_saveAs);
 		add(_saveAll);
+		add(_closeFile);
+		add(new JSeparator());
 		add(_newWindow);
+		add(_closeWindow);
 		
 		_open.addActionListener(this);
 		_save.addActionListener(this);
 		_saveAs.addActionListener(this);
+		_saveAll.addActionListener(this);
+		_closeFile.addActionListener(this);
 		_new.addActionListener(this);
 		_newWindow.addActionListener(this);
+		_closeWindow.addActionListener(this);
 
 	}
 	
@@ -71,12 +89,28 @@ public class FileMenu extends JMenu implements ActionListener {
 			_fh.saveAs();
 		}
 
+		if(e.getSource() == _saveAll) {
+			_codeArea.saveAll();
+		}
+
+		if(e.getSource() == _closeFile) {
+			try {
+				_codeArea.closeCurrentTab();
+			} catch( CloseDeniedException ex ) {
+				// They decided not to close after all
+			}
+		}
+
 		if(e.getSource() == _new) {
 			_codeArea.makeTab(_fh);
 		}
 
 		if(e.getSource() == _newWindow) {
 			_codeArea.getApplication().createNewWindow();
+		}
+
+		if(e.getSource() == _closeWindow) {
+			_codeArea.getWindow().close();
 		}
 
 	}

@@ -11,8 +11,14 @@ import javax.swing.JEditorPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.BorderFactory;
+import javax.swing.text.Document;
+import javax.swing.event.DocumentListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.JSplitPane;
+import javax.swing.JOptionPane;
 
 import camel.Config;
+import camel.gui.interactions.InteractionsPanel;
 import camel.gui.controller.FileHandler;
 import camel.gui.code_area.CodeArea;
 import camel.syntaxhighlighter.OCamlLexer;
@@ -24,7 +30,9 @@ import camel.syntaxhighlighter.SimpleStyleSet;
  * A tab in the GUI. A tab has an associated text pane, and optionally, file that
  * the content of the tab is associated with.
  */
-public class Tab extends JPanel {
+public class Tab extends JPanel implements DocumentListener {
+
+	protected static final double DEFAULT_SPLIT = .8;
 
 	/* The text pane to be displayed in this tab */
 	protected JEditorPane textPane;
@@ -46,6 +54,15 @@ public class Tab extends JPanel {
 
 	/* The scroll pane */
 	protected JScrollPane sc;
+
+	/* The interactions panel of this tab */
+	protected InteractionsPanel interactionsPanel;
+
+	/* The split pane for the tab */
+	protected JSplitPane splitPane;
+
+	/* Whether or not changes have been made since the last save */
+	protected boolean changes = false;
 
 	/**
 	 * Creates a new tab and loads the given file.
@@ -76,6 +93,9 @@ public class Tab extends JPanel {
 		initialize();
 	}
 
+	/**
+	 * Paints the tab
+	 */
 	public void paint(Graphics g) {
 		style.apply( textPane );
 		super.paint(g);
@@ -115,7 +135,25 @@ public class Tab extends JPanel {
 		if( ! lineNumbersEnabled() )
 			hideLineNumbers();
 
-		add(sc, BorderLayout.CENTER);
+		// Create the interactions panel
+		interactionsPanel = new InteractionsPanel(codeArea.getWindow().getInteractionsManager(), null, codeArea.getFont(), style);
+
+		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, sc, interactionsPanel);
+		splitPane.setDividerSize(5);
+		add(splitPane, BorderLayout.CENTER);
+
+		repaint();
+
+		/* Load the desired split for the main window */
+		double interactionsSplit = DEFAULT_SPLIT;
+		if( codeArea.getApplication().getConfig().settingExists("interactionsSplit") )
+			interactionsSplit = Double.parseDouble( codeArea.getApplication().getConfig().getSetting("interactionsSplit") );
+		splitPane.setResizeWeight(interactionsSplit);
+
+		/* Begin listening to the document changes */
+		textPane.getDocument().addDocumentListener( this );
+
+		repaint();
 
 	}
 
@@ -172,6 +210,8 @@ public class Tab extends JPanel {
 		}
 		textPane.setText(output);
 
+		changes = false;
+
 	}
 	
 	/**
@@ -218,6 +258,78 @@ public class Tab extends JPanel {
 	public void setFileLocation(File file) {
 		f = file;
 		codeArea.setTabTitle(this, file.getName());
+		changes = false;
+	}
+
+	/**
+	 * Determines whether or not changes have been made since this tab was last saved.
+	 * 
+	 * @return true if there are unsaved changes, false otherwise
+	 */
+	public boolean unsavedChanges() {
+		return changes;
+	}
+
+	/**
+	 * Called to let the tab know that its contents were just saved to disk.
+	 */
+	public void justSaved() {
+		changes = false;
+	}
+
+	/**
+	 * Runs the tab's program in its interactions window.
+	 */
+	public void run() {
+		// The file must be saved to be run
+		if( unsavedChanges() || getFile() == null ) {
+			
+			int userInput = JOptionPane.showConfirmDialog(codeArea.getWindow(),
+										    			  "The file must be saved to run the program. Save now?",
+										  				  "Save file to run",
+										  				  JOptionPane.YES_NO_OPTION);
+			if( userInput == JOptionPane.YES_OPTION )
+				fh.saveFile(this);
+			else
+				return;
+
+		}
+
+		// If they cancelled, we can't run so just return
+		if( unsavedChanges() || getFile() == null )
+			return;
+
+		interactionsPanel.reset(getFile().getAbsolutePath());
+	}
+
+	public void resetInteractions() {
+		interactionsPanel.reset(null);
+	}
+
+	/**
+	 * Called whenever this tab is going to be closed. The tab should try to
+	 * get its affairs in order before it dies.
+	 */
+	public void close() {
+		// TODO: Implement
+	}
+
+	/**
+	 * Called whenever the document contained changes.
+	 */
+	protected void documentChanged() {
+		changes = true;
+	}
+
+	/* DocumentListener interface methods */
+	public void changedUpdate(DocumentEvent evt) {
+		documentChanged();
+	}
+	public void insertUpdate(DocumentEvent evt) {
+		documentChanged();
+	}
+	public void removeUpdate(DocumentEvent evt) {
+		documentChanged();
 	}
 
 }

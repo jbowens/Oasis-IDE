@@ -51,6 +51,7 @@ public class StyleSet implements Comparable {
 	 */
 	public void apply(JTextComponent component) {
 		 component.setBackground( background );
+		 component.setForeground( getDefaultTextColor() );
 		 component.setSelectionColor( selectedBackground );
 		 component.setCaretColor( caretColor );
 	}
@@ -138,6 +139,17 @@ public class StyleSet implements Comparable {
 	public Color getLineNumbersColor() {
 		if( lineNumbersColor != null )
 			return lineNumbersColor;
+		if( mapping.containsKey(TokenType.DEFAULT) )
+			return mapping.get(TokenType.DEFAULT).getColor();
+		else
+			return DEFAULT_STYLE.getColor();
+	}
+
+	/**
+	 * Gets the default text color. This can be used in other components such as the
+	 * interactions window, etc.
+	 */
+	public Color getDefaultTextColor() {
 		if( mapping.containsKey(TokenType.DEFAULT) )
 			return mapping.get(TokenType.DEFAULT).getColor();
 		else

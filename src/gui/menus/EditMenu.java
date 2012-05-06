@@ -15,6 +15,7 @@ import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.KeyStroke;
 
 import camel.gui.code_area.Tab;
 import camel.gui.code_area.CodeArea;
@@ -52,9 +53,13 @@ public class EditMenu extends JMenu implements ActionListener {
 		setMnemonic('E');
 
 		_copy = new JMenuItem("Copy", KeyEvent.VK_C);
+		_copy.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, ActionEvent.CTRL_MASK));
 		_cut = new JMenuItem("Cut", KeyEvent.VK_X);
+		_cut.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, ActionEvent.CTRL_MASK));
 		_paste = new JMenuItem("Paste", KeyEvent.VK_V);
+		_paste.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, ActionEvent.CTRL_MASK));
 		_undo = new JMenuItem("Undo", KeyEvent.VK_Z);
+		_undo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, ActionEvent.CTRL_MASK));
 
 		add(_copy);
 		add(_cut);

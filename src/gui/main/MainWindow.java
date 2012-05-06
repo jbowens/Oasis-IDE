@@ -3,7 +3,6 @@ package camel.gui.main;
 import java.awt.event.WindowListener;
 import java.awt.event.WindowEvent;
 import java.awt.BorderLayout;
-
 import java.io.File;
 
 import javax.swing.*;
@@ -11,6 +10,7 @@ import javax.swing.*;
 import camel.gui.interactions.InteractionsWindow;
 import camel.gui.controller.FileHandler;
 import camel.gui.code_area.CodeArea;
+import camel.gui.code_area.CloseDeniedException;
 import camel.gui.menus.MenuBar;
 import camel.interactions.*;
 import camel.*;
@@ -32,7 +32,8 @@ public class MainWindow extends JFrame {
 	protected FileTree ft;
 	protected InteractionsWindow iw;
 	protected JSplitPane s1;
-	protected JSplitPane s2;
+
+	protected boolean closed = false;
 	
 	/**
 	 * Creates a new GUI for the application.
@@ -50,20 +51,15 @@ public class MainWindow extends JFrame {
 		this.im = im;
 
 		/* Instantiate the rest of the GUI */
-		ca = new CodeArea(app);
+		ca = new CodeArea(app, this);
 		fh = new FileHandler(ca);
 		mb = new MenuBar(app, this);
 		ft = new FileTree(new File("."));
 		iw = new InteractionsWindow(im);
 		s1 = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, ft, ca);
-		s2 = new JSplitPane(JSplitPane.VERTICAL_SPLIT, s1, iw);
 		s1.setDividerSize(5);
-		s2.setDividerSize(5);
 		add(mb,BorderLayout.NORTH);
-		add(s2,BorderLayout.CENTER);
-		//add(ca,BorderLayout.CENTER);
-		//add(ft,BorderLayout.WEST);
-		//add(iw,BorderLayout.SOUTH);
+		add(s1,BorderLayout.CENTER);
 
 		pack();
 
@@ -74,6 +70,10 @@ public class MainWindow extends JFrame {
 		// Set the width and height
 		setBounds( 100, 100, width, height );
 
+		repaint();
+
+		addWindowListener(new ShutdownListener(this));
+		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		setVisible(true);
 
 	}
@@ -113,34 +113,88 @@ public class MainWindow extends JFrame {
 	}
 
 	/**
+	 * Gets this window's application/
+	 *
+	 * @return the application tired to this window
+	 */
+	public Application getApplication() {
+		return app;
+	}
+
+	/**
+	 * Gets this window's interactions manager.
+	 *
+	 * @return the window's interactions manager
+	 */
+	public InteractionsManager getInteractionsManager() {
+		return im;
+	}
+
+	/**
+	 * Displays a generic error message.
+	 *
+	 * @param message the error message to display
+	 */
+	public void displayErrorMessage(String errorMessage) {
+
+		JOptionPane.showMessageDialog(this, errorMessage, "Error", JOptionPane.ERROR_MESSAGE);
+
+	}
+
+	/**
 	 * A window listener to listen for when the application should shut down.
 	 * This is necessary to make sure all system resources are freed when the
 	 * program is exited.
 	 */
 	public class ShutdownListener implements WindowListener {
 	
-		/* The relevant application */
-		protected Application app;
+		/* The relevant MainWindow being listenerd to */
+		protected MainWindow mainWindow;
 
 		/**
 		 * Creates a new shutdown listener.
 		 *
 		 * @param app - the application to close on window close
 		 */
-		public ShutdownListener(Application app) {
-			this.app = app;
+		public ShutdownListener(MainWindow mainWindow) {
+			this.mainWindow = mainWindow;
 		}
 
 		public void windowActivated(WindowEvent e) {}
 		public void windowClosed(WindowEvent e) {
 			// Notify the application to shut down as well
-			app.close();
+			if( ! mainWindow.isClosed() ) {
+				mainWindow.getApplication().guiClosed();
+				mainWindow.dispose();
+			}
 		}
-		public void windowClosing(WindowEvent e) {}
+		public void windowClosing(WindowEvent e) {
+			try {
+				mainWindow.getCodeArea().close();
+			} catch( CloseDeniedException ex ) {
+				return;
+			}
+			mainWindow.close();
+		}
 		public void windowDeactivated(WindowEvent e) {}
 		public void windowDeiconified(WindowEvent e) {}
 		public void windowIconified(WindowEvent e) {}
 		public void windowOpened(WindowEvent e) {}
+	}
+
+	/**
+	 * Returns true if this window has been closed.
+	 */
+	public boolean isClosed() {
+		return closed;
+	}
+
+	/**
+	 * Tells this window to close itself.
+	 */
+	public void close() {
+		processWindowEvent( new WindowEvent( this, WindowEvent.WINDOW_CLOSED ) );
+		closed = true;
 	}
 
 }
