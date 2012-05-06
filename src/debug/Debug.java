@@ -157,15 +157,17 @@ public class Debug extends Thread {
     *@param cmd - the string that we are writing
     */
     void processGUIInput(String cmd){
+        System.out.println("ProcessGuiInput Debug");
         try{
-	char[] cmdArr = cmd.toCharArray();
-	 for (int i = 0; i < cmdArr.length; i++) {
-		    debugWriter.write(cmdArr[i]);
-		    debugWriter.flush();
-	 }
+	       //char[] cmdArr = cmd.toCharArray();
+	       //for (int i = 0; i < cmdArr.length; i++) {
+                System.out.println("cmd: " + cmd);
+                debugWriter.write(cmd);
+                debugWriter.flush();
+	       //}
         }catch(IOException e){
             //Eat it
-	    e.printStackTrace();
+	       e.printStackTrace();
             //throw new InvalidInteractionsException();
         }
     }

@@ -16,13 +16,15 @@ public class DebugTester implements TextOutputListener{
 		DebugManager dbMan = new DebugManager("");
 
 		//new debugger instance
-		int handle = dbMan.newDebuggerInstance("/gpfs/main/home/mkantesa/BroCamel/Camel/test-ml/test.ml");
+		int handle = dbMan.newDebuggerInstance("~/course/cs032/broCaml/test-ml/test.ml");
 
 		//new output listener
 		DebugTester listener = new DebugTester();
 		dbMan.registerOutputListener(listener,handle);
 
-		dbMan.processGUIInput(handle,"break @ Test 1\n");
+		//dbMan.processGUIInput(handle,"break @ Test 1\n");
+		dbMan.processGUIInput(handle, "run\n");
+
 		dbMan.processGUIInput(handle, "run\n");
 
 	}
