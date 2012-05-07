@@ -34,22 +34,18 @@ import camel.syntaxhighlighter.SimpleStyleSet;
 
 public class DebugTab extends Tab {
 
+	protected DebugStepper step;
+
 	public DebugTab(CodeArea codeArea, File f, FileHandler fh, StyleSet s) {
 		super(codeArea, f, fh, s);
-		JToolBar jtb = new JToolBar();
-		JButton fag = new JButton("Step Forward");
-		jtb.add(fag);
-		this.add(jtb, BorderLayout.EAST);
+		this.step = new DebugStepper(this);
 		textPane.setEditable(false);
 		repaint();
 	}
 
 	public DebugTab(CodeArea codeArea, FileHandler fh, StyleSet s) {
 		super(codeArea, fh, s);
-		JToolBar jtb = new JToolBar();
-		JButton fag = new JButton("Step Forward");
-		jtb.add(fag);
-		this.add(jtb, BorderLayout.EAST);
+		this.step = new DebugStepper(this);
 		textPane.setEditable(false);
 		repaint();
 	}

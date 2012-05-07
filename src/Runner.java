@@ -1,5 +1,6 @@
 package camel;
 
+import javax.swing.UIManager;
 import java.util.ArrayList;
 
 /*
@@ -8,8 +9,9 @@ import java.util.ArrayList;
  */
 public class Runner {
 
-    public static void main(String args[]) {
+    public static void main(String args[]) throws Exception {
 
+	UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         /* Look for files to open */
         ArrayList<String> filesToOpen = new ArrayList<String>();
         for( int i = 0; i < args.length; i++ ) {
