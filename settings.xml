@@ -4,10 +4,10 @@
 <settingData>
 <wordwrap>true</wordwrap>
 <initial_width>1000</initial_width>
-<initial_height>800</initial_height>
 <tabwidth>4</tabwidth>
+<initial_height>800</initial_height>
 <font_size>15</font_size>
+<styleset>Homebrew</styleset>
 <linenumbers>true</linenumbers>
-<styleset>Brown</styleset>
 </settingData>
 </settings>

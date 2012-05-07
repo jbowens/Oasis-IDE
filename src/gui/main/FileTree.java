@@ -6,7 +6,7 @@ import java.awt.event.MouseListener;
 import java.io.File;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
+import java.io.FileFilter;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -29,6 +29,11 @@ public class FileTree extends JPanel {
 		FileTreeModel model = new FileTreeModel(root);
 		final JTree tree = new JTree();
 		tree.setModel(model);
+		
+		int startRow = 1;
+		String prefix = ".";
+		File node;
+		TreePath path;
 		MouseListener ml = new MouseAdapter()
 		{
 			public void mousePressed(MouseEvent e)
@@ -49,7 +54,7 @@ public class FileTree extends JPanel {
 						Matcher m2 = p2.matcher(path);
 						if(selRow != -1 && m2.matches() && e.getClickCount() == 2)
 						{
-							//System.out.println(path);
+							//need regex to parse path from treepath
 							File f = new File(path);
 							String abs = f.getAbsolutePath().toString();
 							Pattern p3 = Pattern.compile("(.*)\\s\\./(.*)");
@@ -69,21 +74,25 @@ public class FileTree extends JPanel {
 
 class FileTreeModel implements TreeModel
 {
-
+	private FileFilter fileFilter = new HiddenFileFilter();
 	protected File root;
 	public FileTreeModel(File r)
 	{
 		root = r;
 	}
-
-
 	/*
 	 * Gets a specific file from the tree
 	 */
 	public Object getChild(Object parent, int index) {
 		String[] children = ((File)parent).list();
-		if ((children == null) || (index >= children.length)) 
+		if ((children == null) || (index >= children.length)){ 
 			return null;
+		}
+		else if(children[index].startsWith("."))
+		{
+			return new File("");
+		}
+		
 		else
 			return new File((File) parent, children[index]);
 	}
@@ -92,27 +101,34 @@ class FileTreeModel implements TreeModel
 	 * Tells the FTModel how many children it has
 	 */
 	public int getChildCount(Object parent) {
-		String[] children = ((File)parent).list();
-		if (children == null) 
-			return 0;
-		else
-			return children.length;
+		File fileSysEntity = (File)parent;
+        if ( fileSysEntity.isDirectory() ) {
+            File[] children = fileSysEntity.listFiles(fileFilter);
+            return children.length;
+        }
+        else {
+            return 0;
+        }
 	}
 
 	/*
 	 * Gets the index of a given child
 	 */
 	public int getIndexOfChild(Object parent, Object child) {
-		String[] children = ((File)parent).list();
-		if (children == null) 
-			return -1;
-		String childname = ((File)child).getName();
-		for(int i = 0; i < children.length; i++)
-		{
-			if (childname.equals(children[i])) 
-				return i;
-		}
-		return -1;
+		 File directory = (File)parent;
+         File fileSysEntity = (File)child;
+         File[] children = directory.listFiles(fileFilter);
+         int result = -1;
+
+         for ( int i = 0; i < children.length; ++i ) {
+             if ( fileSysEntity.equals( children[i] ) ) {
+                 result = i;
+                 break;
+             }
+         }
+
+         return result;
+
 	}
 
 	/*
@@ -121,7 +137,6 @@ class FileTreeModel implements TreeModel
 	public Object getRoot() {
 		return root;
 	}
-
 	/*
 	 * 	Returns true if node is a file
 	 */
@@ -137,6 +152,12 @@ class FileTreeModel implements TreeModel
 	}
 	public void valueForPathChanged(TreePath path, Object newValue) {
 		// do nothing
+	}
+	private class HiddenFileFilter implements FileFilter {
+
+		public boolean accept(File pathname) {
+			return !pathname.isHidden();
+		}
 	}
 
 }
