@@ -15,7 +15,6 @@ public class Runner {
         /* Look for files to open */
         ArrayList<String> filesToOpen = new ArrayList<String>();
         for( int i = 0; i < args.length; i++ ) {
-            System.out.println("Opening file: " + args[i]);
             filesToOpen.add( args[i] );
         }
 
