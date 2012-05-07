@@ -37,7 +37,7 @@ public class DebugTab extends Tab {
 	public DebugTab(CodeArea codeArea, File f, FileHandler fh, StyleSet s) {
 		super(codeArea, f, fh, s);
 		JToolBar jtb = new JToolBar();
-		JButton fag = new JButton("FAG");
+		JButton fag = new JButton("Step Forward");
 		jtb.add(fag);
 		this.add(jtb, BorderLayout.EAST);
 		textPane.setEditable(false);
@@ -47,7 +47,7 @@ public class DebugTab extends Tab {
 	public DebugTab(CodeArea codeArea, FileHandler fh, StyleSet s) {
 		super(codeArea, fh, s);
 		JToolBar jtb = new JToolBar();
-		JButton fag = new JButton("FAG");
+		JButton fag = new JButton("Step Forward");
 		jtb.add(fag);
 		this.add(jtb, BorderLayout.EAST);
 		textPane.setEditable(false);

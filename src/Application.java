@@ -2,7 +2,6 @@ package camel;
 
 import camel.interactions.*;
 import camel.gui.main.*;
-import camel.gui.debug.DebugWindow;
 import camel.gui.code_area.*;
 import camel.syntaxhighlighter.StyleLoader;
 import java.util.*;
@@ -26,8 +25,6 @@ public class Application {
 
     /* The main GUI class */
     protected MainWindow gui; 
-	/*The debugger*/
-	protected DebugWindow debug;
 
     /* The number of open windows */
     protected int guiCounter;;
@@ -145,8 +142,6 @@ public class Application {
         close();
     }
 
-    public void closeDebug() {
-    }
 
 
 }
