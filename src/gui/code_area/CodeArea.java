@@ -2,6 +2,8 @@ package camel.gui.code_area;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import camel.gui.controller.FileHandler;
 import camel.gui.menus.MenuBar;
@@ -11,6 +13,7 @@ import camel.syntaxhighlighter.SimpleStyleSet;
 import camel.syntaxhighlighter.StyleWrapper;
 import camel.Application;
 import javax.swing.plaf.basic.BasicButtonUI;
+import javax.swing.plaf.TabbedPaneUI;
 
 import java.awt.GridBagLayout;
 import java.io.File;
@@ -53,6 +56,29 @@ public class CodeArea extends JPanel {
 
 		tabList = new ArrayList<Tab>();
 		tabs = new JTabbedPane();
+		tabs.addMouseListener(new MouseAdapter() {
+			int prev_position;
+
+			public void mousePressed(MouseEvent e)
+			{
+      			prev_position = tabs.getUI().tabForCoordinate(tabs, e.getX(), e.getY());
+      		}
+
+      		public void mouseReleased(MouseEvent e)
+      		{
+      			int new_position = tabs.getUI().tabForCoordinate(tabs, e.getX(), e.getY());
+      			if(new_position >= 0)
+      			{
+	      			Tab t = (Tab)tabs.getComponentAt(prev_position);
+	           		String title = tabs.getTitleAt(prev_position);
+	            	tabs.removeTabAt(prev_position);
+	            	tabs.insertTab(title, null, t, null, new_position);
+	            	tabs.setTabComponentAt(tabs.indexOfComponent(t), new TabTitle(t,title));
+            	}
+      		}
+   		 });
+
+
 		GridBagConstraints fullFill = new GridBagConstraints();
 		fullFill.weighty = fullFill.weightx = 1.0; 
 		fullFill.fill = GridBagConstraints.BOTH; 

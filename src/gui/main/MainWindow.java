@@ -1,5 +1,4 @@
 package camel.gui.main;
-
 import java.awt.event.WindowListener;
 import java.awt.event.WindowEvent;
 import java.awt.BorderLayout;
@@ -191,6 +190,7 @@ public class MainWindow extends JFrame {
 		public void windowActivated(WindowEvent e) {}
 		public void windowClosed(WindowEvent e) {
 			// Notify the application to shut down as well
+			
 			if( ! mainWindow.isClosed() ) {
 				mainWindow.getApplication().guiClosed();
 				mainWindow.dispose();
@@ -240,6 +240,7 @@ public class MainWindow extends JFrame {
 	public void close() {
 		processWindowEvent( new WindowEvent( this, WindowEvent.WINDOW_CLOSED ) );
 		closed = true;
+		
 	}
 
 }

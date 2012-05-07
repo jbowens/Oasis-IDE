@@ -2,13 +2,13 @@ package camel.gui.menus;
 
 import java.awt.FlowLayout;
 import java.awt.event.KeyEvent;
-
+import java.awt.Color;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-
+import javax.swing.BorderFactory;
 import camel.gui.controller.FileHandler;
 import camel.gui.main.MainWindow;
 import camel.Application;
@@ -24,7 +24,7 @@ public class MenuBar extends JMenuBar {
 	{
 
 		_fMenu = new FileMenu(window.getCodeArea(), window.getFileHandler());
-		
+
 		_eMenu = new EditMenu(this, window.getCodeArea());
 
 		_ocamlMenu = new OCamlMenu(this, window.getCodeArea(),app);
@@ -35,6 +35,7 @@ public class MenuBar extends JMenuBar {
 		add(_ocamlMenu, FlowLayout.LEFT);
 		add(_eMenu, FlowLayout.LEFT);
 		add(_fMenu, FlowLayout.LEFT);
+		
 	
 	}
 
