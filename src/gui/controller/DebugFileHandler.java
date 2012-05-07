@@ -7,9 +7,9 @@ public class DebugFileHandler {
 
 	protected BufferedReader br;
 	protected File f;
-	protected DebugCodeArea dca;
+	protected CodeArea dca;
 
-	public DebugFileHandler(DebugCodeArea dca) {
+	public DebugFileHandler(CodeArea dca) {
 		this.dca = dca;	
 	}
 

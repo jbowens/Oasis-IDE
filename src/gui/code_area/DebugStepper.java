@@ -16,7 +16,7 @@ import javax.swing.event.CaretEvent;
 import java.util.Hashtable;
 import java.io.*;
 
-public class DebugStepper implements MouseListener,CaretListener,TextOutputListener {
+public class DebugStepper implements MouseListener,CaretListener,TextOutputListener, BreakpointSource {
 
 	protected DebugTab tab;
 	protected JToolBar jtb;
@@ -87,15 +87,9 @@ public class DebugStepper implements MouseListener,CaretListener,TextOutputListe
 
 		try {
 			dm.processGUIInput(handle,"break @ " + mName + " 1\n");
-			//dbMan.processGUIInput(handle, "run\n");
 			Thread.sleep(300);
 
 			dm.processGUIInput(handle, "run\n");
-			//Thread.sleep(300);
-			//dm.processGUIInput(handle, "next\n");
-			//Thread.sleep(300);
-			//dm.processGUIInput(handle, "next\n");
-			//dm.processGUIInput(handle, "next\n");
 		} catch (Exception e) {}
 
 	}
@@ -157,6 +151,19 @@ public class DebugStepper implements MouseListener,CaretListener,TextOutputListe
 				}
 			}
 	}
+
+	/**
+	 * Determines whether there is a breakpoint on the given line.
+	 *
+	 * @param line the line to put the breakpoint on.
+	 */
+	public boolean breakpointOnLine(int line) {
+		if( breakpoints.containsKey(line) )
+			return breakpoints.get(line);
+		else
+			return false;
+	}
+
 
 	/**
 	 * Required by the CaretListener interface.

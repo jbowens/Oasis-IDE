@@ -43,7 +43,7 @@ public class Application {
     public Application(String settingsFile) throws NoSettingsException {
         // TODO: Add test to ensure OCaml is installed / find the ocaml executable
         this.config = new Config( settingsFile );
-        this.interactionsManager = new InteractionsManager("ocaml");
+        this.interactionsManager = new InteractionsManager("./ocamlwrap");
 	this.debugManager = new DebugManager("/usr/bin/");
         styleLoader = new StyleLoader( "./styles" );
         setupGui();

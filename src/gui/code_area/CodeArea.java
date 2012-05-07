@@ -2,6 +2,8 @@ package camel.gui.code_area;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import camel.gui.controller.FileHandler;
 import camel.gui.menus.MenuBar;
@@ -12,6 +14,7 @@ import camel.syntaxhighlighter.StyleWrapper;
 import camel.Application;
 import camel.debug.*;
 import javax.swing.plaf.basic.BasicButtonUI;
+import javax.swing.plaf.TabbedPaneUI;
 
 import java.awt.GridBagLayout;
 import java.io.File;
@@ -20,6 +23,9 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class CodeArea extends JPanel {
+
+	protected Color UNSAVED_ICON_COLOR = new Color(161, 80, 80);
+	protected Color CLOSE_TAB_COLOR = UNSAVED_ICON_COLOR;
 
 	/* The tabbed pane that holds all the existing tabs */
 	protected JTabbedPane tabs;
@@ -54,6 +60,29 @@ public class CodeArea extends JPanel {
 
 		tabList = new ArrayList<Tab>();
 		tabs = new JTabbedPane();
+		tabs.addMouseListener(new MouseAdapter() {
+			int prev_position;
+
+			public void mousePressed(MouseEvent e)
+			{
+      			prev_position = tabs.getUI().tabForCoordinate(tabs, e.getX(), e.getY());
+      		}
+
+      		public void mouseReleased(MouseEvent e)
+      		{
+      			int new_position = tabs.getUI().tabForCoordinate(tabs, e.getX(), e.getY());
+      			if(new_position >= 0 && (new_position != prev_position))
+      			{
+	      			Tab t = (Tab)tabs.getComponentAt(prev_position);
+	           		String title = tabs.getTitleAt(prev_position);
+	            	tabs.removeTabAt(prev_position);
+	            	tabs.insertTab(title, null, t, null, new_position);
+	            	tabs.setTabComponentAt(tabs.indexOfComponent(t), new TabTitle(t,title));
+            	}
+      		}
+   		 });
+
+
 		GridBagConstraints fullFill = new GridBagConstraints();
 		fullFill.weighty = fullFill.weightx = 1.0; 
 		fullFill.fill = GridBagConstraints.BOTH; 
@@ -291,6 +320,16 @@ public class CodeArea extends JPanel {
 	 * @throws CloseDeniedException when the user decides not to close the tab after all
 	 */
 	public void closeTab(Tab tabToClose) throws CloseDeniedException {
+
+		// Make sure this tab actually exists.
+		if( tabs.indexOfComponent(tabToClose) == -1 ) {
+			// The tab doesn't actually exist. Remove it from the tab list if it's
+			// still in there.
+			if(tabList.contains(tabToClose))
+				tabList.remove(tabToClose);
+			return;
+		}
+
 		// Make sure the tab doesn't have any unsaved changes
 		if( tabToClose.unsavedChanges() ) {
 			if( tabToClose.getFile() == null ) {
@@ -395,22 +434,54 @@ public class CodeArea extends JPanel {
 	    }
 	    protected void paintComponent(Graphics g)
 	    {
-	        super.paintComponent(g);
-	        Graphics2D g2 = (Graphics2D) g.create();
-	        //shift the image for pressed buttons
-	        if (getModel().isPressed()) {
-	            g2.translate(1, 1);
-	        }
-	        g2.setStroke(new BasicStroke(2));
-	        g2.setColor(Color.BLACK);
-	        if (getModel().isRollover()) {
-	            g2.setColor(Color.MAGENTA);
-	        }
-	        int delta = 5;
-	        g2.drawLine(delta, delta, getWidth() - delta - 1, getHeight() - delta - 1);
-	        g2.drawLine(getWidth() - delta - 1, delta, delta, getHeight() - delta - 1);
-	        g2.dispose();
+	    	g = setRenderingHints(g);
+
+	    	if(tabToClose.changes == false || getModel().isRollover())
+	    	{
+		        super.paintComponent(g);
+		        Graphics2D g2 = (Graphics2D) g.create();
+		        //shift the image for pressed buttons
+		        if (getModel().isPressed()) {
+		            g2.translate(1, 1);
+		        }
+		        
+		        g2.setStroke(new BasicStroke(2));
+		        g2.setColor(Color.BLACK);
+		        if (getModel().isRollover()) {
+                	g2.setColor(CLOSE_TAB_COLOR);
+            	}
+		        int delta = 3;
+		        g2.drawLine(delta, delta, getWidth() - delta - 1, getHeight() - delta - 1);
+		        g2.drawLine(getWidth() - delta - 1, delta, delta, getHeight() - delta - 1);
+		        g2.dispose();
+	    	}
+	    	else
+	    	{
+	    		super.paintComponent(g);
+		        Graphics2D g2 = (Graphics2D) g.create();
+		        //shift the image for pressed buttons
+		        if (getModel().isPressed()) {
+		            g2.translate(1, 1);
+		        }
+		        g2.setStroke(new BasicStroke(2));
+		        g2.setColor(UNSAVED_ICON_COLOR);
+		        g2.fillOval(3, 3, getWidth()-6, getHeight()-6);
+		        g2.dispose();
+	    	}
 	    }
+
+	    /**
+	     * Sets rendering hints needed for drawing the tab icons.
+	     *
+	     * @param g the graphics context
+	     */
+	    protected Graphics2D setRenderingHints(Graphics g) {
+	    	Graphics2D g2 = (Graphics2D) g;
+	    	g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+	    						RenderingHints.VALUE_ANTIALIAS_ON);
+	    	return g2;
+	    }
+
 	}
 	 private final static MouseListener buttonMouseListener = new MouseAdapter() 
 	 {
