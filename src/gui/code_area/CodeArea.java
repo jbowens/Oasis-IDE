@@ -290,6 +290,11 @@ public class CodeArea extends JPanel {
 	 * @throws CloseDeniedException when the user decides not to close the tab after all
 	 */
 	public void closeTab(Tab tabToClose) throws CloseDeniedException {
+
+		// Make sure this tab actually exists.
+		if( tabs.indexOfComponent(tabToClose) == -1 )
+			return;
+
 		// Make sure the tab doesn't have any unsaved changes
 		if( tabToClose.unsavedChanges() ) {
 			if( tabToClose.getFile() == null ) {
@@ -423,7 +428,7 @@ public class CodeArea extends JPanel {
 		        }
 		        g2.setStroke(new BasicStroke(2));
 		        g2.setColor(Color.RED);
-		        g2.drawString("O",getWidth()/2,getHeight()/2);
+		        g2.drawString("o",getWidth()/2,getHeight()/2);
 		        g2.dispose();
 	    	}
 	    }
