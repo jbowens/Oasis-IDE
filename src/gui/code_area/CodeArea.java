@@ -111,7 +111,7 @@ public class CodeArea extends JPanel {
 		Tab t = new Tab(this, fh, style);
 		tabs.addTab("Untitled", t);
 		tabs.setSelectedComponent(t);
-		tabs.setTabComponentAt(tabs.indexOfComponent(t), new TabButton(t));
+		tabs.setTabComponentAt(tabs.indexOfComponent(t), new TabTitle(t,"Untitled"));
 		tabList.add(t);
 	}
 
@@ -125,7 +125,7 @@ public class CodeArea extends JPanel {
 		Tab t = new Tab(this, new File(filename), fh, style);
 		tabs.addTab(fh.getName(), t);
 		tabs.setSelectedComponent(t);
-		tabs.setTabComponentAt(tabs.indexOfComponent(t), new TabButton(t));
+		tabs.setTabComponentAt(tabs.indexOfComponent(t), new TabTitle(t,fh.getName()));
 		tabList.add(t);
 	}
 
@@ -139,7 +139,7 @@ public class CodeArea extends JPanel {
 		Tab t = new Tab(this, f, fh, style);
 		tabs.addTab(fh.getName(), t);
 		tabs.setSelectedComponent(t);
-		tabs.setTabComponentAt(tabs.indexOfComponent(t), new TabButton(t));
+		tabs.setTabComponentAt(tabs.indexOfComponent(t), new TabTitle(t,fh.getName()));
 		tabList.add(t);
 	}
 
@@ -151,7 +151,7 @@ public class CodeArea extends JPanel {
 		t.setDebug();
 		tabs.addTab("DEBUG -"+ fh.getName(), t);
 		tabs.setSelectedComponent(t);
-		tabs.setTabComponentAt(tabs.indexOfComponent(t), new TabButton(t));
+		tabs.setTabComponentAt(tabs.indexOfComponent(t), new TabTitle(t,"DEBUG -"+ fh.getName()));
 		tabList.add(t);
 	}
 
@@ -166,7 +166,7 @@ public class CodeArea extends JPanel {
 		Tab t = new Tab(this, fh.getFile(), fh, style);
 		tabs.addTab(fh.getName(), t);
 		tabs.setSelectedComponent(t);
-		tabs.setTabComponentAt(tabs.indexOfComponent(t), new TabButton(t));
+		tabs.setTabComponentAt(tabs.indexOfComponent(t), new TabTitle(t,fh.getName()));
 		tabList.add(t);
 	}
 
@@ -338,7 +338,6 @@ public class CodeArea extends JPanel {
 	protected void removeTab(Tab tabToRemove) {
 		// Let the tab know that it should get its affairs in order
 		tabToRemove.close();
-
 		tabs.remove(tabToRemove);
 	}
 
@@ -354,7 +353,18 @@ public class CodeArea extends JPanel {
 
 
 	//This is code for a "close" button, it works but not sure how to add the button
-	
+	private class TabTitle extends JPanel
+	{
+		private JLabel title;
+		private JButton closeButton;
+		public TabTitle(Tab t,String name)
+		{
+			closeButton = new TabButton(t);
+			title = new JLabel(name);
+			add(title);
+			add(closeButton);
+		}
+	}
 	private class TabButton extends JButton implements ActionListener
 	{
 		private int size = 15;
