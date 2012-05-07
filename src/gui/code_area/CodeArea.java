@@ -363,6 +363,8 @@ public class CodeArea extends JPanel {
 			title = new JLabel(name);
 			add(title);
 			add(closeButton);
+			setBackground(new Color(0, 0, 0, 0));
+			setBorder(BorderFactory.createEmptyBorder());
 		}
 	}
 	private class TabButton extends JButton implements ActionListener
