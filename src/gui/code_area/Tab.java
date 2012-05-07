@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.FlowLayout;
 import java.awt.BorderLayout;
+import java.awt.*;
+import java.awt.event.*;
 import java.io.File;
 
 import javax.swing.JEditorPane;
@@ -16,6 +18,8 @@ import javax.swing.event.DocumentListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.JSplitPane;
 import javax.swing.JOptionPane;
+import javax.swing.*;
+import javax.swing.plaf.basic.BasicButtonUI;
 
 import camel.Config;
 import camel.gui.interactions.InteractionsPanel;
@@ -69,6 +73,7 @@ public class Tab extends JPanel implements DocumentListener {
 	/*Is this is a debug tab*/
 	protected boolean isDebug = false;
 
+	
 	/**
 	 * Creates a new tab and loads the given file.
 	 *
@@ -168,7 +173,6 @@ public class Tab extends JPanel implements DocumentListener {
 
 		/* Begin listening to the document changes */
 		textPane.getDocument().addDocumentListener( this );
-
 		repaint();
 
 	}
@@ -359,4 +363,70 @@ public class Tab extends JPanel implements DocumentListener {
 		documentChanged();
 	}
 
+	//This is code for a "close" button, it works but not sure how to add the button
+	/*
+	private class TabButton extends JButton implements ActionListener
+	{
+		private int size = 15;
+		public TabButton()
+		{
+			setPreferredSize(new Dimension(size,size));
+			setToolTipText("Close Tab");
+			setUI(new BasicButtonUI());
+			setContentAreaFilled(false);
+			setFocusable(false);
+	        setBorder(BorderFactory.createEtchedBorder());
+	        setBorderPainted(false);
+	        addMouseListener(buttonMouseListener);
+	        setRolloverEnabled(true);
+	        addActionListener(this);
+		}
+		public void actionPerformed(ActionEvent e) 
+		{
+			try
+			{
+	        codeArea.closeTab(Tab.this);
+	    	}
+	    	catch(Exception e1){}
+	    }
+	    protected void paintComponent(Graphics g)
+	    {
+	        super.paintComponent(g);
+	        Graphics2D g2 = (Graphics2D) g.create();
+	        //shift the image for pressed buttons
+	        if (getModel().isPressed()) {
+	            g2.translate(1, 1);
+	        }
+	        g2.setStroke(new BasicStroke(2));
+	        g2.setColor(Color.BLACK);
+	        if (getModel().isRollover()) {
+	            g2.setColor(Color.MAGENTA);
+	        }
+	        int delta = 5;
+	        g2.drawLine(delta, delta, getWidth() - delta - 1, getHeight() - delta - 1);
+	        g2.drawLine(getWidth() - delta - 1, delta, delta, getHeight() - delta - 1);
+	        g2.dispose();
+	    }
+	}
+	 private final static MouseListener buttonMouseListener = new MouseAdapter() 
+	 {
+	    public void mouseEntered(MouseEvent e) {
+	        Component component = e.getComponent();
+	        if (component instanceof AbstractButton) {
+	            AbstractButton button = (AbstractButton) component;
+	            button.setBorderPainted(true);
+	        }
+	    }
+
+	    public void mouseExited(MouseEvent e) {
+	        Component component = e.getComponent();
+	        if (component instanceof AbstractButton) {
+	            AbstractButton button = (AbstractButton) component;
+	            button.setBorderPainted(false);
+	        }
+	    }
+	};
+	*/
 }
+
+

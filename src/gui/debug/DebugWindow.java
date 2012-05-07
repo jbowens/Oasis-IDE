@@ -32,23 +32,13 @@ public class DebugWindow extends JFrame {
 
 	protected DebugStepper step;
 
-	protected Font font;
-
-	protected Application app;
-
-	protected Config config;
-
-	/**
-	 * Creates a new debug window for the application
-	 *
-	 * @param app - the application associated to this debug window instance
-	 * @param config - config object with settings
-	 * @param filenmae - file opened with this debug window
-	 */
-
-	public DebugWindow(Application app, Config config, String filename) {
-
-		super();
+	public DebugWindow(Application app, Config config, InteractionsManager im, String filename) {
+		super(app, config, im);
+		this.setTitle("Debug Mode");
+		this.remove(super.s1);
+		this.remove(super.mb);
+		this.remove(super.statusBar);
+		this.remove(super.mb);
 
 		this.app = app;
 		this.config = config;
