@@ -70,7 +70,7 @@ public class CodeArea extends JPanel {
       		public void mouseReleased(MouseEvent e)
       		{
       			int new_position = tabs.getUI().tabForCoordinate(tabs, e.getX(), e.getY());
-      			if(new_position >= 0)
+      			if(new_position >= 0 && (new_position != prev_position))
       			{
 	      			Tab t = (Tab)tabs.getComponentAt(prev_position);
 	           		String title = tabs.getTitleAt(prev_position);
