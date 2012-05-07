@@ -40,7 +40,7 @@ public class LineNumbersRuler extends JPanel implements DocumentListener {
   protected int height;
 
   /* Breakpoints highlighting */
-  protected HashSet<Integer> breakPointLines;
+  protected BreakpointSource breakpointSource;
 
   /**
    * Creates a new line numbers ruler with the given style set.
@@ -50,8 +50,6 @@ public class LineNumbersRuler extends JPanel implements DocumentListener {
   public LineNumbersRuler(StyleSet style) {
     this.style = style;
     setBorder( BorderFactory.createEmptyBorder( 0, 4, 0, 10) );
-    breakPointLines = new HashSet<Integer>();
-    breakPointLines.add( new Integer(6) );
   }
 
   /**
@@ -94,18 +92,6 @@ public class LineNumbersRuler extends JPanel implements DocumentListener {
   }
 
   /**
-   * Toggles the breakpoint on the given line.
-   *
-   * @param line the line number the breakpoint should be toggled.
-   */
-  public void toggleBreakpoint(int line) {
-    if( breakPointLines.contains(new Integer(line)) )
-      breakPointLines.remove(new Integer(line));
-    else
-      breakPointLines.add(new Integer(line));
-  }
-
-  /**
    * Paints the component with its lines.
    */
   @Override
@@ -135,7 +121,7 @@ public class LineNumbersRuler extends JPanel implements DocumentListener {
       int verticalOffset = lineHeight * lineNum;
 
       // Set the breakpoint styling if this is a breakpoint
-      if( breakPointLines.contains(lineNum) ) {
+      if( breakpointSource != null && breakpointSource.breakpointOnLine(lineNum) ) {
         g.setColor(BREAKPOINT_COLOR);
         g.setFont( pane.getFont().deriveFont(Font.BOLD) );
       }
@@ -143,7 +129,7 @@ public class LineNumbersRuler extends JPanel implements DocumentListener {
       g.drawString(lineString, insets.left, verticalOffset);
 
       // Remove the breakpoint styling if necessary
-      if( breakPointLines.contains(lineNum) ) {
+      if( breakpointSource != null && breakpointSource.breakpointOnLine(lineNum) ) {
         g.setColor(style.getLineNumbersColor());
         g.setFont( pane.getFont().deriveFont(Font.PLAIN) );
       }
