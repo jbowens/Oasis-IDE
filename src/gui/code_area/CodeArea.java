@@ -10,6 +10,7 @@ import camel.syntaxhighlighter.StyleSet;
 import camel.syntaxhighlighter.SimpleStyleSet;
 import camel.syntaxhighlighter.StyleWrapper;
 import camel.Application;
+import camel.debug.*;
 import javax.swing.plaf.basic.BasicButtonUI;
 
 import java.awt.GridBagLayout;
@@ -147,7 +148,7 @@ public class CodeArea extends JPanel {
 	 * Makes a debug tab from an already given file object.
 	 */
 	public void makeDebugTab(FileHandler fh, File f) {
-		DebugTab t = new DebugTab(this, f, fh, style);
+		DebugTab t = new DebugTab(this, new File(f.getAbsolutePath()), fh, style);
 		t.setDebug();
 		tabs.addTab("DEBUG -"+ fh.getName(), t);
 		tabs.setSelectedComponent(t);

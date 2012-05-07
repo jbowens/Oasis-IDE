@@ -1,18 +1,32 @@
 package camel.gui.code_area;
 
 
-import java.util.Hashtable;
-import javax.swing.*;
+import camel.debug.*;
+import camel.syntaxhighlighter.OCamlDocument;
+import camel.interactions.*;
+import camel.gui.interactions.*;
+
 import java.awt.BorderLayout;
 import java.awt.event.*;
+
+import javax.swing.*;
 import javax.swing.event.CaretListener;
 import javax.swing.event.CaretEvent;
-import camel.syntaxhighlighter.OCamlDocument;
 
-public class DebugStepper implements MouseListener,CaretListener {
+import java.util.Hashtable;
+import java.io.*;
+
+public class DebugStepper implements MouseListener,CaretListener,TextOutputListener {
 
 	protected DebugTab tab;
 	protected JToolBar jtb;
+	protected DebugManager dm;
+	protected int handle;
+	protected String mName;
+	protected LinePainter lp;
+	int curr_line = 0;
+
+	protected File f;
 	protected int lastClick;
 
 	protected Hashtable<Integer,Boolean> breakpoints;
@@ -20,30 +34,83 @@ public class DebugStepper implements MouseListener,CaretListener {
 
 	protected class StepNext extends JButton implements ActionListener {
 
-		DebugTab tab;
-		String text;
-		JEditorPane tp;
-		LinePainter lp;
 		//TODO move this to a more "global" location
-		int curr_line = 0;
+		protected DebugManager dm;
+		protected int handle;
 
-		public StepNext(DebugTab tab) {
+		public StepNext(DebugStepper step) {
 			super("Step forward");
-			this.tab = tab;
-			this.text = tab.getText();
-			this.tp = tab.getTextPane();
-			this.lp = new LinePainter(this.tp);	
+			this.dm = step.getDM();
+			this.handle = step.getHandle();
 			super.addActionListener(this);
 		}
 
 		public void actionPerformed(ActionEvent e) {
-			System.out.println("Forward!!!!!");
-			curr_line++;
-			setLineNumber(tp, curr_line);
+			try {
+				dm.processGUIInput(handle,"next\n");
+			} catch(Exception f) {}
 		}	
+		
+	}
 
+	private StepNext _next;	
+
+
+
+	public DebugStepper(DebugTab dtb, DebugManager dm, File f){
+
+		this.tab = dtb;
+		this.dm = dm;
+		this.f = f;
+		this.lp = new LinePainter(this.tab.getTextPane());	
+		this.breakpoints = new Hashtable<Integer,Boolean>();
+
+		this.mName = f.getName().split("\\.")[0].toLowerCase();	
+		System.out.println(mName);
+
+		this.jtb = new JToolBar();
+		this._next = new StepNext(this);
+		this.jtb.add(_next);	
+
+		this.tab.add(this.jtb, BorderLayout.NORTH);
+
+		/*Register listener*/
+		try {
+			this.handle = this.dm.newDebuggerInstance(f.getAbsolutePath());
+			this.dm.registerOutputListener(this,this.handle);
+			this.dm.registerOutputListener(this.tab.getInteractionsPanel(),this.handle);
+		} catch (Exception e) {}	
+
+		/* Add listeners */
+		this.tab.getTextPane().addMouseListener(this);
+		this.tab.getTextPane().addCaretListener(this);
+
+		try {
+			dm.processGUIInput(handle,"break @ " + mName + " 1\n");
+			//dbMan.processGUIInput(handle, "run\n");
+			Thread.sleep(300);
+
+			dm.processGUIInput(handle, "run\n");
+			//Thread.sleep(300);
+			//dm.processGUIInput(handle, "next\n");
+			//Thread.sleep(300);
+			//dm.processGUIInput(handle, "next\n");
+			//dm.processGUIInput(handle, "next\n");
+		} catch (Exception e) {}
+
+	}
+
+	public DebugManager getDM() {
+		return this.dm;
+	}
+
+	public int getHandle() {
+		return this.handle;
+	}
 	
-		private void setLineNumber(JEditorPane text, int line) {
+	private void updateLineNumber(int line) {
+		System.out.println("Update Line: " + line);
+		JEditorPane text = this.tab.getTextPane();
 			int currentLine = 0;
 		    int currentSelection = 0;
 		    String textContent = text.getText();
@@ -61,35 +128,36 @@ public class DebugStepper implements MouseListener,CaretListener {
 			}
 		    }
 		    text.setCaretPosition(currentSelection);
-		}
-
-
 	}
 
-	private StepNext _next;	
 
-
-
-	public DebugStepper(DebugTab dtb) {
-
-		this.tab = dtb;
-		
-		this.jtb = new JToolBar();
-		this.breakpoints = new Hashtable<Integer,Boolean>();
-	
-		this._next = new StepNext(this.tab);
-		
-		this.jtb.add(_next);	
-
-		this.tab.add(this.jtb, BorderLayout.EAST);
-
-		this.tab.getTextPane().addMouseListener(this);
-		this.tab.getTextPane().addCaretListener(this);
-
-
-
+	/**
+	*The implementation of the TextOutputListener. Recieves input from the ocaml
+	*debug. Calls updateLineNumber to update the debug GUI.
+	*
+	*@param evt - the TextOutputEvent from which we get the text
+	*/
+	public void receiveOutput(TextOutputEvent evt){
+		String input = evt.getText();
+		String[] inputArray = input.split("\\s+");
+		//try{
+			for(int i = 0; i< inputArray.length; i++){
+				if(inputArray[i].equals("module")){
+					if(((i + 2) < inputArray.length) && (inputArray[i+1].toLowerCase().equals(mName))) {
+						try{
+							int lineNum = Integer.parseInt(inputArray[i+2]);
+							System.out.println(inputArray[i]);
+							System.out.println(inputArray[i+1]);
+							System.out.println(inputArray[i+2]);
+							updateLineNumber(lineNum);
+						}catch(NumberFormatException nmf){
+							/*Eat it */
+						}
+					}
+				}
+			}
 	}
-	
+
 	/**
 	 * Required by the CaretListener interface.
 	 *
@@ -145,7 +213,27 @@ public class DebugStepper implements MouseListener,CaretListener {
 		}
 
 		/*System.out.print("Breakpoints:");
-		Integer[] keys = (Integer[]) this.breakpoints.keySet().toArray();
+		private void setLineNumber(JEditorPane text, int line) {
+			int currentLine = 0;
+		    int currentSelection = 0;
+		    String textContent = text.getText();
+			String seperator = "\n";
+		    int seperatorLength = seperator.length();
+		    while (currentLine < line) {
+			int next = textContent.indexOf(seperator,currentSelection);
+			if (next > -1) {
+			    currentSelection = next + seperatorLength;
+			    currentLine++;
+			} else {
+			    // set to the end of doc
+			    currentSelection = textContent.length();
+			    currentLine= line; // exits loop
+			}
+		    }
+		    text.setCaretPosition(currentSelection);
+		}
+
+Integer[] keys = (Integer[]) this.breakpoints.keySet().toArray();
 		for (int i = 0; i < keys.length; i++) {
 			if (this.breakpoints.get(keys[i])) {
 				System.out.print(keys[i] + ",");

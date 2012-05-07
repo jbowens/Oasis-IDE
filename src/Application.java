@@ -1,5 +1,6 @@
 package camel;
 
+import camel.debug.*;
 import camel.interactions.*;
 import camel.gui.main.*;
 import camel.gui.code_area.*;
@@ -20,6 +21,9 @@ public class Application {
     /* The interactions manager that organizes all interactions with the ocaml REPL */
     protected InteractionsManager interactionsManager;
 
+    /* The debug manager that organizes all interactions with the ocamldebug backend */
+    protected DebugManager debugManager;
+
     /* A style loader to load styles from the file system */
     protected StyleLoader styleLoader;
 
@@ -27,7 +31,7 @@ public class Application {
     protected MainWindow gui; 
 
     /* The number of open windows */
-    protected int guiCounter;;
+    protected int guiCounter;
 
     /**
      * Creates a new Application from the given settings file.
@@ -40,6 +44,7 @@ public class Application {
         // TODO: Add test to ensure OCaml is installed / find the ocaml executable
         this.config = new Config( settingsFile );
         this.interactionsManager = new InteractionsManager("ocaml");
+	this.debugManager = new DebugManager("/usr/bin/");
         styleLoader = new StyleLoader( "./styles" );
         setupGui();
 
@@ -51,7 +56,7 @@ public class Application {
      * Constructs the front-end gui for the application.
      */
     protected void setupGui() {
-        gui = new MainWindow(this, config, interactionsManager);
+        gui = new MainWindow(this, config, interactionsManager, debugManager);
         guiCounter = 1;
     }
 
@@ -59,7 +64,7 @@ public class Application {
      * Creates another window.
      */
     public void createNewWindow() {
-        new MainWindow(this, config, interactionsManager);
+        new MainWindow(this, config, interactionsManager, debugManager);
         guiCounter++;
     }
 
@@ -119,6 +124,7 @@ public class Application {
      */
     public void close() {
         interactionsManager.close();
+	debugManager.close();
         try {
             config.save();
         } catch( SettingsSaveException e ) {

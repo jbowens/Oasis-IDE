@@ -16,6 +16,7 @@ import camel.gui.code_area.CloseDeniedException;
 import camel.gui.menus.MenuBar;
 import camel.gui.code_area.StatusBar;
 import camel.interactions.*;
+import camel.debug.*;
 import camel.*;
 
 public class MainWindow extends JFrame {
@@ -32,11 +33,15 @@ public class MainWindow extends JFrame {
 	/* Interactions manager for getting input from the OCaml REPL */
 	protected InteractionsManager im;
 
+	/* Debug manager for getting input from ocamldebug backend */
+	protected DebugManager dm;
+
 	/* The status bar for the window */
 	protected StatusBar statusBar;
 
 	/* The default font to use */
 	protected Font font;
+
 
 	protected CodeArea ca;
 	protected MenuBar mb;
@@ -53,13 +58,14 @@ public class MainWindow extends JFrame {
 	 * @param config - a config object with the various settings
 	 * @param im - an interactions manager to use when creating interactions
 	 */
-	public MainWindow(Application app, Config config, InteractionsManager im)
+	public MainWindow(Application app, Config config, InteractionsManager im, DebugManager dm)
 	{
 		super();
 
 		this.app = app;
 		this.config = config;
 		this.im = im;
+		this.dm = dm;
 
 		loadFont();
 
@@ -156,6 +162,15 @@ public class MainWindow extends JFrame {
 	 */
 	public InteractionsManager getInteractionsManager() {
 		return im;
+	}
+
+	/**
+	 * Get this window's debug manager.
+	 *
+	 * @return the window's debug manager
+	 */
+	public DebugManager getDebugManager() {
+		return dm;
 	}
 
 	/**

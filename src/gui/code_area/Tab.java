@@ -329,6 +329,10 @@ public class Tab extends JPanel implements DocumentListener {
 		codeArea.getWindow().getStatusBar().displayStatus("Interactions reset");
 	}
 
+	public InteractionsPanel getInteractionsPanel() {
+		return this.interactionsPanel;
+	}
+
 	public void setDebug() {
 		this.isDebug = true;
 	}
