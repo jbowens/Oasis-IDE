@@ -27,7 +27,7 @@ public class Application {
     protected MainWindow gui; 
 
     /* The number of open windows */
-    protected int guiCounter;;
+    protected int guiCounter;
 
     /**
      * Creates a new Application from the given settings file.
@@ -39,7 +39,7 @@ public class Application {
     public Application(String settingsFile) throws NoSettingsException {
         // TODO: Add test to ensure OCaml is installed / find the ocaml executable
         this.config = new Config( settingsFile );
-        this.interactionsManager = new InteractionsManager("ocaml");
+        this.interactionsManager = new InteractionsManager("./ocamlwrap");
         styleLoader = new StyleLoader( "./styles" );
         setupGui();
 
