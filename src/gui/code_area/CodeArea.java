@@ -20,6 +20,9 @@ import java.util.ArrayList;
 
 public class CodeArea extends JPanel {
 
+	protected Color UNSAVED_ICON_COLOR = new Color(161, 80, 80);
+	protected Color CLOSE_TAB_COLOR = UNSAVED_ICON_COLOR;
+
 	/* The tabbed pane that holds all the existing tabs */
 	protected JTabbedPane tabs;
 
@@ -399,6 +402,8 @@ public class CodeArea extends JPanel {
 	    }
 	    protected void paintComponent(Graphics g)
 	    {
+	    	g = setRenderingHints(g);
+
 	    	if(tabToClose.changes == false || getModel().isRollover())
 	    	{
 		        super.paintComponent(g);
@@ -411,7 +416,7 @@ public class CodeArea extends JPanel {
 		        g2.setStroke(new BasicStroke(2));
 		        g2.setColor(Color.BLACK);
 		        if (getModel().isRollover()) {
-                	g2.setColor(Color.RED);
+                	g2.setColor(CLOSE_TAB_COLOR);
             	}
 		        int delta = 3;
 		        g2.drawLine(delta, delta, getWidth() - delta - 1, getHeight() - delta - 1);
@@ -427,11 +432,24 @@ public class CodeArea extends JPanel {
 		            g2.translate(1, 1);
 		        }
 		        g2.setStroke(new BasicStroke(2));
-		        g2.setColor(Color.RED);
-		        g2.drawString("o",getWidth()/2,getHeight()/2);
+		        g2.setColor(UNSAVED_ICON_COLOR);
+		        g2.fillOval(3, 3, getWidth()-6, getHeight()-6);
 		        g2.dispose();
 	    	}
 	    }
+
+	    /**
+	     * Sets rendering hints needed for drawing the tab icons.
+	     *
+	     * @param g the graphics context
+	     */
+	    protected Graphics2D setRenderingHints(Graphics g) {
+	    	Graphics2D g2 = (Graphics2D) g;
+	    	g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+	    						RenderingHints.VALUE_ANTIALIAS_ON);
+	    	return g2;
+	    }
+
 	}
 	 private final static MouseListener buttonMouseListener = new MouseAdapter() 
 	 {
