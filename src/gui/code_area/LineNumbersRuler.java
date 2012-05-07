@@ -92,6 +92,16 @@ public class LineNumbersRuler extends JPanel implements DocumentListener {
   }
 
   /**
+   * Sets the breakpoint source for the line number ruler. The argument can
+   * be null for no breakpoints.
+   *
+   * @param newBpSource the breakpoint source for the line numbers ruler.
+   */
+  public void setBreakpointSource(BreakpointSource newBpSource) {
+    breakpointSource = newBpSource;
+  }
+
+  /**
    * Paints the component with its lines.
    */
   @Override
