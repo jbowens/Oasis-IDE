@@ -295,8 +295,13 @@ public class CodeArea extends JPanel {
 	public void closeTab(Tab tabToClose) throws CloseDeniedException {
 
 		// Make sure this tab actually exists.
-		if( tabs.indexOfComponent(tabToClose) == -1 )
+		if( tabs.indexOfComponent(tabToClose) == -1 ) {
+			// The tab doesn't actually exist. Remove it from the tab list if it's
+			// still in there.
+			if(tabList.contains(tabToClose))
+				tabList.remove(tabToClose);
 			return;
+		}
 
 		// Make sure the tab doesn't have any unsaved changes
 		if( tabToClose.unsavedChanges() ) {
