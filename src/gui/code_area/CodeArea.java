@@ -423,7 +423,7 @@ public class CodeArea extends JPanel {
 		        }
 		        g2.setStroke(new BasicStroke(2));
 		        g2.setColor(Color.RED);
-		        g2.drawString("O",getWidth()/2,getHeight()/2);
+		        g2.drawString("o",getWidth()/2,getHeight()/2);
 		        g2.dispose();
 	    	}
 	    }
