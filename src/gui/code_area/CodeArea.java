@@ -2,6 +2,8 @@ package camel.gui.code_area;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import camel.gui.controller.FileHandler;
 import camel.gui.menus.MenuBar;
@@ -10,6 +12,9 @@ import camel.syntaxhighlighter.StyleSet;
 import camel.syntaxhighlighter.SimpleStyleSet;
 import camel.syntaxhighlighter.StyleWrapper;
 import camel.Application;
+import camel.debug.*;
+import javax.swing.plaf.basic.BasicButtonUI;
+import javax.swing.plaf.TabbedPaneUI;
 
 import java.awt.GridBagLayout;
 import java.io.File;
@@ -18,6 +23,9 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class CodeArea extends JPanel {
+
+	protected Color UNSAVED_ICON_COLOR = new Color(161, 80, 80);
+	protected Color CLOSE_TAB_COLOR = UNSAVED_ICON_COLOR;
 
 	/* The tabbed pane that holds all the existing tabs */
 	protected JTabbedPane tabs;
@@ -52,6 +60,29 @@ public class CodeArea extends JPanel {
 
 		tabList = new ArrayList<Tab>();
 		tabs = new JTabbedPane();
+		tabs.addMouseListener(new MouseAdapter() {
+			int prev_position;
+
+			public void mousePressed(MouseEvent e)
+			{
+      			prev_position = tabs.getUI().tabForCoordinate(tabs, e.getX(), e.getY());
+      		}
+
+      		public void mouseReleased(MouseEvent e)
+      		{
+      			int new_position = tabs.getUI().tabForCoordinate(tabs, e.getX(), e.getY());
+      			if(new_position >= 0 && (new_position != prev_position))
+      			{
+	      			Tab t = (Tab)tabs.getComponentAt(prev_position);
+	           		String title = tabs.getTitleAt(prev_position);
+	            	tabs.removeTabAt(prev_position);
+	            	tabs.insertTab(title, null, t, null, new_position);
+	            	tabs.setTabComponentAt(tabs.indexOfComponent(t), new TabTitle(t,title));
+            	}
+      		}
+   		 });
+
+
 		GridBagConstraints fullFill = new GridBagConstraints();
 		fullFill.weighty = fullFill.weightx = 1.0; 
 		fullFill.fill = GridBagConstraints.BOTH; 
@@ -110,6 +141,7 @@ public class CodeArea extends JPanel {
 		Tab t = new Tab(this, fh, style);
 		tabs.addTab("Untitled", t);
 		tabs.setSelectedComponent(t);
+		tabs.setTabComponentAt(tabs.indexOfComponent(t), new TabTitle(t,"Untitled"));
 		tabList.add(t);
 	}
 
@@ -123,6 +155,7 @@ public class CodeArea extends JPanel {
 		Tab t = new Tab(this, new File(filename), fh, style);
 		tabs.addTab(fh.getName(), t);
 		tabs.setSelectedComponent(t);
+		tabs.setTabComponentAt(tabs.indexOfComponent(t), new TabTitle(t,fh.getName()));
 		tabList.add(t);
 	}
 
@@ -136,6 +169,7 @@ public class CodeArea extends JPanel {
 		Tab t = new Tab(this, f, fh, style);
 		tabs.addTab(fh.getName(), t);
 		tabs.setSelectedComponent(t);
+		tabs.setTabComponentAt(tabs.indexOfComponent(t), new TabTitle(t,fh.getName()));
 		tabList.add(t);
 	}
 
@@ -143,10 +177,11 @@ public class CodeArea extends JPanel {
 	 * Makes a debug tab from an already given file object.
 	 */
 	public void makeDebugTab(FileHandler fh, File f) {
-		DebugTab t = new DebugTab(this, f, fh, style);
+		DebugTab t = new DebugTab(this, new File(f.getAbsolutePath()), fh, style);
 		t.setDebug();
 		tabs.addTab("DEBUG -"+ fh.getName(), t);
 		tabs.setSelectedComponent(t);
+		tabs.setTabComponentAt(tabs.indexOfComponent(t), new TabTitle(t,"DEBUG -"+ fh.getName()));
 		tabList.add(t);
 	}
 
@@ -161,6 +196,7 @@ public class CodeArea extends JPanel {
 		Tab t = new Tab(this, fh.getFile(), fh, style);
 		tabs.addTab(fh.getName(), t);
 		tabs.setSelectedComponent(t);
+		tabs.setTabComponentAt(tabs.indexOfComponent(t), new TabTitle(t,fh.getName()));
 		tabList.add(t);
 	}
 
@@ -284,6 +320,16 @@ public class CodeArea extends JPanel {
 	 * @throws CloseDeniedException when the user decides not to close the tab after all
 	 */
 	public void closeTab(Tab tabToClose) throws CloseDeniedException {
+
+		// Make sure this tab actually exists.
+		if( tabs.indexOfComponent(tabToClose) == -1 ) {
+			// The tab doesn't actually exist. Remove it from the tab list if it's
+			// still in there.
+			if(tabList.contains(tabToClose))
+				tabList.remove(tabToClose);
+			return;
+		}
+
 		// Make sure the tab doesn't have any unsaved changes
 		if( tabToClose.unsavedChanges() ) {
 			if( tabToClose.getFile() == null ) {
@@ -332,7 +378,6 @@ public class CodeArea extends JPanel {
 	protected void removeTab(Tab tabToRemove) {
 		// Let the tab know that it should get its affairs in order
 		tabToRemove.close();
-
 		tabs.remove(tabToRemove);
 	}
 
@@ -345,5 +390,116 @@ public class CodeArea extends JPanel {
 			closeTab(t);
 		tabList.clear();
 	}
+
+
+	//This is code for a "close" button, it works but not sure how to add the button
+	private class TabTitle extends JPanel
+	{
+		private JLabel title;
+		private JButton closeButton;
+		public TabTitle(Tab t,String name)
+		{
+			closeButton = new TabButton(t);
+			title = new JLabel(name);
+			add(title);
+			add(closeButton);
+			setBackground(new Color(0, 0, 0, 0));
+			setBorder(BorderFactory.createEmptyBorder());
+		}
+	}
+	private class TabButton extends JButton implements ActionListener
+	{
+		private int size = 15;
+		protected Tab tabToClose;
+		public TabButton(Tab t)
+		{
+			tabToClose = t;
+			setPreferredSize(new Dimension(size,size));
+			setToolTipText("Close Tab");
+			setUI(new BasicButtonUI());
+			setContentAreaFilled(false);
+			setFocusable(false);
+	        setBorder(BorderFactory.createEtchedBorder());
+	        setBorderPainted(false);
+	        addMouseListener(buttonMouseListener);
+	        setRolloverEnabled(true);
+	        addActionListener(this);
+		}
+		public void actionPerformed(ActionEvent e) 
+		{
+			try {
+	        	closeTab(tabToClose);
+	    	}
+	    	catch(Exception e1){}
+	    }
+	    protected void paintComponent(Graphics g)
+	    {
+	    	g = setRenderingHints(g);
+
+	    	if(tabToClose.changes == false || getModel().isRollover())
+	    	{
+		        super.paintComponent(g);
+		        Graphics2D g2 = (Graphics2D) g.create();
+		        //shift the image for pressed buttons
+		        if (getModel().isPressed()) {
+		            g2.translate(1, 1);
+		        }
+		        
+		        g2.setStroke(new BasicStroke(2));
+		        g2.setColor(Color.BLACK);
+		        if (getModel().isRollover()) {
+                	g2.setColor(CLOSE_TAB_COLOR);
+            	}
+		        int delta = 3;
+		        g2.drawLine(delta, delta, getWidth() - delta - 1, getHeight() - delta - 1);
+		        g2.drawLine(getWidth() - delta - 1, delta, delta, getHeight() - delta - 1);
+		        g2.dispose();
+	    	}
+	    	else
+	    	{
+	    		super.paintComponent(g);
+		        Graphics2D g2 = (Graphics2D) g.create();
+		        //shift the image for pressed buttons
+		        if (getModel().isPressed()) {
+		            g2.translate(1, 1);
+		        }
+		        g2.setStroke(new BasicStroke(2));
+		        g2.setColor(UNSAVED_ICON_COLOR);
+		        g2.fillOval(3, 3, getWidth()-6, getHeight()-6);
+		        g2.dispose();
+	    	}
+	    }
+
+	    /**
+	     * Sets rendering hints needed for drawing the tab icons.
+	     *
+	     * @param g the graphics context
+	     */
+	    protected Graphics2D setRenderingHints(Graphics g) {
+	    	Graphics2D g2 = (Graphics2D) g;
+	    	g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+	    						RenderingHints.VALUE_ANTIALIAS_ON);
+	    	return g2;
+	    }
+
+	}
+	 private final static MouseListener buttonMouseListener = new MouseAdapter() 
+	 {
+	    public void mouseEntered(MouseEvent e) {
+	        Component component = e.getComponent();
+	        if (component instanceof AbstractButton) {
+	            AbstractButton button = (AbstractButton) component;
+	            button.setBorderPainted(true);
+	        }
+	    }
+
+	    public void mouseExited(MouseEvent e) {
+	        Component component = e.getComponent();
+	        if (component instanceof AbstractButton) {
+	            AbstractButton button = (AbstractButton) component;
+	            button.setBorderPainted(false);
+	        }
+	    }
+	};
 
 }

@@ -1,5 +1,4 @@
 package camel.gui.main;
-
 import java.awt.event.WindowListener;
 import java.awt.event.WindowEvent;
 import java.awt.BorderLayout;
@@ -16,6 +15,7 @@ import camel.gui.code_area.CloseDeniedException;
 import camel.gui.menus.MenuBar;
 import camel.gui.code_area.StatusBar;
 import camel.interactions.*;
+import camel.debug.*;
 import camel.*;
 
 public class MainWindow extends JFrame {
@@ -32,11 +32,15 @@ public class MainWindow extends JFrame {
 	/* Interactions manager for getting input from the OCaml REPL */
 	protected InteractionsManager im;
 
+	/* Debug manager for getting input from ocamldebug backend */
+	protected DebugManager dm;
+
 	/* The status bar for the window */
 	protected StatusBar statusBar;
 
 	/* The default font to use */
 	protected Font font;
+
 
 	protected CodeArea ca;
 	protected MenuBar mb;
@@ -53,13 +57,14 @@ public class MainWindow extends JFrame {
 	 * @param config - a config object with the various settings
 	 * @param im - an interactions manager to use when creating interactions
 	 */
-	public MainWindow(Application app, Config config, InteractionsManager im)
+	public MainWindow(Application app, Config config, InteractionsManager im, DebugManager dm)
 	{
 		super();
 
 		this.app = app;
 		this.config = config;
 		this.im = im;
+		this.dm = dm;
 
 		loadFont();
 
@@ -159,6 +164,15 @@ public class MainWindow extends JFrame {
 	}
 
 	/**
+	 * Get this window's debug manager.
+	 *
+	 * @return the window's debug manager
+	 */
+	public DebugManager getDebugManager() {
+		return dm;
+	}
+
+	/**
 	 * Displays a generic error message.
 	 *
 	 * @param message the error message to display
@@ -191,6 +205,7 @@ public class MainWindow extends JFrame {
 		public void windowActivated(WindowEvent e) {}
 		public void windowClosed(WindowEvent e) {
 			// Notify the application to shut down as well
+			
 			if( ! mainWindow.isClosed() ) {
 				mainWindow.getApplication().guiClosed();
 				mainWindow.dispose();
@@ -240,6 +255,7 @@ public class MainWindow extends JFrame {
 	public void close() {
 		processWindowEvent( new WindowEvent( this, WindowEvent.WINDOW_CLOSED ) );
 		closed = true;
+		
 	}
 
 }

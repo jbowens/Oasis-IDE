@@ -48,7 +48,6 @@ public class InteractionsPanel extends JPanel implements TextOutputListener {
 		inputBar.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
 		inputBar.setFont(font);
 		inputBar.addKeyListener(new EnterListener());
-		style.apply(inputBar);
 		add(inputBar,BorderLayout.SOUTH);
 		textPane.addKeyListener(new KListener());
 		try {
@@ -60,7 +59,6 @@ public class InteractionsPanel extends JPanel implements TextOutputListener {
 
 	@Override
 	public void paint(Graphics g) {
-		style.apply(inputBar);
 		style.apply(textPane);
 		inputBar.setBackground(style.getSelectedBackground());
 		super.paint(g);

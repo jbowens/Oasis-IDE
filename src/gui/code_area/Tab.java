@@ -19,7 +19,6 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.JSplitPane;
 import javax.swing.JOptionPane;
 import javax.swing.*;
-import javax.swing.plaf.basic.BasicButtonUI;
 
 import camel.Config;
 import camel.gui.interactions.InteractionsPanel;
@@ -137,7 +136,7 @@ public class Tab extends JPanel implements DocumentListener {
 		style.apply( textPane );
 
 		/* Load the syntax highlighter editor kit */
-		textPane.setEditorKit( new OCamlEditorKit( lexer, style ) );
+		textPane.setEditorKit( new OCamlEditorKit( lexer, style ) );		
 
 		sc = new JScrollPane(textPane);
 		sc.setBorder(BorderFactory.createEmptyBorder());
@@ -158,6 +157,7 @@ public class Tab extends JPanel implements DocumentListener {
 
 		// Create the interactions panel
 		interactionsPanel = new InteractionsPanel(codeArea.getWindow().getInteractionsManager(), null, codeArea.getFont(), style);
+
 
 		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, middlePanel, interactionsPanel);
 		splitPane.setDividerSize(5);
@@ -329,6 +329,10 @@ public class Tab extends JPanel implements DocumentListener {
 		codeArea.getWindow().getStatusBar().displayStatus("Interactions reset");
 	}
 
+	public InteractionsPanel getInteractionsPanel() {
+		return this.interactionsPanel;
+	}
+
 	public void setDebug() {
 		this.isDebug = true;
 	}
@@ -363,70 +367,7 @@ public class Tab extends JPanel implements DocumentListener {
 		documentChanged();
 	}
 
-	//This is code for a "close" button, it works but not sure how to add the button
-	/*
-	private class TabButton extends JButton implements ActionListener
-	{
-		private int size = 15;
-		public TabButton()
-		{
-			setPreferredSize(new Dimension(size,size));
-			setToolTipText("Close Tab");
-			setUI(new BasicButtonUI());
-			setContentAreaFilled(false);
-			setFocusable(false);
-	        setBorder(BorderFactory.createEtchedBorder());
-	        setBorderPainted(false);
-	        addMouseListener(buttonMouseListener);
-	        setRolloverEnabled(true);
-	        addActionListener(this);
-		}
-		public void actionPerformed(ActionEvent e) 
-		{
-			try
-			{
-	        codeArea.closeTab(Tab.this);
-	    	}
-	    	catch(Exception e1){}
-	    }
-	    protected void paintComponent(Graphics g)
-	    {
-	        super.paintComponent(g);
-	        Graphics2D g2 = (Graphics2D) g.create();
-	        //shift the image for pressed buttons
-	        if (getModel().isPressed()) {
-	            g2.translate(1, 1);
-	        }
-	        g2.setStroke(new BasicStroke(2));
-	        g2.setColor(Color.BLACK);
-	        if (getModel().isRollover()) {
-	            g2.setColor(Color.MAGENTA);
-	        }
-	        int delta = 5;
-	        g2.drawLine(delta, delta, getWidth() - delta - 1, getHeight() - delta - 1);
-	        g2.drawLine(getWidth() - delta - 1, delta, delta, getHeight() - delta - 1);
-	        g2.dispose();
-	    }
-	}
-	 private final static MouseListener buttonMouseListener = new MouseAdapter() 
-	 {
-	    public void mouseEntered(MouseEvent e) {
-	        Component component = e.getComponent();
-	        if (component instanceof AbstractButton) {
-	            AbstractButton button = (AbstractButton) component;
-	            button.setBorderPainted(true);
-	        }
-	    }
-
-	    public void mouseExited(MouseEvent e) {
-	        Component component = e.getComponent();
-	        if (component instanceof AbstractButton) {
-	            AbstractButton button = (AbstractButton) component;
-	            button.setBorderPainted(false);
-	        }
-	    }
-	};
-	*/
+	
 }
 
 

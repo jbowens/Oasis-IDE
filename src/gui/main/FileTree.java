@@ -88,11 +88,12 @@ class FileTreeModel implements TreeModel
 		if ((children == null) || (index >= children.length)){ 
 			return null;
 		}
+		/*
 		else if(children[index].startsWith("."))
 		{
 			return new File("");
 		}
-		
+		*/
 		else
 			return new File((File) parent, children[index]);
 	}
@@ -156,7 +157,7 @@ class FileTreeModel implements TreeModel
 	private class HiddenFileFilter implements FileFilter {
 
 		public boolean accept(File pathname) {
-			return !pathname.isHidden();
+			return true;
 		}
 	}
 

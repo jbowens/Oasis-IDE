@@ -25,6 +25,7 @@ import camel.syntaxhighlighter.OCamlLexer;
 import camel.syntaxhighlighter.OCamlEditorKit;
 import camel.syntaxhighlighter.StyleSet;
 import camel.syntaxhighlighter.SimpleStyleSet;
+import camel.debug.*;
 
 
 /**
@@ -38,15 +39,17 @@ public class DebugTab extends Tab {
 
 	public DebugTab(CodeArea codeArea, File f, FileHandler fh, StyleSet s) {
 		super(codeArea, f, fh, s);
-		this.step = new DebugStepper(this);
+		this.step = new DebugStepper(this, codeArea.getWindow().getDebugManager(), f);
 		textPane.setEditable(false);
+		lineNums.setBreakpointSource(step);
 		repaint();
 	}
 
 	public DebugTab(CodeArea codeArea, FileHandler fh, StyleSet s) {
 		super(codeArea, fh, s);
-		this.step = new DebugStepper(this);
+		this.step = new DebugStepper(this, codeArea.getWindow().getDebugManager(), f);
 		textPane.setEditable(false);
+		lineNums.setBreakpointSource(step);
 		repaint();
 	}
 
