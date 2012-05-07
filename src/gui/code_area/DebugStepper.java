@@ -1,14 +1,21 @@
 package camel.gui.code_area;
 
 
+import java.util.Hashtable;
 import javax.swing.*;
 import java.awt.BorderLayout;
 import java.awt.event.*;
+import javax.swing.event.CaretListener;
+import javax.swing.event.CaretEvent;
+import camel.syntaxhighlighter.OCamlDocument;
 
-public class DebugStepper {
+public class DebugStepper implements MouseListener,CaretListener {
 
 	protected DebugTab tab;
 	protected JToolBar jtb;
+	protected int lastClick;
+
+	protected Hashtable<Integer,Boolean> breakpoints;
 
 
 	protected class StepNext extends JButton implements ActionListener {
@@ -68,6 +75,7 @@ public class DebugStepper {
 		this.tab = dtb;
 		
 		this.jtb = new JToolBar();
+		this.breakpoints = new Hashtable<Integer,Boolean>();
 	
 		this._next = new StepNext(this.tab);
 		
@@ -75,8 +83,91 @@ public class DebugStepper {
 
 		this.tab.add(this.jtb, BorderLayout.EAST);
 
+		this.tab.getTextPane().addMouseListener(this);
+		this.tab.getTextPane().addCaretListener(this);
+
+
+
+	}
+	
+	/**
+	 * Required by the CaretListener interface.
+	 *
+	 * This method updates the status bar line and col positions whenever the
+	 * caret moves.
+	 *
+	 * @param evt the caret event to respond to
+	 */
+	public void caretUpdate(CaretEvent evt) {
+		int pos = evt.getDot();
+
+		if( this.tab == null )
+			return;
+
+		if( ! (this.tab.getTextPane().getDocument() instanceof OCamlDocument) )
+			return;
+
+		OCamlDocument doc = (OCamlDocument) this.tab.getTextPane().getDocument();
+		int linePos = doc.getLinePosition( pos );
+		int columnPos = doc.getColumnPosition( pos );
+		System.out.println("Line: " + linePos);
 
 	}
 
+	public void mouseClicked(MouseEvent e) {
+
+		int pos = this.tab.getTextPane().getCaretPosition();
+		if (this.tab == null)
+			return;
+	
+		if (! (this.tab.getTextPane().getDocument() instanceof OCamlDocument) )
+			return;
+
+		OCamlDocument doc = (OCamlDocument) this.tab.getTextPane().getDocument();
+		int linePos = doc.getLinePosition( pos );
+
+		if (linePos == this.lastClick) {
+
+			if (breakpoints.containsKey(linePos)) {
+				boolean isBreak = this.breakpoints.get(linePos);
+				//Toggle breakpoint
+				this.breakpoints.put(linePos,!isBreak);
+			}
+			else {
+				//Add new breakpoint
+				breakpoints.put(linePos,true);
+			}
+
+			this.lastClick = -1;
+		}
+		else {
+			this.lastClick = linePos;
+		}
+
+		/*System.out.print("Breakpoints:");
+		Integer[] keys = (Integer[]) this.breakpoints.keySet().toArray();
+		for (int i = 0; i < keys.length; i++) {
+			if (this.breakpoints.get(keys[i])) {
+				System.out.print(keys[i] + ",");
+			}
+		}*/
+
+	}
+	
+	public void mousePressed(MouseEvent e) {
+
+	}
+
+	public void mouseReleased(MouseEvent e) {
+
+	}
+
+	public void mouseEntered(MouseEvent e) {
+
+	}
+
+	public void mouseExited(MouseEvent e) {
+
+	}
 
 }

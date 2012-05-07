@@ -394,21 +394,38 @@ public class CodeArea extends JPanel {
 	    }
 	    protected void paintComponent(Graphics g)
 	    {
-	        super.paintComponent(g);
-	        Graphics2D g2 = (Graphics2D) g.create();
-	        //shift the image for pressed buttons
-	        if (getModel().isPressed()) {
-	            g2.translate(1, 1);
-	        }
-	        g2.setStroke(new BasicStroke(2));
-	        g2.setColor(Color.BLACK);
-	        if (getModel().isRollover()) {
-	            g2.setColor(Color.MAGENTA);
-	        }
-	        int delta = 5;
-	        g2.drawLine(delta, delta, getWidth() - delta - 1, getHeight() - delta - 1);
-	        g2.drawLine(getWidth() - delta - 1, delta, delta, getHeight() - delta - 1);
-	        g2.dispose();
+	    	if(tabToClose.changes == false || getModel().isRollover())
+	    	{
+		        super.paintComponent(g);
+		        Graphics2D g2 = (Graphics2D) g.create();
+		        //shift the image for pressed buttons
+		        if (getModel().isPressed()) {
+		            g2.translate(1, 1);
+		        }
+		        
+		        g2.setStroke(new BasicStroke(2));
+		        g2.setColor(Color.BLACK);
+		        if (getModel().isRollover()) {
+                	g2.setColor(Color.RED);
+            	}
+		        int delta = 3;
+		        g2.drawLine(delta, delta, getWidth() - delta - 1, getHeight() - delta - 1);
+		        g2.drawLine(getWidth() - delta - 1, delta, delta, getHeight() - delta - 1);
+		        g2.dispose();
+	    	}
+	    	else
+	    	{
+	    		super.paintComponent(g);
+		        Graphics2D g2 = (Graphics2D) g.create();
+		        //shift the image for pressed buttons
+		        if (getModel().isPressed()) {
+		            g2.translate(1, 1);
+		        }
+		        g2.setStroke(new BasicStroke(2));
+		        g2.setColor(Color.RED);
+		        g2.drawString("O",getWidth()/2,getHeight()/2);
+		        g2.dispose();
+	    	}
 	    }
 	}
 	 private final static MouseListener buttonMouseListener = new MouseAdapter() 
