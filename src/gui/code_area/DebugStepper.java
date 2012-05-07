@@ -75,13 +75,14 @@ public class DebugStepper implements MouseListener,CaretListener {
 		this.tab = dtb;
 		
 		this.jtb = new JToolBar();
+		this.jtb.setFloatable(false);
 		this.breakpoints = new Hashtable<Integer,Boolean>();
 	
 		this._next = new StepNext(this.tab);
 		
 		this.jtb.add(_next);	
 
-		this.tab.add(this.jtb, BorderLayout.EAST);
+		this.tab.add(this.jtb, BorderLayout.NORTH);
 
 		this.tab.getTextPane().addMouseListener(this);
 		this.tab.getTextPane().addCaretListener(this);
