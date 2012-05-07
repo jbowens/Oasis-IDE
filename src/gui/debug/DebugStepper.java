@@ -25,7 +25,6 @@ public class DebugStepper {
 			super("Step forward");
 			this.tab = tab;
 			this.text = tab.getText();
-			System.out.println(this.text);
 			this.tp = tab.getTextPane();
 			this.lp = new LinePainter(this.tp);	
 			super.addActionListener(this);

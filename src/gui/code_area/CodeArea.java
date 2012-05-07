@@ -140,6 +140,17 @@ public class CodeArea extends JPanel {
 	}
 
 	/**
+	 * Makes a debug tab from an already given file object.
+	 */
+	public void makeDebugTab(FileHandler fh, File f) {
+		DebugTab t = new DebugTab(this, f, fh, style);
+		t.setDebug();
+		tabs.addTab("DEBUG -"+ fh.getName(), t);
+		tabs.setSelectedComponent(t);
+		tabList.add(t);
+	}
+
+	/**
 	 * Makes a new tab from a user-inputted file.
 	 * 
 	 * Note: Prompts for user input of the file.
@@ -199,8 +210,26 @@ public class CodeArea extends JPanel {
 			getWindow().displayErrorMessage("There is no open file to run.");
 			return;
 		}
+		
 		current.run();
 	}
+
+	/**
+	 * Opens debug tab for current file.
+	 */
+
+	public void debugCurrentFile() {
+		Tab current = getCurTab();
+		if( current == null ) {
+			getWindow().displayErrorMessage("There is no open file to run.");
+			return;
+		}
+		/*Can't debug a debug tab!*/
+		if (!current.checkDebug()) {
+			fh.openFile(new File(current.getPath()));
+		}
+	}
+
 
 	/**
 	 * Resets the current tab's interactions window.

@@ -25,8 +25,7 @@ public class Application {
     protected StyleLoader styleLoader;
 
     /* The main GUI class */
-    protected MainWindow gui;
-
+    protected MainWindow gui; 
 	/*The debugger*/
 	protected DebugWindow debug;
 
@@ -146,24 +145,9 @@ public class Application {
         close();
     }
 
-	/**
-	* open debug window
-	*/ 
-	public void openDebug() {
-		if (this.debug == null) {
-			Tab currTab = gui.getCodeArea().getCurTab();
-			if (currTab != null) {
-				String filename = currTab.getPath();
-				System.out.println(filename);
-				this.debug = new DebugWindow(this, this.config,this.interactionsManager, filename);
-			}
-		}
-		else  {
-			JOptionPane.showMessageDialog(gui,"Only one file can be debugged at a time.");		
-		}
-		
-	}
-	
+    public void closeDebug() {
+    }
+
 
 }
 

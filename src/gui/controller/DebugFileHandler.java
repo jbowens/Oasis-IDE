@@ -3,10 +3,14 @@ package camel.gui.controller;
 import camel.gui.code_area.*;
 import java.io.*;
 
-public class DebugFileHandler extends FileHandler {
+public class DebugFileHandler {
 
-	public DebugFileHandler(CodeArea ca) {
-		super(ca);
+	protected BufferedReader br;
+	protected File f;
+	protected DebugCodeArea dca;
+
+	public DebugFileHandler(DebugCodeArea dca) {
+		this.dca = dca;	
 	}
 
 	/**
@@ -16,9 +20,38 @@ public class DebugFileHandler extends FileHandler {
 	 */ 
 	public void setBuffRead(String path) {
 		try {
-			super.br = new BufferedReader(new InputStreamReader(new DataInputStream(new FileInputStream(path))));
+			this.br = new BufferedReader(new InputStreamReader(new DataInputStream(new FileInputStream(path))));
 		} catch (FileNotFoundException e) {
 			System.out.println("Could not open file to debug. :(");
 		}
 	}
+	
+	public String nextLine() 
+	{
+		try {
+			if(br.ready())
+			{
+				return br.readLine();
+			}
+			else
+			{
+				return null;
+			}
+		} catch (IOException e) {
+			System.err.println("Error, bufferedreader was not initialized");
+		}
+		return null;
+	}
+
+	public void closeReader() {
+		if (br != null) {
+			try{
+				br.close();
+			} catch(Exception e) {
+				//eat it
+			}
+		}
+	}
+
 }
+

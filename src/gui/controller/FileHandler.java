@@ -33,6 +33,25 @@ public class FileHandler {
 		this.ca = ca;
 	}
 
+	public void openFile(File file) {
+		this.f = file;
+		if( f != null )	{
+			// Save the default directory
+			directory = f.getParentFile();
+
+			// Get the absolute path so we can open
+			String path = f.getAbsolutePath();
+			try {
+				br = new BufferedReader(new InputStreamReader(new DataInputStream(new FileInputStream(path))));
+				ca.makeDebugTab(this, f);
+			} catch (FileNotFoundException e) {
+				System.err.println("Couldn't open file");
+			} catch (IOException e) {
+				System.err.println("Error reading from file");
+			}
+		}
+	}
+
 	public void openFile() 
 	{
 		int val = _fc.showOpenDialog(null);

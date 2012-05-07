@@ -66,6 +66,9 @@ public class Tab extends JPanel implements DocumentListener {
 	/* Whether or not changes have been made since the last save */
 	protected boolean changes = false;
 
+	/*Is this is a debug tab*/
+	protected boolean isDebug = false;
+
 	/**
 	 * Creates a new tab and loads the given file.
 	 *
@@ -320,6 +323,14 @@ public class Tab extends JPanel implements DocumentListener {
 	public void resetInteractions() {
 		interactionsPanel.reset(null);
 		codeArea.getWindow().getStatusBar().displayStatus("Interactions reset");
+	}
+
+	public void setDebug() {
+		this.isDebug = true;
+	}
+
+	public boolean checkDebug() {
+		return this.isDebug;
 	}
 
 	/**

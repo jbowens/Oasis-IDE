@@ -70,7 +70,8 @@ public class OCamlMenu extends JMenu implements ActionListener {
 
 		if(evt.getSource() == _debug) {
 			// TODO: launch debugger
-			app.openDebug();
+			//app.openDebug();
+			codeArea.debugCurrentFile();
 		}
 
 		if(evt.getSource() == _resetInteractions) {
