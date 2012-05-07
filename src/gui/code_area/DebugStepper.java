@@ -9,7 +9,7 @@ import javax.swing.event.CaretListener;
 import javax.swing.event.CaretEvent;
 import camel.syntaxhighlighter.OCamlDocument;
 
-public class DebugStepper implements MouseListener,CaretListener {
+public class DebugStepper implements MouseListener, CaretListener, BreakpointSource {
 
 	protected DebugTab tab;
 	protected JToolBar jtb;
@@ -91,6 +91,19 @@ public class DebugStepper implements MouseListener,CaretListener {
 
 	}
 	
+	/**
+	 * Determines whether there is a breakpoint on the given line.
+	 *
+	 * @param line the line to put the breakpoint on.
+	 */
+	public boolean breakpointOnLine(int line) {
+		if( breakpoints.containsKey(line) )
+			return breakpoints.get(line);
+		else
+			return false;
+	}
+
+
 	/**
 	 * Required by the CaretListener interface.
 	 *

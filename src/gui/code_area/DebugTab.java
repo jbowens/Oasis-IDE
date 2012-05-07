@@ -40,6 +40,7 @@ public class DebugTab extends Tab {
 		super(codeArea, f, fh, s);
 		this.step = new DebugStepper(this);
 		textPane.setEditable(false);
+		lineNums.setBreakpointSource(step);
 		repaint();
 	}
 
@@ -47,6 +48,7 @@ public class DebugTab extends Tab {
 		super(codeArea, fh, s);
 		this.step = new DebugStepper(this);
 		textPane.setEditable(false);
+		lineNums.setBreakpointSource(step);
 		repaint();
 	}
 
