@@ -10,6 +10,7 @@ import camel.syntaxhighlighter.StyleSet;
 import camel.syntaxhighlighter.SimpleStyleSet;
 import camel.syntaxhighlighter.StyleWrapper;
 import camel.Application;
+import javax.swing.plaf.basic.BasicButtonUI;
 
 import java.awt.GridBagLayout;
 import java.io.File;
@@ -110,6 +111,7 @@ public class CodeArea extends JPanel {
 		Tab t = new Tab(this, fh, style);
 		tabs.addTab("Untitled", t);
 		tabs.setSelectedComponent(t);
+		tabs.setTabComponentAt(tabs.indexOfComponent(t), new TabButton(t));
 		tabList.add(t);
 	}
 
@@ -123,6 +125,7 @@ public class CodeArea extends JPanel {
 		Tab t = new Tab(this, new File(filename), fh, style);
 		tabs.addTab(fh.getName(), t);
 		tabs.setSelectedComponent(t);
+		tabs.setTabComponentAt(tabs.indexOfComponent(t), new TabButton(t));
 		tabList.add(t);
 	}
 
@@ -136,6 +139,7 @@ public class CodeArea extends JPanel {
 		Tab t = new Tab(this, f, fh, style);
 		tabs.addTab(fh.getName(), t);
 		tabs.setSelectedComponent(t);
+		tabs.setTabComponentAt(tabs.indexOfComponent(t), new TabButton(t));
 		tabList.add(t);
 	}
 
@@ -147,6 +151,7 @@ public class CodeArea extends JPanel {
 		t.setDebug();
 		tabs.addTab("DEBUG -"+ fh.getName(), t);
 		tabs.setSelectedComponent(t);
+		tabs.setTabComponentAt(tabs.indexOfComponent(t), new TabButton(t));
 		tabList.add(t);
 	}
 
@@ -161,6 +166,7 @@ public class CodeArea extends JPanel {
 		Tab t = new Tab(this, fh.getFile(), fh, style);
 		tabs.addTab(fh.getName(), t);
 		tabs.setSelectedComponent(t);
+		tabs.setTabComponentAt(tabs.indexOfComponent(t), new TabButton(t));
 		tabList.add(t);
 	}
 
@@ -345,5 +351,71 @@ public class CodeArea extends JPanel {
 			closeTab(t);
 		tabList.clear();
 	}
+
+
+	//This is code for a "close" button, it works but not sure how to add the button
+	
+	private class TabButton extends JButton implements ActionListener
+	{
+		private int size = 15;
+		protected Tab tabToClose;
+		public TabButton(Tab t)
+		{
+			tabToClose = t;
+			setPreferredSize(new Dimension(size,size));
+			setToolTipText("Close Tab");
+			setUI(new BasicButtonUI());
+			setContentAreaFilled(false);
+			setFocusable(false);
+	        setBorder(BorderFactory.createEtchedBorder());
+	        setBorderPainted(false);
+	        addMouseListener(buttonMouseListener);
+	        setRolloverEnabled(true);
+	        addActionListener(this);
+		}
+		public void actionPerformed(ActionEvent e) 
+		{
+			try {
+	        	closeTab(tabToClose);
+	    	}
+	    	catch(Exception e1){}
+	    }
+	    protected void paintComponent(Graphics g)
+	    {
+	        super.paintComponent(g);
+	        Graphics2D g2 = (Graphics2D) g.create();
+	        //shift the image for pressed buttons
+	        if (getModel().isPressed()) {
+	            g2.translate(1, 1);
+	        }
+	        g2.setStroke(new BasicStroke(2));
+	        g2.setColor(Color.BLACK);
+	        if (getModel().isRollover()) {
+	            g2.setColor(Color.MAGENTA);
+	        }
+	        int delta = 5;
+	        g2.drawLine(delta, delta, getWidth() - delta - 1, getHeight() - delta - 1);
+	        g2.drawLine(getWidth() - delta - 1, delta, delta, getHeight() - delta - 1);
+	        g2.dispose();
+	    }
+	}
+	 private final static MouseListener buttonMouseListener = new MouseAdapter() 
+	 {
+	    public void mouseEntered(MouseEvent e) {
+	        Component component = e.getComponent();
+	        if (component instanceof AbstractButton) {
+	            AbstractButton button = (AbstractButton) component;
+	            button.setBorderPainted(true);
+	        }
+	    }
+
+	    public void mouseExited(MouseEvent e) {
+	        Component component = e.getComponent();
+	        if (component instanceof AbstractButton) {
+	            AbstractButton button = (AbstractButton) component;
+	            button.setBorderPainted(false);
+	        }
+	    }
+	};
 
 }
