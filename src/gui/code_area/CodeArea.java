@@ -325,8 +325,6 @@ public class CodeArea extends JPanel {
 		if( tabs.indexOfComponent(tabToClose) == -1 ) {
 			// The tab doesn't actually exist. Remove it from the tab list if it's
 			// still in there.
-			if(tabList.contains(tabToClose))
-				tabList.remove(tabToClose);
 			return;
 		}
 
