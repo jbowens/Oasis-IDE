@@ -25,10 +25,11 @@ public class InteractionsPanel extends JPanel implements TextOutputListener {
 	protected Stack<String> commands;
 	protected StyleSet style;
 
-	public InteractionsPanel(InteractionsManager im, String filePath, Font font, StyleSet style) {
+	public InteractionsPanel(InteractionsManager im, int handle, Font font, StyleSet style) {
 
 		setLayout(new BorderLayout());
 
+		this._handle = handle;
 		this.style = style;
 		this._im = im;
 		commands = new Stack<String>();
@@ -51,7 +52,6 @@ public class InteractionsPanel extends JPanel implements TextOutputListener {
 		add(inputBar,BorderLayout.SOUTH);
 		textPane.addKeyListener(new KListener());
 		try {
-			_handle = _im.newInteractionsInstance(filePath);
 			_im.registerOutputListener(this, _handle);
 		} catch(Exception e) {}
 
@@ -60,7 +60,6 @@ public class InteractionsPanel extends JPanel implements TextOutputListener {
 	@Override
 	public void paint(Graphics g) {
 		style.apply(textPane);
-		inputBar.setBackground(style.getSelectedBackground());
 		super.paint(g);
 	}
 
@@ -143,8 +142,8 @@ public class InteractionsPanel extends JPanel implements TextOutputListener {
 				if(e.getKeyChar() == '\n')
         		{
         			_im.processUserInput(_handle, inputBar.getText() + "\n");
-					commands.push(inputBar.getText());
-					inputBar.setText("");
+							commands.push(inputBar.getText());
+							inputBar.setText("");
         		}
         	} catch(Exception e2) {}
    		}

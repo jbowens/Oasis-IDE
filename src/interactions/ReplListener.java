@@ -57,6 +57,9 @@ public class ReplListener extends Thread {
                 }
 
                 int c = replStreamReader.read();
+                if( c == -1 )
+                    break;
+
 		        char theChar = (char) c;
                 buffer.append( theChar );
 
@@ -74,7 +77,8 @@ public class ReplListener extends Thread {
         		    TextOutputEvent event = new TextOutputEvent( output, handle );
                     synchronized(observers) {
             		    for( TextOutputListener listener : observers ) {
-            		        listener.receiveOutput( event );
+                            if( listener != null )
+            		          listener.receiveOutput( event );
             		    }
                     }
         		    buffer.delete(0, buffer.length());

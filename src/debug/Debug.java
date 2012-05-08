@@ -188,25 +188,17 @@ public class Debug extends Thread {
     */
     void close(){
         try{
-	    System.out.println("DEBUG CLOSE");
             debugWriter.write("quit\n");
             debugWriter.flush();
-	    Thread.sleep(1000);
-	    System.out.println("DEBUG CLOSE 2");
+            Thread.sleep(100);
             debugWriter.write("yes\n");
             debugWriter.flush();
-	    Thread.sleep(1000);
-	    System.out.println("DEBUG CLOSE 3");
+            Thread.sleep(100);
             debugWriter.close();
-	    System.out.println("DEBUG CLOSE 4");
             debugReader.kill();
-	    System.out.println("DEBUG CLOSE 5");
             debugReader.interrupt();
-	    System.out.println("DEBUG CLOSE 6");
             debugReader.kill();
-	    System.out.println("DEBUG CLOSE 7");
             debugger.destroy();
-	    System.out.println("DEBUG CLOSE 8");
         }catch(Exception e){
             System.out.println("Close exception");
             //Eat it

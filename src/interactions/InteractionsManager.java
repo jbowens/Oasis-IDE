@@ -19,6 +19,9 @@ public class InteractionsManager {
     /* The current handle index */
     protected int currIndex;
 
+    /* The current remote port # */
+    protected int portNum;
+
     /**
      * Constructs a new InteractionsManager, given the location of the OCaml runnable
      *
@@ -28,6 +31,7 @@ public class InteractionsManager {
         ocamlLoc = ocamlLocation;
         currIndex = 0;
         interactions = new ArrayList<Interactions>();
+        portNum = 2003;
     }
 
     /**
@@ -45,8 +49,24 @@ public class InteractionsManager {
      */
     public int newInteractionsInstance( String def ) throws FileNotFoundException, InteractionsUnavailableException {
         int index = currIndex++;
-        Interactions newInstance = new Interactions(ocamlLoc, def, index);
+        Interactions newInstance = new LocalInteractions(ocamlLoc, def, index);
 	   interactions.add(newInstance);
+        return index;
+    }
+
+    /**
+     * Creates a new Interactions REPL by connecting to a remote client (usually
+     * an instance of ocamldebug).
+     *
+     * @return a new handle
+     *
+     * @throws InteractionsUnavailableException if unable to create a new interactions instance
+     */
+    public int newRemoteInteractionsInstance() throws InteractionsUnavailableException {
+        int index = currIndex++;
+        // TODO: Figure out port numbers
+        Interactions newInstance = new RemoteInteractions(portNum++, index);
+        interactions.add(newInstance);
         return index;
     }
 
@@ -99,10 +119,7 @@ public class InteractionsManager {
             throw new InvalidInteractionsIdException();
 
         /* Pass on the input */
-        for( char c : str.toCharArray() )
-		{
-            interactions.get(id).processUserInput( c );
-		}
+        interactions.get(id).processUserInput( str );
     }
 
     /**

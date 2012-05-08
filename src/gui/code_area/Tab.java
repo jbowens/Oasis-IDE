@@ -18,7 +18,13 @@ import javax.swing.event.DocumentListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.JSplitPane;
 import javax.swing.JOptionPane;
+import javax.swing.undo.UndoManager;
+import javax.swing.event.UndoableEditListener; 
+import javax.swing.event.UndoableEditEvent;
 import javax.swing.*;
+
+import java.io.IOException;
+import java.io.FileNotFoundException;
 
 import camel.Config;
 import camel.gui.interactions.InteractionsPanel;
@@ -28,6 +34,7 @@ import camel.syntaxhighlighter.OCamlLexer;
 import camel.syntaxhighlighter.OCamlEditorKit;
 import camel.syntaxhighlighter.StyleSet;
 import camel.syntaxhighlighter.SimpleStyleSet;
+import camel.interactions.InteractionsUnavailableException;
 
 /**
  * A tab in the GUI. A tab has an associated text pane, and optionally, file that
@@ -72,7 +79,10 @@ public class Tab extends JPanel implements DocumentListener {
 	/*Is this is a debug tab*/
 	protected boolean isDebug = false;
 
+	/*UI for managing undos*/
+	protected UndoManager undo;
 	
+
 	/**
 	 * Creates a new tab and loads the given file.
 	 *
@@ -116,6 +126,8 @@ public class Tab extends JPanel implements DocumentListener {
 	 */
 	protected void initialize() {
 
+
+
 		setLayout(new BorderLayout());
 
 		middlePanel = new JPanel();
@@ -156,7 +168,7 @@ public class Tab extends JPanel implements DocumentListener {
 		//middlePanel.add(statusBar, BorderLayout.SOUTH);
 
 		// Create the interactions panel
-		interactionsPanel = new InteractionsPanel(codeArea.getWindow().getInteractionsManager(), null, codeArea.getFont(), style);
+		interactionsPanel = createInteractionsPanel();
 
 
 		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, middlePanel, interactionsPanel);
@@ -173,6 +185,37 @@ public class Tab extends JPanel implements DocumentListener {
 
 		/* Begin listening to the document changes */
 		textPane.getDocument().addDocumentListener( this );
+		undo = new UndoManager();
+		textPane.getDocument().addUndoableEditListener(new UndoableEditListener() {
+	    	public void undoableEditHappened(UndoableEditEvent evt) {
+		        undo.addEdit(evt.getEdit());
+		    }	
+		});
+		// Create an undo action and add it to the text component
+		textPane.getActionMap().put("Undo",
+		    new AbstractAction("Undo") {
+		        public void actionPerformed(ActionEvent evt) {
+		            try {
+		                if (undo.canUndo()) {
+		                    undo.undo();
+		                }
+		            } 
+		            catch (Exception e) {}
+		        }
+	    }); 
+	    //textPane.getInputMap().put(KeyStroke.getKeyStroke("control Z"), "Undo");
+	    // Create a redo action and add it to the text component
+		textPane.getActionMap().put("Redo",
+		    new AbstractAction("Redo") {
+		        public void actionPerformed(ActionEvent evt) {
+		            try {
+		                if (undo.canRedo()) {
+		                    undo.redo();
+		                }
+		            } catch (Exception e) {}
+		        }
+	    });
+	    //textPane.getInputMap().put(KeyStroke.getKeyStroke("control shift Z"), "Redo");
 		repaint();
 
 	}
@@ -200,6 +243,26 @@ public class Tab extends JPanel implements DocumentListener {
 
 	}
 
+	public void callUndo()
+	{
+		Action action = textPane.getActionMap().get("Undo");
+		if (action != null)
+		{
+		    ActionEvent ae = new ActionEvent(textPane, ActionEvent.ACTION_PERFORMED, "");
+		    action.actionPerformed( ae );
+		}
+	}
+
+	public void callRedo()
+	{
+		Action action = textPane.getActionMap().get("Redo");
+		if (action != null)
+		{
+		    ActionEvent ae = new ActionEvent(textPane, ActionEvent.ACTION_PERFORMED, "");
+		    action.actionPerformed( ae );
+		}
+	}
+
 	/**
 	 * Shows the line numbers
 	 */
@@ -211,6 +274,8 @@ public class Tab extends JPanel implements DocumentListener {
 	 * Hides the line numbers
 	 */
 	public void hideLineNumbers() {
+		
+		
 		sc.getRowHeader().remove(lineNums);
 	}
 
@@ -333,6 +398,19 @@ public class Tab extends JPanel implements DocumentListener {
 		return this.interactionsPanel;
 	}
 
+	protected InteractionsPanel createInteractionsPanel() {
+		try {
+			int handle = codeArea.getWindow().getInteractionsManager().newInteractionsInstance( f != null ? f.getPath() : null );
+			return new InteractionsPanel(codeArea.getWindow().getInteractionsManager(), handle, codeArea.getFont(), style);
+		} catch( FileNotFoundException ex ) {
+			return null;
+		} catch( IOException ex ) {
+			return null;
+		} catch( InteractionsUnavailableException ex ) {
+			return null;
+		}
+	}
+
 	public void setDebug() {
 		this.isDebug = true;
 	}
@@ -366,6 +444,8 @@ public class Tab extends JPanel implements DocumentListener {
 	public void removeUpdate(DocumentEvent evt) {
 		documentChanged();
 	}
+
+
 
 	
 }
