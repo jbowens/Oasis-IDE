@@ -35,8 +35,15 @@ public class MenuBar extends JMenuBar {
 		add(_ocamlMenu, FlowLayout.LEFT);
 		add(_eMenu, FlowLayout.LEFT);
 		add(_fMenu, FlowLayout.LEFT);
-		
 	
+	}
+	public void setEnable(Boolean b)
+	{
+		System.out.println("here");
+		_fMenu.setEnable(b);
+		System.out.println("here");
+		_ocamlMenu.setEnable(b);
+		System.out.println("here");
 	}
 
 }

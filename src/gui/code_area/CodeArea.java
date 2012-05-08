@@ -325,8 +325,6 @@ public class CodeArea extends JPanel {
 		if( tabs.indexOfComponent(tabToClose) == -1 ) {
 			// The tab doesn't actually exist. Remove it from the tab list if it's
 			// still in there.
-			if(tabList.contains(tabToClose))
-				tabList.remove(tabToClose);
 			return;
 		}
 
@@ -379,6 +377,10 @@ public class CodeArea extends JPanel {
 		// Let the tab know that it should get its affairs in order
 		tabToRemove.close();
 		tabs.remove(tabToRemove);
+		if(tabs.getTabCount() == 0)
+		{
+			mainWindow.getMB().setEnable(false);
+		}
 	}
 
 	/**
@@ -405,6 +407,7 @@ public class CodeArea extends JPanel {
 			add(closeButton);
 			setBackground(new Color(0, 0, 0, 0));
 			setBorder(BorderFactory.createEmptyBorder());
+			mainWindow.getMB().setEnable(true);
 		}
 	}
 	private class TabButton extends JButton implements ActionListener

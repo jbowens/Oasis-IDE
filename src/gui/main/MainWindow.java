@@ -155,6 +155,13 @@ public class MainWindow extends JFrame {
 	}
 
 	/**
+	 * Gets the menubar 
+	 */
+	public MenuBar getMB() {
+		return mb;
+	}
+
+	/**
 	 * Gets this window's interactions manager.
 	 *
 	 * @return the window's interactions manager
@@ -253,6 +260,7 @@ public class MainWindow extends JFrame {
 	 * Tells this window to close itself.
 	 */
 	public void close() {
+		dm.close();
 		processWindowEvent( new WindowEvent( this, WindowEvent.WINDOW_CLOSED ) );
 		closed = true;
 		
