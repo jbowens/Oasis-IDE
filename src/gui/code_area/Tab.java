@@ -401,7 +401,7 @@ public class Tab extends JPanel implements DocumentListener {
 	protected InteractionsPanel createInteractionsPanel() {
 		try {
 			int handle = codeArea.getWindow().getInteractionsManager().newInteractionsInstance( null );
-			return new InteractionsPanel(codeArea.getWindow().getInteractionsManager(), handle, codeArea.getFont(), style);
+			return new InteractionsPanel(codeArea.getWindow().getInteractionsManager(), handle, codeArea.getFont(), style, null);
 		} catch( FileNotFoundException ex ) {
 			return null;
 		} catch( IOException ex ) {

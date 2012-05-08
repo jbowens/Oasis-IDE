@@ -13,6 +13,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.BorderFactory;
 import camel.interactions.*;
+import camel.debug.*;
 import camel.syntaxhighlighter.StyleSet;
 
 public class InteractionsPanel extends JPanel implements TextOutputListener {
@@ -20,12 +21,15 @@ public class InteractionsPanel extends JPanel implements TextOutputListener {
 	protected JEditorPane textPane;
 	protected JTextField inputBar;
 	protected InteractionsManager _im;
+	protected DebugManager _dm;
 	protected int _handle;
+	protected int _debugHandle;
 	protected String query;
 	protected Stack<String> commands;
 	protected StyleSet style;
+	protected boolean isDebug = false;
 
-	public InteractionsPanel(InteractionsManager im, int handle, Font font, StyleSet style) {
+	public InteractionsPanel(InteractionsManager im, int handle, Font font, StyleSet style, DebugManager dm) {
 
 		setLayout(new BorderLayout());
 
@@ -141,9 +145,14 @@ public class InteractionsPanel extends JPanel implements TextOutputListener {
 				//System.out.println("Sending " + e.getKeyChar());
 				if(e.getKeyChar() == '\n')
         		{
-        			_im.processUserInput(_handle, inputBar.getText() + "\n");
-							commands.push(inputBar.getText());
-							inputBar.setText("");
+				if (isDebug) {
+					_dm.processGUIInput(_debugHandle, inputBar.getText() + "\n");
+				}
+				else {
+					_im.processUserInput(_handle, inputBar.getText() + "\n");
+				}
+				commands.push(inputBar.getText());
+				inputBar.setText("");
         		}
         	} catch(Exception e2) {}
    		}
@@ -158,6 +167,12 @@ public class InteractionsPanel extends JPanel implements TextOutputListener {
 	    /** Handle the key-released event from the text field. */
 	    public void keyReleased(KeyEvent e) {
 	    }
+	}
+
+	public void setDebug(DebugManager dm, int dbHandle) {
+		this._debugHandle = dbHandle;
+		this._dm = dm;
+		this.isDebug = true;
 	}
 
 	
