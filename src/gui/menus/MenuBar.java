@@ -39,11 +39,8 @@ public class MenuBar extends JMenuBar {
 	}
 	public void setEnable(Boolean b)
 	{
-		System.out.println("here");
 		_fMenu.setEnable(b);
-		System.out.println("here");
 		_ocamlMenu.setEnable(b);
-		System.out.println("here");
 	}
 
 }

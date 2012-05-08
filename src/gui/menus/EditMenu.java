@@ -38,6 +38,7 @@ public class EditMenu extends JMenu implements ActionListener {
 	protected JMenuItem _paste;
 
 	protected JMenuItem _undo;
+	protected JMenuItem _redo;
 
 	/**
 	 * Create a new menu bar
@@ -61,15 +62,20 @@ public class EditMenu extends JMenu implements ActionListener {
 		_paste.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 		_undo = new JMenuItem("Undo", KeyEvent.VK_Z);
 		_undo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+		_redo = new JMenuItem("Redo");
+		_redo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | ActionEvent.SHIFT_MASK));
 
 		add(_copy);
 		add(_cut);
 		add(_paste);
 		add(_undo);
+		add(_redo);
 
 		_copy.addActionListener( this );
 		_cut.addActionListener( this );
 		_paste.addActionListener( this );
+		_undo.addActionListener(this);
+		_redo.addActionListener(this);
 
 	}
 
@@ -89,17 +95,37 @@ public class EditMenu extends JMenu implements ActionListener {
 		}
 
 		if( evt.getSource() == _paste ) {
-			Transferable t = getToolkit().getSystemClipboard().getContents(null);
-			String text = "";
-    	try {
-        if (t != null && t.isDataFlavorSupported(DataFlavor.stringFlavor)) {
-            text = (String)t.getTransferData(DataFlavor.stringFlavor);
-        }
-    	} catch (UnsupportedFlavorException e) {
-			} catch (IOException e) { }
-    	
-			_codeArea.getCurTab().getTextPane().replaceSelection(text);
+				Transferable t = getToolkit().getSystemClipboard().getContents(null);
+				String text = "";
+	    	try {
+	        if (t != null && t.isDataFlavorSupported(DataFlavor.stringFlavor)) {
+	            text = (String)t.getTransferData(DataFlavor.stringFlavor);
+	        }
+	    	} catch (UnsupportedFlavorException e) {
+				} catch (IOException e) { }
+	    	
+				_codeArea.getCurTab().getTextPane().replaceSelection(text);
 
+		}
+
+		if(evt.getSource() == _undo)
+		{
+			try
+			{
+				_codeArea.getCurTab().callUndo();
+			}
+			catch(Exception e){};
+			
+		}
+
+		if(evt.getSource() == _redo)
+		{
+			try
+			{
+				_codeArea.getCurTab().callRedo();
+			}
+			catch(Exception e){};
+			
 		}
 
 	}
