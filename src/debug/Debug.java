@@ -129,7 +129,6 @@ public class Debug extends Thread {
             debugArgs[1] = outFile;
             debugArgs[2] = "-s";
             debugArgs[3] = "localhost:" + port;
-            System.out.println("Running on port " + port);
             try{
                 debugger = runtime.exec(debugArgs);
             }catch(IOException e){
