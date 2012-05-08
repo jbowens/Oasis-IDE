@@ -24,12 +24,13 @@ public class DebugStepper implements MouseListener,CaretListener,TextOutputListe
 	protected int handle;
 	protected String mName;
 	protected LinePainter lp;
+	protected int bpCounter = 0;
 	int curr_line = 0;
 
 	protected File f;
 	protected int lastClick;
 
-	protected Hashtable<Integer,Boolean> breakpoints;
+	protected Hashtable<Integer,Breakpoint> breakpoints;
 
 
 	protected class Next extends JButton implements ActionListener {
@@ -170,7 +171,7 @@ public class DebugStepper implements MouseListener,CaretListener,TextOutputListe
 		this.dm = dm;
 		this.f = f;
 		this.lp = new LinePainter(this.tab.getTextPane());	
-		this.breakpoints = new Hashtable<Integer,Boolean>();
+		this.breakpoints = new Hashtable<Integer,Breakpoint>();
 
 		this.mName = f.getName().split("\\.")[0].toLowerCase();	
 
@@ -304,10 +305,7 @@ public class DebugStepper implements MouseListener,CaretListener,TextOutputListe
 	 * @param line the line to put the breakpoint on.
 	 */
 	public boolean breakpointOnLine(int line) {
-		if( breakpoints.containsKey(line) )
-			return breakpoints.get(line);
-		else
-			return false;
+		return (breakpoints.containsKey(line));
 	}
 
 
@@ -349,16 +347,14 @@ public class DebugStepper implements MouseListener,CaretListener,TextOutputListe
 
 		if (linePos == this.lastClick) {
 
+			//Remove breakpoint
 			if (breakpoints.containsKey(linePos)) {
-				boolean isBreak = this.breakpoints.get(linePos);
-				//Toggle breakpoint
-				this.breakpoints.put(linePos,!isBreak);
-				breakPoint(linePos,!isBreak);
+				setBreakpoint(breakpoints.get(linePos).getBreakpointHandle(), linePos, false);
+				breakpoints.remove(linePos);
 			}
 			else {
-				//Add new breakpoint
-				breakpoints.put(linePos,true);
-				breakPoint(linePos, true);
+				breakpoints.put(linePos, new Breakpoint(linePos, ++bpCounter));
+				setBreakpoint(bpCounter, linePos,  true);
 			}
 
 			this.lastClick = -1;
@@ -387,15 +383,20 @@ public class DebugStepper implements MouseListener,CaretListener,TextOutputListe
 
 	}
 
-	public void breakPoint(int linePos, boolean isBreak) {
+	public void setBreakpoint(int bpHandle, int linePos, boolean isBreak) {
 		if (isBreak) {
 			try {
 			System.out.println("SET BP @ HANDLE: " + handle);
-			dm.processGUIInput(handle,"break @ " + mName + " "+ linePos + "\n");
+			dm.processGUIInput(handle,"break @ " + mName + " "+ linePos+ "\n");
 			} catch (Exception e) {}
 		}
 		else {
+			try {
+				System.out.println("DELETING BP: " + bpHandle);
+				dm.processGUIInput(handle, "delete " + bpHandle + "\n");
+			} catch (Exception e) {}
 		}
+		
 	}
 
 }
