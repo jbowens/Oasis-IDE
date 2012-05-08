@@ -115,5 +115,12 @@ public class FileMenu extends JMenu implements ActionListener {
 		}
 
 	}
+	public void setEnable(Boolean b)
+	{
+		_save.setEnabled(b);
+		_saveAs.setEnabled(b);
+		_saveAll.setEnabled(b);
+		_closeFile.setEnabled(b);
+	}
 
 }

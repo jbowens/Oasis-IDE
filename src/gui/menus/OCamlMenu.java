@@ -77,8 +77,12 @@ public class OCamlMenu extends JMenu implements ActionListener {
 		if(evt.getSource() == _resetInteractions) {
 			codeArea.resetInteractions();
 		}
+	}
 
-
+	public void setEnable(Boolean b)
+	{
+		_run.setEnabled(b);
+		_debug.setEnabled(b);
 	}
 
 }

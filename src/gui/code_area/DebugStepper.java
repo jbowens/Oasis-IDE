@@ -69,6 +69,7 @@ public class DebugStepper implements MouseListener,CaretListener,TextOutputListe
 		System.out.println(mName);
 
 		this.jtb = new JToolBar();
+		this.jtb.setFloatable(false);
 		this._next = new StepNext(this);
 		this.jtb.add(_next);	
 
