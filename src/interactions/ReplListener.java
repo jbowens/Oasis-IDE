@@ -13,7 +13,7 @@ public class ReplListener extends Thread {
     protected int handle;
 
     /* The stream to read from */
-    protected BufferedReader replStreamReader;
+    protected Reader replStreamReader;
 
     /* List of output listeners */
     protected List<TextOutputListener> observers;
@@ -33,7 +33,7 @@ public class ReplListener extends Thread {
      */
     public ReplListener( InputStream replStream, List<TextOutputListener> observers, int handle ) {
 	    this.handle = handle;
-        replStreamReader = new BufferedReader( new InputStreamReader(replStream) );
+        replStreamReader = new ANSIStripperReader( new InputStreamReader(replStream) );
         this.observers = observers;
         buffer = new StringBuilder();
         alive = true;
