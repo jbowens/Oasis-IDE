@@ -17,7 +17,7 @@ public class DebugTester implements TextOutputListener{
 		DebugManager dbMan = new DebugManager("/usr/bin/");
 
 		//new debugger instance
-		int handle = dbMan.newDebuggerInstance("../test-ml/test.ml");
+		int handle = dbMan.newDebuggerInstance("../test-ml/test.ml", 2003);
 
 		//new output listener
 		DebugOutputListener listener = new DebugOutputListener("Test");

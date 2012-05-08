@@ -163,7 +163,9 @@ public class DebugStepper implements MouseListener,CaretListener,TextOutputListe
 	private Reverse _reverse;
 	private Step _step;
 
-	public DebugStepper(DebugTab dtb, DebugManager dm, File f){
+
+
+	public DebugStepper(DebugTab dtb, DebugManager dm, File f, int port){
 
 		this.tab = dtb;
 		this.dm = dm;
@@ -176,7 +178,7 @@ public class DebugStepper implements MouseListener,CaretListener,TextOutputListe
 
 		/*Register listener*/
 		try {
-			this.handle = this.dm.newDebuggerInstance(f.getAbsolutePath());
+			this.handle = this.dm.newDebuggerInstance(f.getAbsolutePath(), port);
 			System.out.println("HANDLE: " + this.handle);
 			this.dm.registerOutputListener(this,this.handle);
 			this.dm.registerOutputListener(this.tab.getInteractionsPanel(),this.handle);

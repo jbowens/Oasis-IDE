@@ -40,9 +40,11 @@ public class DebugTab extends Tab {
 
 	protected DebugStepper step;
 
+	protected int port;
+
 	public DebugTab(CodeArea codeArea, File f, FileHandler fh, StyleSet s) {
 		super(codeArea, f, fh, s);
-		this.step = new DebugStepper(this, codeArea.getWindow().getDebugManager(), f);
+		this.step = new DebugStepper(this, codeArea.getWindow().getDebugManager(), f, port);
 		textPane.setEditable(false);
 		lineNums.setBreakpointSource(step);
 		repaint();
@@ -50,7 +52,7 @@ public class DebugTab extends Tab {
 
 	public DebugTab(CodeArea codeArea, FileHandler fh, StyleSet s) {
 		super(codeArea, fh, s);
-		this.step = new DebugStepper(this, codeArea.getWindow().getDebugManager(), f);
+		this.step = new DebugStepper(this, codeArea.getWindow().getDebugManager(), f, port);
 		textPane.setEditable(false);
 		lineNums.setBreakpointSource(step);
 		repaint();
@@ -59,6 +61,7 @@ public class DebugTab extends Tab {
 	protected InteractionsPanel createInteractionsPanel() {
 		try {
 			int handle = codeArea.getWindow().getInteractionsManager().newRemoteInteractionsInstance();
+			port = codeArea.getWindow().getInteractionsManager().getPort(handle);
 			return new InteractionsPanel(codeArea.getWindow().getInteractionsManager(), handle, codeArea.getFont(), style);
 		}  catch( InteractionsUnavailableException ex ) {
 			return null;

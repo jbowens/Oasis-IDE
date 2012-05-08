@@ -41,6 +41,9 @@ public class Debug extends Thread {
 
     /*The handle number of this debug instance */
     int handle;
+
+    /* The port to communicate with the gui on */
+    int port;
     
     /**
     *Creates a new Debug backend.
@@ -49,12 +52,14 @@ public class Debug extends Thread {
     *@parma ocamlDebug - the command for running the debugger
     *@param filename - the name of the file that is being debugged
     *@param handle - the id of the Debug instance
+    *@param port - the port the debug should sent to
     */
-    public Debug(String ocamlCompileC, String ocamlDebugC, String filename, int handle) 
+    public Debug(String ocamlCompileC, String ocamlDebugC, String filename, int handle, int port) 
     throws IOException, FileNotFoundException, DebuggerCompilationException{
         observers = new ArrayList<TextOutputListener>();
         this.ocamlCompileC = ocamlCompileC;
         this.ocamlDebugC = ocamlDebugC;
+        this.port = port;
 
         if(filename.equals("")){
             this.filename = null;
@@ -119,9 +124,12 @@ public class Debug extends Thread {
     */
     public void callDebug() throws IOException, FileNotFoundException, DebuggerCompilationException{
     	//try{
-    		String debugArgs[] = new String[2];
+    		String debugArgs[] = new String[4];
     		debugArgs[0] = ocamlDebugC;
             debugArgs[1] = outFile;
+            debugArgs[2] = "-s";
+            debugArgs[3] = "localhost:" + port;
+            System.out.println("Running on port " + port);
             try{
                 debugger = runtime.exec(debugArgs);
             }catch(IOException e){
