@@ -278,12 +278,20 @@ public class DebugStepper implements MouseListener,CaretListener,TextOutputListe
 					if(((i + 2) < inputArray.length) && (inputArray[i+1].toLowerCase().equals(mName))) {
 						try{
 							int lineNum = Integer.parseInt(inputArray[i+2]);
-							System.out.println(inputArray[i]);
-							System.out.println(inputArray[i+1]);
-							System.out.println(inputArray[i+2]);
 							updateLineNumber(lineNum);
 						}catch(NumberFormatException nmf){
 							/*Eat it */
+						}
+					}
+				}else if(inputArray[i].equals("Breakpoint")){
+					if(((i + 3)< inputArray.length) && inputArray[i+1].equals(":")){
+						System.out.println("receiveOutput equals Breakpoint");
+						try{
+							int lineNum = Integer.parseInt(inputArray[i+3]);
+							System.out.println("LineNum: " + lineNum);
+							updateLineNumber(lineNum);
+						}catch(NumberFormatException nmf){
+							/* Eat it */
 						}
 					}
 				}
