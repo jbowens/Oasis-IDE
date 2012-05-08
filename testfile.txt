@@ -1,9 +1,0 @@
-        Objective Caml version 3.11.2
-
-# - : int = 10
-# [A# a + 4;;
-Error: Unbound value a
-# [A# b + 5;;
-Error: Unbound value b
-# - : int = 12
-# 
