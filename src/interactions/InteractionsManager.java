@@ -55,6 +55,17 @@ public class InteractionsManager {
     }
 
     /**
+     * Gets the port id of the given interactions instance.
+     *
+     * @param handle the handle of the instance
+     *
+     * @return the port that the given instance is communicating on
+     */
+    public int getPort(int handle) {
+        return interactions.get(handle).getPort();
+    }
+
+    /**
      * Creates a new Interactions REPL by connecting to a remote client (usually
      * an instance of ocamldebug).
      *

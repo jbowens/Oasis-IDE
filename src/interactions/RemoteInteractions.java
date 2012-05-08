@@ -41,6 +41,13 @@ public class RemoteInteractions extends Interactions {
 	}
 
 	/**
+	 * Returns the relevant port
+	 */
+	public int getPort() {
+		return port;
+	}
+
+	/**
 	 * Passes on user input to the standard in of the remote
 	 * interactions instance.
 	 *
