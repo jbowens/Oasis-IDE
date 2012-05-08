@@ -53,7 +53,33 @@ public class DebugStepper implements MouseListener,CaretListener,TextOutputListe
 		
 	}
 
+	protected class Run extends JButton implements ActionListener {
+		//
+		//TODO move this to a more "global" location
+		protected DebugManager dm;
+		protected int handle;
+
+		public Run(DebugStepper step) {
+			super("Run");
+			this.dm = step.getDM();
+			this.handle = step.getHandle();
+			super.addActionListener(this);
+		}
+
+		public void actionPerformed(ActionEvent e) {
+			try {
+				System.out.println("SENT RUN @ HANDLE: " + handle);
+				dm.processGUIInput(handle,"run\n");
+			} catch(Exception f) {
+				f.printStackTrace();
+			}
+		}	
+		
+	}
+
+
 	private StepNext _next;	
+	private Run _run;
 
 
 
@@ -66,17 +92,13 @@ public class DebugStepper implements MouseListener,CaretListener,TextOutputListe
 		this.breakpoints = new Hashtable<Integer,Boolean>();
 
 		this.mName = f.getName().split("\\.")[0].toLowerCase();	
-		System.out.println(mName);
+		System.out.println("MODULE: " + mName);
 
-		this.jtb = new JToolBar();
-		this._next = new StepNext(this);
-		this.jtb.add(_next);	
-
-		this.tab.add(this.jtb, BorderLayout.NORTH);
 
 		/*Register listener*/
 		try {
 			this.handle = this.dm.newDebuggerInstance(f.getAbsolutePath());
+			System.out.println("HANDLE: " + this.handle);
 			this.dm.registerOutputListener(this,this.handle);
 			this.dm.registerOutputListener(this.tab.getInteractionsPanel(),this.handle);
 		} catch (Exception e) {}	
@@ -85,12 +107,28 @@ public class DebugStepper implements MouseListener,CaretListener,TextOutputListe
 		this.tab.getTextPane().addMouseListener(this);
 		this.tab.getTextPane().addCaretListener(this);
 
-		try {
+		this.jtb = new JToolBar();
+		this._next = new StepNext(this);
+		this._run = new Run(this);
+		this.jtb.add(_next);	
+		this.jtb.add(_run);
+
+		this.tab.add(this.jtb, BorderLayout.NORTH);
+
+		/*try {
 			dm.processGUIInput(handle,"break @ " + mName + " 1\n");
 			Thread.sleep(300);
+			dm.processGUIInput(handle,"run\n");
+			Thread.sleep(300);
+			dm.processGUIInput(handle,"next\n");
+			Thread.sleep(300);
+			dm.processGUIInput(handle,"next\n");
+			Thread.sleep(300);
+			dm.processGUIInput(handle,"run\n");
 
-			dm.processGUIInput(handle, "run\n");
-		} catch (Exception e) {}
+			//dm.processGUIInput(handle, "run\n");
+		} catch (Exception e) {
+		}*/
 
 	}
 
@@ -105,12 +143,12 @@ public class DebugStepper implements MouseListener,CaretListener,TextOutputListe
 	private void updateLineNumber(int line) {
 		System.out.println("Update Line: " + line);
 		JEditorPane text = this.tab.getTextPane();
-			int currentLine = 0;
-		    int currentSelection = 0;
-		    String textContent = text.getText();
-			String seperator = "\n";
-		    int seperatorLength = seperator.length();
-		    while (currentLine < line) {
+		int currentLine = 0;
+		int currentSelection = 0;
+		String textContent = text.getText();
+		String seperator = "\n";
+		int seperatorLength = seperator.length();
+		while (currentLine < line-1) {
 			int next = textContent.indexOf(seperator,currentSelection);
 			if (next > -1) {
 			    currentSelection = next + seperatorLength;
@@ -121,9 +159,23 @@ public class DebugStepper implements MouseListener,CaretListener,TextOutputListe
 			    currentLine= line; // exits loop
 			}
 		    }
-		    text.setCaretPosition(currentSelection);
+		text.setCaretPosition(currentSelection);
+		/*if (this.tab == null)
+			return;
+	
+		if (! (this.tab.getTextPane().getDocument() instanceof OCamlDocument) )
+			return;
+
+		OCamlDocument doc = (OCamlDocument) this.tab.getTextPane().getDocument();
+		int linePos = doc.getLinePosition( line );
+		System.out.println("STEP TO: " + linePos);*/
 	}
 
+
+
+	public void close() {
+		dm.close(this.handle);
+	}
 
 	/**
 	*The implementation of the TextOutputListener. Recieves input from the ocaml
@@ -207,10 +259,12 @@ public class DebugStepper implements MouseListener,CaretListener,TextOutputListe
 				boolean isBreak = this.breakpoints.get(linePos);
 				//Toggle breakpoint
 				this.breakpoints.put(linePos,!isBreak);
+				breakPoint(linePos,!isBreak);
 			}
 			else {
 				//Add new breakpoint
 				breakpoints.put(linePos,true);
+				breakPoint(linePos, true);
 			}
 
 			this.lastClick = -1;
@@ -219,33 +273,6 @@ public class DebugStepper implements MouseListener,CaretListener,TextOutputListe
 			this.lastClick = linePos;
 		}
 
-		/*System.out.print("Breakpoints:");
-		private void setLineNumber(JEditorPane text, int line) {
-			int currentLine = 0;
-		    int currentSelection = 0;
-		    String textContent = text.getText();
-			String seperator = "\n";
-		    int seperatorLength = seperator.length();
-		    while (currentLine < line) {
-			int next = textContent.indexOf(seperator,currentSelection);
-			if (next > -1) {
-			    currentSelection = next + seperatorLength;
-			    currentLine++;
-			} else {
-			    // set to the end of doc
-			    currentSelection = textContent.length();
-			    currentLine= line; // exits loop
-			}
-		    }
-		    text.setCaretPosition(currentSelection);
-		}
-
-Integer[] keys = (Integer[]) this.breakpoints.keySet().toArray();
-		for (int i = 0; i < keys.length; i++) {
-			if (this.breakpoints.get(keys[i])) {
-				System.out.print(keys[i] + ",");
-			}
-		}*/
 
 	}
 	
@@ -260,9 +287,21 @@ Integer[] keys = (Integer[]) this.breakpoints.keySet().toArray();
 	public void mouseEntered(MouseEvent e) {
 
 	}
+	
 
 	public void mouseExited(MouseEvent e) {
 
+	}
+
+	public void breakPoint(int linePos, boolean isBreak) {
+		if (isBreak) {
+			try {
+			System.out.println("SET BP @ HANDLE: " + handle);
+			dm.processGUIInput(handle,"break @ " + mName + " "+ linePos + "\n");
+			} catch (Exception e) {}
+		}
+		else {
+		}
 	}
 
 }

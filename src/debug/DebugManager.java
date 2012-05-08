@@ -55,10 +55,11 @@ public class DebugManager{
 	*/
 	public void processGUIInput(int id, String cmd) throws InvalidInteractionsException {
 		/* Make sure the debugger instance exists */
-		if(id > debuggers.size() - 1){
-			throw new InvalidInteractionsException();
-		}
+		//if(id > debuggers.size() - 1){
+		//	throw new InvalidInteractionsException();
+		//}
 		if(debuggers.get(id) == null){
+			System.out.println("BLAH");
 			throw new InvalidInteractionsException();
 		}
 		/*Pass on the input */
@@ -108,9 +109,22 @@ public class DebugManager{
 	*/
 	public void close(){
 		for(Debug db : debuggers){
-			db.close();
+			if (db != null) {
+				db.close();
+			}
 		}
 		debuggers.clear();
 	}
+
+	/**
+	 * Close specific Debug instance.
+	 */
+	public void close(int handle) {
+		System.out.println("DM CLOSE");
+		debuggers.get(handle).close();
+		System.out.println("DM CLOSE 2");
+		debuggers.set(handle, null);
+		System.out.println("DM CLOSE 3");
+	}	
 
 }

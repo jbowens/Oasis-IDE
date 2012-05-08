@@ -253,6 +253,7 @@ public class MainWindow extends JFrame {
 	 * Tells this window to close itself.
 	 */
 	public void close() {
+		dm.close();
 		processWindowEvent( new WindowEvent( this, WindowEvent.WINDOW_CLOSED ) );
 		closed = true;
 		
