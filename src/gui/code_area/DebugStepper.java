@@ -32,14 +32,14 @@ public class DebugStepper implements MouseListener,CaretListener,TextOutputListe
 	protected Hashtable<Integer,Boolean> breakpoints;
 
 
-	protected class StepNext extends JButton implements ActionListener {
+	protected class Next extends JButton implements ActionListener {
 
 		//TODO move this to a more "global" location
 		protected DebugManager dm;
 		protected int handle;
 
-		public StepNext(DebugStepper step) {
-			super("Step forward");
+		public Next(DebugStepper step) {
+			super("Next");
 			this.dm = step.getDM();
 			this.handle = step.getHandle();
 			super.addActionListener(this);
@@ -77,9 +77,90 @@ public class DebugStepper implements MouseListener,CaretListener,TextOutputListe
 		
 	}
 
+	/**
+	*The step back button
+	*/
+	protected class StepBack extends JButton implements ActionListener {
 
-	private StepNext _next;	
+		//TODO move this to a more "global" location
+		protected DebugManager dm;
+		protected int handle;
+
+		public StepBack(DebugStepper step) {
+			super("Step back");
+			this.dm = step.getDM();
+			this.handle = step.getHandle();
+			super.addActionListener(this);
+		}
+
+		public void actionPerformed(ActionEvent e) {
+			try {
+				dm.processGUIInput(handle,"backstep\n");
+			} catch(Exception f) {
+				f.printStackTrace();
+			}
+		}	
+		
+	}
+
+	/**
+	*The reverse button
+	*/
+	protected class Reverse extends JButton implements ActionListener {
+
+		//TODO move this to a more "global" location
+		protected DebugManager dm;
+		protected int handle;
+
+		public Reverse(DebugStepper step) {
+			super("Reverse");
+			this.dm = step.getDM();
+			this.handle = step.getHandle();
+			super.addActionListener(this);
+		}
+
+		public void actionPerformed(ActionEvent e) {
+			try {
+				dm.processGUIInput(handle,"reverse\n");
+			} catch(Exception f) {
+				f.printStackTrace();
+			}
+		}	
+		
+	}
+
+	/**
+	*The step button
+	*/
+	protected class Step extends JButton implements ActionListener {
+
+		//TODO move this to a more "global" location
+		protected DebugManager dm;
+		protected int handle;
+
+		public Step(DebugStepper step) {
+			super("Step");
+			this.dm = step.getDM();
+			this.handle = step.getHandle();
+			super.addActionListener(this);
+		}
+
+		public void actionPerformed(ActionEvent e) {
+			try {
+				dm.processGUIInput(handle,"step\n");
+			} catch(Exception f) {
+				f.printStackTrace();
+			}
+		}	
+		
+	}
+
+
+	private Next _next;	
 	private Run _run;
+	private StepBack _stepBack;
+	private Reverse _reverse;
+	private Step _step;
 
 
 
@@ -107,10 +188,16 @@ public class DebugStepper implements MouseListener,CaretListener,TextOutputListe
 		this.tab.getTextPane().addCaretListener(this);
 
 		this.jtb = new JToolBar();
-		this._next = new StepNext(this);
+		this._next = new Next(this);
 		this._run = new Run(this);
+		this._stepBack = new StepBack(this);
+		this._reverse = new Reverse(this);
+		this._step = new Step(this);
+		this.jtb.add(_step);
 		this.jtb.add(_next);	
 		this.jtb.add(_run);
+		this.jtb.add(_reverse);
+		this.jtb.add(_stepBack);
 
 		this.tab.add(this.jtb, BorderLayout.NORTH);
 
