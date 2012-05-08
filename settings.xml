@@ -7,11 +7,7 @@
 <tabwidth>4</tabwidth>
 <initial_height>800</initial_height>
 <font_size>15</font_size>
-<<<<<<< HEAD
-<styleset>Brown</styleset>
-=======
 <styleset>Simple Dark</styleset>
->>>>>>> fbe106b5519bd1ac8cdae61566024a2c60187b46
-<linenumbers>true</linenumbers>
+<linenumbers>false</linenumbers>
 </settingData>
 </settings>
