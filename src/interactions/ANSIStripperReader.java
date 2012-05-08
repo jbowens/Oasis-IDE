@@ -77,7 +77,7 @@ public class ANSIStripperReader extends Reader {
   public boolean ready() throws IOException {
     // WARNING: DOESN'T ACTUALLY OBEY THE SPECIFICATION FOR READY IN
     //          ALL CASES
-    return false;
+    return source.ready();
   }
 
   @Override

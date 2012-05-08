@@ -387,7 +387,7 @@ module AIPlayer : GAME_PLAYER =
     type state = Game.state
     type move = Game.move
     type status = Game.status
-    let minimax_depth = 5
+    let minimax_depth = 4
     
     (* next_move : state -> move
        Input: the current state of the game, state1

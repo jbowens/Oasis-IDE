@@ -14,6 +14,7 @@ import javax.swing.JTextField;
 import javax.swing.BorderFactory;
 import camel.interactions.*;
 import camel.syntaxhighlighter.StyleSet;
+import javax.swing.text.BadLocationException;
 
 public class InteractionsPanel extends JPanel implements TextOutputListener {
 
@@ -69,7 +70,12 @@ public class InteractionsPanel extends JPanel implements TextOutputListener {
 	 */
 	public void receiveOutput(TextOutputEvent evt)
 	{
-		textPane.setText(textPane.getText() + evt.getText());
+		try {
+			textPane.getDocument().insertString(textPane.getDocument().getLength(), evt.getText(), null);
+		} catch (BadLocationException ex ) {
+
+		}
+		//textPane.setText(textPane.getText() + evt.getText());
         textPane.setCaretPosition(textPane.getText().length());	
 	}
 
