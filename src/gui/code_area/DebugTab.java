@@ -53,5 +53,11 @@ public class DebugTab extends Tab {
 		repaint();
 	}
 
+	@Override
+	public void close() {
+		step.close();
+		super.close();
+	}
+
 }
 

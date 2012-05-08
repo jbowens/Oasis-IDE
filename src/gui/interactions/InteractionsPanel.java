@@ -60,7 +60,6 @@ public class InteractionsPanel extends JPanel implements TextOutputListener {
 	@Override
 	public void paint(Graphics g) {
 		style.apply(textPane);
-		inputBar.setBackground(style.getSelectedBackground());
 		super.paint(g);
 	}
 
@@ -143,8 +142,8 @@ public class InteractionsPanel extends JPanel implements TextOutputListener {
 				if(e.getKeyChar() == '\n')
         		{
         			_im.processUserInput(_handle, inputBar.getText() + "\n");
-					commands.push(inputBar.getText());
-					inputBar.setText("");
+							commands.push(inputBar.getText());
+							inputBar.setText("");
         		}
         	} catch(Exception e2) {}
    		}

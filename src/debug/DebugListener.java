@@ -53,12 +53,15 @@ public class DebugListener extends Thread {
 			try{
 				/*make sure we are alive */
 				if(!alive){
-					close(); return;
+					System.out.println("I'm closing.");
+					close(); 
+					break;
 				}
 
 				int c;// = debugStreamReader.read();
 				char theChar;// = (char) c;
 				//buffer.append(theChar);
+				//
 
 				while(debugStreamReader.ready()){
 					c = debugStreamReader.read();
@@ -70,13 +73,17 @@ public class DebugListener extends Thread {
 					}
 				}
 
+
 				if(buffer.length() > 0){
 					String output = buffer.toString();
+					System.out.println("From Listener:" + output);
 					TextOutputEvent event = new TextOutputEvent(output, handle);
-					for(TextOutputListener listener : observers){
-						listener.receiveOutput(event);
+					synchronized(observers) {
+						for(TextOutputListener listener : observers){
+							listener.receiveOutput(event);
+						}
+						buffer.delete(0, buffer.length());
 					}
-					buffer.delete(0, buffer.length());
 				}
 			}catch(IOException e){
 				/*We will eventually want to eat this */
@@ -86,10 +93,13 @@ public class DebugListener extends Thread {
 		}
 
 		try{
+			System.out.println("For real, though - I'm closing.");
 			debugStreamReader.close();
+			return;
 		}catch(IOException e){
 			/*Eat it */
 		}
+		return;
 	}
 
 	/**
