@@ -202,8 +202,8 @@ public class DebugStepper implements MouseListener,CaretListener,TextOutputListe
 
 		this.tab.add(this.jtb, BorderLayout.NORTH);
 
-		/*try {
-			dm.processGUIInput(handle,"break @ " + mName + " 1\n");
+		//try {
+			/*dm.processGUIInput(handle,"break @ " + mName + " 1\n");
 			Thread.sleep(300);
 			dm.processGUIInput(handle,"run\n");
 			Thread.sleep(300);
@@ -211,9 +211,11 @@ public class DebugStepper implements MouseListener,CaretListener,TextOutputListe
 			Thread.sleep(300);
 			dm.processGUIInput(handle,"next\n");
 			Thread.sleep(300);
-			dm.processGUIInput(handle,"run\n");
+			dm.processGUIInput(handle,"run\n");*/
 
-			//dm.processGUIInput(handle, "run\n");
+			/*dm.processGUIInput(handle, "run\n");
+			Thread.sleep(3000);
+			dm.processGUIInput(handle, "2\n");
 		} catch (Exception e) {
 		}*/
 
