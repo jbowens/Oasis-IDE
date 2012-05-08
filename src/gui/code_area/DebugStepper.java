@@ -81,8 +81,6 @@ public class DebugStepper implements MouseListener,CaretListener,TextOutputListe
 	private StepNext _next;	
 	private Run _run;
 
-
-
 	public DebugStepper(DebugTab dtb, DebugManager dm, File f){
 
 		this.tab = dtb;
