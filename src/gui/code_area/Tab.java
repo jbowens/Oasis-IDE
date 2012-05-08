@@ -162,7 +162,7 @@ public class Tab extends JPanel implements DocumentListener {
 		//middlePanel.add(statusBar, BorderLayout.SOUTH);
 
 		// Create the interactions panel
-		interactionsPanel = new InteractionsPanel(codeArea.getWindow().getInteractionsManager(), null, codeArea.getFont(), style);
+		interactionsPanel = createInteractionsPanel();
 
 
 		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, middlePanel, interactionsPanel);
@@ -390,6 +390,11 @@ public class Tab extends JPanel implements DocumentListener {
 
 	public InteractionsPanel getInteractionsPanel() {
 		return this.interactionsPanel;
+	}
+
+	protected InteractionsPanel createInteractionsPanel() {
+		int handle = _im.newInteractionsInstance(filePath);
+		return new InteractionsPanel(codeArea.getWindow().getInteractionsManager(), handle, codeArea.getFont(), style);
 	}
 
 	public void setDebug() {

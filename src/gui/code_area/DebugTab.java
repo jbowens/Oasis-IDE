@@ -53,6 +53,12 @@ public class DebugTab extends Tab {
 		repaint();
 	}
 
+	protected InteractionsPanel createInteractionsPanel() {
+		int handle = _im.newInteractionsInstance(filePath);
+		return new InteractionsPanel(codeArea.getWindow().getInteractionsManager(), handle, codeArea.getFont(), style);
+	}
+
+
 	@Override
 	public void close() {
 		step.close();
