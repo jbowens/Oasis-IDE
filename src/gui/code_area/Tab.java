@@ -23,6 +23,9 @@ import javax.swing.event.UndoableEditListener;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.*;
 
+import java.io.IOException;
+import java.io.FileNotFoundException;
+
 import camel.Config;
 import camel.gui.interactions.InteractionsPanel;
 import camel.gui.controller.FileHandler;
@@ -31,6 +34,7 @@ import camel.syntaxhighlighter.OCamlLexer;
 import camel.syntaxhighlighter.OCamlEditorKit;
 import camel.syntaxhighlighter.StyleSet;
 import camel.syntaxhighlighter.SimpleStyleSet;
+import camel.interactions.InteractionsUnavailableException;
 
 /**
  * A tab in the GUI. A tab has an associated text pane, and optionally, file that
@@ -122,6 +126,8 @@ public class Tab extends JPanel implements DocumentListener {
 	 */
 	protected void initialize() {
 
+
+
 		setLayout(new BorderLayout());
 
 		middlePanel = new JPanel();
@@ -162,7 +168,7 @@ public class Tab extends JPanel implements DocumentListener {
 		//middlePanel.add(statusBar, BorderLayout.SOUTH);
 
 		// Create the interactions panel
-		interactionsPanel = new InteractionsPanel(codeArea.getWindow().getInteractionsManager(), null, codeArea.getFont(), style);
+		interactionsPanel = createInteractionsPanel();
 
 
 		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, middlePanel, interactionsPanel);
@@ -390,6 +396,19 @@ public class Tab extends JPanel implements DocumentListener {
 
 	public InteractionsPanel getInteractionsPanel() {
 		return this.interactionsPanel;
+	}
+
+	protected InteractionsPanel createInteractionsPanel() {
+		try {
+			int handle = codeArea.getWindow().getInteractionsManager().newInteractionsInstance( f != null ? f.getPath() : null );
+			return new InteractionsPanel(codeArea.getWindow().getInteractionsManager(), handle, codeArea.getFont(), style);
+		} catch( FileNotFoundException ex ) {
+			return null;
+		} catch( IOException ex ) {
+			return null;
+		} catch( InteractionsUnavailableException ex ) {
+			return null;
+		}
 	}
 
 	public void setDebug() {

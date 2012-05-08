@@ -137,8 +137,10 @@ public class InteractionsServer extends Thread {
 			}
 		} catch(IOException ex) {}
 
-		stdoutListener.kill();
-		stdoutListener.interrupt();
+		if( stdoutListener != null ) {
+			stdoutListener.kill();
+			stdoutListener.interrupt();
+		}
 
 		interrupt();
 	}

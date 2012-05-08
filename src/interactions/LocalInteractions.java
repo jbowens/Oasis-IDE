@@ -17,7 +17,7 @@ public class LocalInteractions extends Interactions {
     ReplListener readProcess;
     OutputStreamWriter replWriter;
 
-	/*
+	/**
      * Creates a new Interactions backend. It takes in the path to the OCaml runnable and the filename
      * of a definitions file. If the definitions filename is NULL, no initial definitions
      * are loaded.
@@ -86,7 +86,7 @@ public class LocalInteractions extends Interactions {
         }
     }
 
-    /*
+    /**
      * Passes on user input to the REPL process.
      */
     @Override
@@ -99,7 +99,7 @@ public class LocalInteractions extends Interactions {
         }
     }
 
-    /*
+    /**
      * Closes any existing links to the filepath or other processes. This
      * may be called multiple times without harm or errors.
      */
