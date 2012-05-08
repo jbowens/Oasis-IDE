@@ -92,7 +92,6 @@ public class DebugStepper implements MouseListener,CaretListener,TextOutputListe
 		this.breakpoints = new Hashtable<Integer,Boolean>();
 
 		this.mName = f.getName().split("\\.")[0].toLowerCase();	
-		System.out.println("MODULE: " + mName);
 
 
 		/*Register listener*/

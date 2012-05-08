@@ -155,6 +155,13 @@ public class MainWindow extends JFrame {
 	}
 
 	/**
+	 * Gets the menubar 
+	 */
+	public MenuBar getMB() {
+		return mb;
+	}
+
+	/**
 	 * Gets this window's interactions manager.
 	 *
 	 * @return the window's interactions manager
