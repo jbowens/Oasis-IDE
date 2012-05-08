@@ -53,6 +53,7 @@ public class InteractionsServer extends Thread {
 		serverSocket = new ServerSocket(port);
 		observers = listeners;
 		this.handle = handle;
+		writeBuffer = new StringBuilder();
 	}
 
 	/**
@@ -74,8 +75,12 @@ public class InteractionsServer extends Thread {
 			
 			while( ! dead ) {
 
+				System.out.println("Waiting for a client to connect.");
+
 				// Connect to the client
 				clientSocket = serverSocket.accept();
+
+				System.out.println("Received a client");
 
 				// Spawn listener thread
 				stdoutListener = new ReplListener(clientSocket.getInputStream(),

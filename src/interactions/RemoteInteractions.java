@@ -29,6 +29,7 @@ public class RemoteInteractions extends Interactions {
 	 */
 	public RemoteInteractions(int port, int handle) throws InteractionsUnavailableException {
 		this.port = port;
+		observers = new ArrayList<TextOutputListener>();
 
 		try {
 			interactionsServer = new InteractionsServer(port, handle, observers);
