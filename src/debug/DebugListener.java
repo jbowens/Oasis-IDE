@@ -53,7 +53,6 @@ public class DebugListener extends Thread {
 			try{
 				/*make sure we are alive */
 				if(!alive){
-					System.out.println("I'm closing.");
 					close(); 
 					break;
 				}
@@ -76,7 +75,6 @@ public class DebugListener extends Thread {
 
 				if(buffer.length() > 0){
 					String output = buffer.toString();
-					System.out.println("From Listener:" + output);
 					TextOutputEvent event = new TextOutputEvent(output, handle);
 					synchronized(observers) {
 						for(TextOutputListener listener : observers){
@@ -93,7 +91,6 @@ public class DebugListener extends Thread {
 		}
 
 		try{
-			System.out.println("For real, though - I'm closing.");
 			debugStreamReader.close();
 			return;
 		}catch(IOException e){

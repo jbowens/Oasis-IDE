@@ -120,11 +120,8 @@ public class DebugManager{
 	 * Close specific Debug instance.
 	 */
 	public void close(int handle) {
-		System.out.println("DM CLOSE");
 		debuggers.get(handle).close();
-		System.out.println("DM CLOSE 2");
 		debuggers.set(handle, null);
-		System.out.println("DM CLOSE 3");
 	}	
 
 }
