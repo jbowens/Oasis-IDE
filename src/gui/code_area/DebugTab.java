@@ -27,6 +27,9 @@ import camel.syntaxhighlighter.StyleSet;
 import camel.syntaxhighlighter.SimpleStyleSet;
 import camel.debug.*;
 
+import java.io.IOException;
+import camel.interactions.InteractionsUnavailableException;
+
 
 /**
  * A tab in the Debug GUI. A tab has an associated text pane, and optionally, file that
@@ -54,8 +57,12 @@ public class DebugTab extends Tab {
 	}
 
 	protected InteractionsPanel createInteractionsPanel() {
-		int handle = _im.newInteractionsInstance(filePath);
-		return new InteractionsPanel(codeArea.getWindow().getInteractionsManager(), handle, codeArea.getFont(), style);
+		try {
+			int handle = codeArea.getWindow().getInteractionsManager().newRemoteInteractionsInstance();
+			return new InteractionsPanel(codeArea.getWindow().getInteractionsManager(), handle, codeArea.getFont(), style);
+		}  catch( InteractionsUnavailableException ex ) {
+			return null;
+		}
 	}
 
 
