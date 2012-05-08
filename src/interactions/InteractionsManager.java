@@ -19,6 +19,9 @@ public class InteractionsManager {
     /* The current handle index */
     protected int currIndex;
 
+    /* The current remote port # */
+    protected int portNum;
+
     /**
      * Constructs a new InteractionsManager, given the location of the OCaml runnable
      *
@@ -28,6 +31,7 @@ public class InteractionsManager {
         ocamlLoc = ocamlLocation;
         currIndex = 0;
         interactions = new ArrayList<Interactions>();
+        portNum = 2003;
     }
 
     /**
@@ -61,7 +65,7 @@ public class InteractionsManager {
     public int newRemoteInteractionsInstance() throws InteractionsUnavailableException {
         int index = currIndex++;
         // TODO: Figure out port numbers
-        Interactions newInstance = new RemoteInteractions(2003, index);
+        Interactions newInstance = new RemoteInteractions(portNum++, index);
         interactions.add(newInstance);
         return index;
     }
