@@ -18,21 +18,35 @@ import java.io.*;
 
 public class DebugStepper implements MouseListener,CaretListener,TextOutputListener, BreakpointSource {
 
+	/* The corresponding DebugTab the stepper is attached to and manipulates */
 	protected DebugTab tab;
+
 	protected JToolBar jtb;
+	
+	/* The DebugManager this stepper uses to retrieve Debug instances. */
 	protected DebugManager dm;
+
+	/* The debug handle this stepper is using */
 	protected int handle;
+
 	protected String mName;
+	
 	protected LinePainter lp;
+	
 	protected int bpCounter = 0;
+	
 	int curr_line = 0;
 
 	protected File f;
+	
 	protected int lastClick;
 
+	/* Table of breakpoints */
 	protected Hashtable<Integer,Breakpoint> breakpoints;
 
-
+	/**
+	 * The next button
+	 */
 	protected class Next extends JButton implements ActionListener {
 
 		//TODO move this to a more "global" location
@@ -54,6 +68,9 @@ public class DebugStepper implements MouseListener,CaretListener,TextOutputListe
 		
 	}
 
+	/**
+	 * The run button.
+	 */
 	protected class Run extends JButton implements ActionListener {
 		//
 		//TODO move this to a more "global" location
@@ -78,8 +95,8 @@ public class DebugStepper implements MouseListener,CaretListener,TextOutputListe
 	}
 
 	/**
-	*The step back button
-	*/
+	 * The step back button
+	 */
 	protected class StepBack extends JButton implements ActionListener {
 
 		//TODO move this to a more "global" location
@@ -104,11 +121,11 @@ public class DebugStepper implements MouseListener,CaretListener,TextOutputListe
 	}
 
 	/**
-	*The reverse button
-	*/
+	 * The reverse button
+	 */
 	protected class Reverse extends JButton implements ActionListener {
 
-		//TODO move this to a more "global" location
+		// TODO: move this to a more "global" location
 		protected DebugManager dm;
 		protected int handle;
 
@@ -130,8 +147,8 @@ public class DebugStepper implements MouseListener,CaretListener,TextOutputListe
 	}
 
 	/**
-	*The step button
-	*/
+	 * The step button
+	 */
 	protected class Step extends JButton implements ActionListener {
 
 		//TODO move this to a more "global" location
@@ -155,14 +172,11 @@ public class DebugStepper implements MouseListener,CaretListener,TextOutputListe
 		
 	}
 
-
 	private Next _next;	
 	private Run _run;
 	private StepBack _stepBack;
 	private Reverse _reverse;
 	private Step _step;
-
-
 
 	public DebugStepper(DebugTab dtb, DebugManager dm, File f, int port){
 
@@ -234,18 +248,21 @@ public class DebugStepper implements MouseListener,CaretListener,TextOutputListe
 
 	}
 
-
-
+	/**
+	 * Closes the debug stepper, releasing any system resources used by
+	 * the stepper.
+	 */
 	public void close() {
+		// Release the debug instance
 		dm.close(this.handle);
 	}
 
 	/**
-	*The implementation of the TextOutputListener. Recieves input from the ocaml
-	*debug. Calls updateLineNumber to update the debug GUI.
-	*
-	*@param evt - the TextOutputEvent from which we get the text
-	*/
+	 * The implementation of the TextOutputListener. Recieves input from the ocaml
+	 * debug. Calls updateLineNumber to update the debug GUI.
+	 *
+	 * @param evt - the TextOutputEvent from which we get the text
+	 */
 	public void receiveOutput(TextOutputEvent evt){
 		String input = evt.getText();
 		String[] inputArray = input.split("\\s+");
@@ -305,8 +322,6 @@ public class DebugStepper implements MouseListener,CaretListener,TextOutputListe
 		OCamlDocument doc = (OCamlDocument) this.tab.getTextPane().getDocument();
 		int linePos = doc.getLinePosition( pos );
 		int columnPos = doc.getColumnPosition( pos );
-		System.out.println("Line: " + linePos);
-
 	}
 
 	public void mouseClicked(MouseEvent e) {
@@ -339,38 +354,30 @@ public class DebugStepper implements MouseListener,CaretListener,TextOutputListe
 			this.lastClick = linePos;
 		}
 
-
 	}
 	
-	public void mousePressed(MouseEvent e) {
+	public void mousePressed(MouseEvent e) { }
 
-	}
+	public void mouseReleased(MouseEvent e) { }
 
-	public void mouseReleased(MouseEvent e) {
-
-	}
-
-	public void mouseEntered(MouseEvent e) {
-
-	}
+	public void mouseEntered(MouseEvent e) { }
 	
-
-	public void mouseExited(MouseEvent e) {
-
-	}
+	public void mouseExited(MouseEvent e) { }
 
 	public void setBreakpoint(int bpHandle, int linePos, boolean isBreak) {
 		if (isBreak) {
 			try {
-			System.out.println("SET BP @ HANDLE: " + handle);
 			dm.processGUIInput(handle,"break @ " + mName + " "+ linePos+ "\n");
-			} catch (Exception e) {}
+			} catch (InvalidInteractionsException e) {
+				// TODO: Respond to error
+			}
 		}
 		else {
 			try {
-				System.out.println("DELETING BP: " + bpHandle);
 				dm.processGUIInput(handle, "delete " + bpHandle + "\n");
-			} catch (Exception e) {}
+			} catch (InvalidInteractionsException e) {
+				// TODO: Respond to error
+			}
 		}
 		
 	}
