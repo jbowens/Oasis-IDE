@@ -111,7 +111,11 @@ public class FileMenu extends JMenu implements ActionListener {
 		}
 
 		if(e.getSource() == _closeWindow) {
-			_codeArea.getWindow().close();
+			try {
+				_codeArea.getWindow().close();
+			} catch( CloseDeniedException ex ) {
+				// Do nothing
+			}
 		}
 
 	}

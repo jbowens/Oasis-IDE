@@ -31,7 +31,7 @@ public class Application {
     protected MainWindow gui; 
 
     /* The number of open windows */
-    protected int guiCounter;
+    protected ArrayList<MainWindow> windows;
 
     /**
      * Creates a new Application from the given settings file.
@@ -46,6 +46,8 @@ public class Application {
         this.interactionsManager = new InteractionsManager("ocaml");
 	    this.debugManager = new DebugManager( "" );
         styleLoader = new StyleLoader( "./styles" );
+
+        windows = new ArrayList<MainWindow>();
         setupGui();
 
         /* Make sure we always clean up after starting up */
@@ -56,16 +58,18 @@ public class Application {
      * Constructs the front-end gui for the application.
      */
     protected void setupGui() {
-        gui = new MainWindow(this, config, interactionsManager, debugManager);
-        guiCounter = 1;
+        // set some mac-specific properties
+        System.setProperty("apple.awt.graphics.EnableQ2DX", "true");
+        System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Oasis IDE");
+        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        windows.add(new MainWindow(this, config, interactionsManager, debugManager));
     }
 
     /**
      * Creates another window.
      */
     public void createNewWindow() {
-        new MainWindow(this, config, interactionsManager, debugManager);
-        guiCounter++;
+        windows.add(new MainWindow(this, config, interactionsManager, debugManager));
     }
 
     /**
@@ -74,7 +78,7 @@ public class Application {
      * @param filename a filename to open
      */ 
     public void openFile( String filename ) {
-        gui.open(filename);
+        windows.get(0).open(filename);
     }
 
     /**
@@ -91,7 +95,7 @@ public class Application {
      * Creates a new blank file.
      */
     public void openBlankProgram() {
-        gui.newBlank();
+        windows.get(0).newBlank();
     }
 
     /**
@@ -112,9 +116,9 @@ public class Application {
      * Tells the application that a gui (usually a MainWindow) has been closed.
      * If all the guis are closed, we should quit.
      */
-    public void guiClosed() {
-        guiCounter--;
-        if( guiCounter <= 0 )
+    public void guiClosed(MainWindow gui) {
+        windows.remove(gui);
+        if( windows.size() <= 0 )
             close();
     }
 
@@ -123,8 +127,18 @@ public class Application {
      * needs to be called when the program exists.
      */
     public void close() {
+        /* First try to close the guis. There may be unsaved changes! */
+        try {
+            for(MainWindow w : windows)
+                w.close();
+        } catch(CloseDeniedException ex) {
+            // They no longer want to close, so just stop closing.
+            return;
+        }
+
+        /* Now close everything else down */
         interactionsManager.close();
-	debugManager.close();
+	    debugManager.close();
         try {
             config.save();
         } catch( SettingsSaveException e ) {

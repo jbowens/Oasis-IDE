@@ -215,6 +215,10 @@ public class CodeArea extends JPanel {
 		return (Tab) tabs.getSelectedComponent();
 	}
 
+	/**
+	 * Updates the preferences for tab display from the current
+	 * settings.
+	 */
 	public void updateDisplayPreferences() {
 		for( Tab t : tabList )
 			t.updateDisplayPreferences();
@@ -259,7 +263,6 @@ public class CodeArea extends JPanel {
 	/**
 	 * Opens debug tab for current file.
 	 */
-
 	public void debugCurrentFile() {
 		Tab current = getCurTab();
 		if( current == null ) {

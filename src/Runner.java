@@ -11,7 +11,9 @@ public class Runner {
 
     public static void main(String args[]) throws Exception {
 
-	UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        // Mac-specific properties:
+        System.setProperty("apple.laf.useScreenMenuBar", "true");
+
         /* Look for files to open */
         ArrayList<String> filesToOpen = new ArrayList<String>();
         for( int i = 0; i < args.length; i++ ) {

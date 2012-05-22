@@ -59,7 +59,7 @@ public class MainWindow extends JFrame {
 	 */
 	public MainWindow(Application app, Config config, InteractionsManager im, DebugManager dm)
 	{
-		super();
+		super("Oasis IDE");
 
 		this.app = app;
 		this.config = config;
@@ -214,17 +214,16 @@ public class MainWindow extends JFrame {
 			// Notify the application to shut down as well
 			
 			if( ! mainWindow.isClosed() ) {
-				mainWindow.getApplication().guiClosed();
+				mainWindow.getApplication().guiClosed(mainWindow);
 				mainWindow.dispose();
 			}
 		}
 		public void windowClosing(WindowEvent e) {
 			try {
-				mainWindow.getCodeArea().close();
+				mainWindow.close();
 			} catch( CloseDeniedException ex ) {
-				return;
+				// Eat it, and just do nothing -- they don't want to close the window
 			}
-			mainWindow.close();
 		}
 		public void windowDeactivated(WindowEvent e) {}
 		public void windowDeiconified(WindowEvent e) {}
@@ -259,7 +258,16 @@ public class MainWindow extends JFrame {
 	/**
 	 * Tells this window to close itself.
 	 */
-	public void close() {
+	public void close() throws CloseDeniedException {
+		// If already closed, nothing to do
+		if( isClosed() )
+			return;
+
+		/* Try to close the code area first. This may throw a CloseDeniedException if
+			 the user decides he no longer wants to close the window (maybe unsaved files) */
+		ca.close();
+
+		/* We have permission to close, so close everything else down */
 		dm.close();
 		processWindowEvent( new WindowEvent( this, WindowEvent.WINDOW_CLOSED ) );
 		closed = true;
