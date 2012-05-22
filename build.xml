@@ -1,13 +1,13 @@
-<project name="Camel" default="dist" basedir=".">
+<project name="OasisIDE" default="dist" basedir=".">
     <description>
-        Build file for Camel
+        Build file for Oasis
     </description>
   <!-- set global properties for this build -->
   <property name="src" location="src"/>
   <property name="build" location="build"/>
   <property name="dist"  location="dist"/>
 
-  <path id="camel.class.path">
+  <path id="oasis.class.path">
     <pathelement location="build" />
     <pathelement location="/usr/share/java/junit4.jar" />
     <pathelement location="/Users/jbowens/junit-4.10.jar" />
@@ -23,26 +23,31 @@
   <target name="compile" depends="init"
         description="compile the source " >
     <!-- Compile the java code from ${src} into ${build} -->
-    <javac srcdir="${src}" destdir="${build}" classpathref="camel.class.path" includeantruntime="false" />
+    <javac srcdir="${src}" destdir="${build}" classpathref="oasis.class.path" includeantruntime="false" />
   </target>
 
   <target name="dist" depends="compile"
         description="generate the distribution" >
     <!-- Create the distribution directory -->
-    <mkdir dir="${dist}/lib"/>
+    <mkdir dir="${dist}/"/>
 
-    <!-- Put everything in ${build} into the MyProject-${DSTAMP}.jar file -->
-    <jar jarfile="${dist}/lib/Camel-${DSTAMP}.jar" basedir="${build}" classpathref="camel.class.path" />
+    <jar jarfile="${dist}/OasisIDE-1.0beta.jar" basedir="${build}">
+        <manifest>
+            <attribute name="Main-Class" value="camel.Runner" />
+        </manifest>
+        <fileset dir="build" includes="**/*.class" />
+        <fileset dir="build" includes="/Users/jbowens/junit-4.10.jar" />
+    </jar>
   </target>
 
   <target name="run" depends="compile" description="run the main program">
-    <java fork="true" classpathref="camel.class.path" classname="camel.Runner">
+    <java fork="true" classpathref="oasis.class.path" classname="camel.Runner">
     </java>
   </target>
 
   <target name="test" description="test using junit" depends="compile">
   <junit printsummary="yes" haltonfailure="yes">
-    <classpath refid="camel.class.path" />
+    <classpath refid="oasis.class.path" />
     <batchtest fork="yes">
         <fileset dir="{$src}/tests">
         </fileset>

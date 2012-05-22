@@ -36,7 +36,7 @@ public class DebugManager{
 	*returns the handle to the debugger, which can be used when registering listeners or
 	*in sending in input.
 	*
-	*@param filename  - the name of the module that we are compiling
+	* @param filename  - the name of the module that we are compiling
 	* @param port - the port through which the debugger should communicate with the program
 	*
 	*@return a new handle
@@ -55,16 +55,17 @@ public class DebugManager{
 	*@param cmd  - the command from the GUI
 	*/
 	public void processGUIInput(int id, String cmd) throws InvalidInteractionsException {
+		
 		/* Make sure the debugger instance exists */
-		//if(id > debuggers.size() - 1){
-		//	throw new InvalidInteractionsException();
-		//}
-		if(debuggers.get(id) == null){
-			System.out.println("BLAH");
+		if(id >= debuggers.size()){
 			throw new InvalidInteractionsException();
 		}
-		/*Pass on the input */
 
+		if(debuggers.get(id) == null){
+			throw new InvalidInteractionsException();
+		}
+		
+		// Pass on the input to the invdividual debug instance.
 		debuggers.get(id).processGUIInput(cmd);
 	}
 

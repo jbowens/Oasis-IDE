@@ -69,10 +69,9 @@ public class DebugStepper implements MouseListener,CaretListener,TextOutputListe
 
 		public void actionPerformed(ActionEvent e) {
 			try {
-				System.out.println("SENT RUN @ HANDLE: " + handle);
 				dm.processGUIInput(handle,"run\n");
-			} catch(Exception f) {
-				f.printStackTrace();
+			} catch(InvalidInteractionsException f) {
+				System.err.println("Invalid debug instance");
 			}
 		}	
 		
@@ -97,8 +96,8 @@ public class DebugStepper implements MouseListener,CaretListener,TextOutputListe
 		public void actionPerformed(ActionEvent e) {
 			try {
 				dm.processGUIInput(handle,"backstep\n");
-			} catch(Exception f) {
-				f.printStackTrace();
+			} catch(InvalidInteractionsException f) {
+				System.err.println("Invalid debug instance");
 			}
 		}	
 		
@@ -123,8 +122,8 @@ public class DebugStepper implements MouseListener,CaretListener,TextOutputListe
 		public void actionPerformed(ActionEvent e) {
 			try {
 				dm.processGUIInput(handle,"reverse\n");
-			} catch(Exception f) {
-				f.printStackTrace();
+			} catch(InvalidInteractionsException f) {
+				System.err.println("Invalid debug instance");
 			}
 		}	
 		
@@ -149,8 +148,8 @@ public class DebugStepper implements MouseListener,CaretListener,TextOutputListe
 		public void actionPerformed(ActionEvent e) {
 			try {
 				dm.processGUIInput(handle,"step\n");
-			} catch(Exception f) {
-				f.printStackTrace();
+			} catch(InvalidInteractionsException f) {
+				System.err.println("Invalid debug instance");
 			}
 		}	
 		
@@ -202,23 +201,6 @@ public class DebugStepper implements MouseListener,CaretListener,TextOutputListe
 
 		this.tab.add(this.jtb, BorderLayout.NORTH);
 
-		//try {
-			/*dm.processGUIInput(handle,"break @ " + mName + " 1\n");
-			Thread.sleep(300);
-			dm.processGUIInput(handle,"run\n");
-			Thread.sleep(300);
-			dm.processGUIInput(handle,"next\n");
-			Thread.sleep(300);
-			dm.processGUIInput(handle,"next\n");
-			Thread.sleep(300);
-			dm.processGUIInput(handle,"run\n");*/
-
-			/*dm.processGUIInput(handle, "run\n");
-			Thread.sleep(3000);
-			dm.processGUIInput(handle, "2\n");
-		} catch (Exception e) {
-		}*/
-
 	}
 
 	public DebugManager getDM() {
@@ -249,15 +231,7 @@ public class DebugStepper implements MouseListener,CaretListener,TextOutputListe
 			}
 		    }
 		text.setCaretPosition(currentSelection);
-		/*if (this.tab == null)
-			return;
-	
-		if (! (this.tab.getTextPane().getDocument() instanceof OCamlDocument) )
-			return;
 
-		OCamlDocument doc = (OCamlDocument) this.tab.getTextPane().getDocument();
-		int linePos = doc.getLinePosition( line );
-		System.out.println("STEP TO: " + linePos);*/
 	}
 
 
