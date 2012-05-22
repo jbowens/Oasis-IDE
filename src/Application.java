@@ -44,7 +44,7 @@ public class Application {
         // TODO: Add test to ensure OCaml is installed / find the ocaml executable
         this.config = new Config( settingsFile );
         this.interactionsManager = new InteractionsManager("ocaml");
-	    this.debugManager = new DebugManager("/usr/bin/");
+	    this.debugManager = new DebugManager( "" );
         styleLoader = new StyleLoader( "./styles" );
         setupGui();
 

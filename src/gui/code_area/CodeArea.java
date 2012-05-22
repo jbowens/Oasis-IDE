@@ -22,9 +22,15 @@ import java.io.IOException;
 import java.util.List;
 import java.util.ArrayList;
 
+/**
+ * The CodeArea contains all the open tabs. 
+ */
 public class CodeArea extends JPanel {
 
+	/* The color of the icon that is displayed alongside unclosed tab names */
 	protected Color UNSAVED_ICON_COLOR = new Color(161, 80, 80);
+
+	/* The color of the close tab icon */
 	protected Color CLOSE_TAB_COLOR = UNSAVED_ICON_COLOR;
 
 	/* The tabbed pane that holds all the existing tabs */
