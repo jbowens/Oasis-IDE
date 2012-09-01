@@ -4,7 +4,9 @@ import camel.debug.*;
 import camel.interactions.*;
 import camel.gui.main.*;
 import camel.gui.code_area.*;
+import camel.syntaxhighlighter.CompositeStyleLoader;
 import camel.syntaxhighlighter.StyleLoader;
+import java.io.File;
 import java.util.*;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
@@ -16,8 +18,13 @@ import javax.swing.UIManager;
  */
 public class Application {
 
+    protected static final String APPLICATION_NAME = "Oasis IDE";
+
     /* The location of the user's application files */
     protected String userHome;
+
+    /* The resource manager for application files */
+    protected ResourceManager resourceManager;
 
     /* The configurations object for this instance of the application. */
     protected Config config;
@@ -44,14 +51,20 @@ public class Application {
      *
      * @throws NoSettingsException when the settings file cannot be found
      */
-    public Application(String userHome) throws NoSettingsException {
+    public Application(String userHome) throws NoSettingsException, ResourceLoadingException {
         // TODO: Add test to ensure OCaml is installed / find the ocaml executable
         this.userHome = userHome;
+        this.resourceManager = new ResourceManager( userHome );
+        this.resourceManager.initializeUserDirectory();
 
-        this.config = new Config( userHome + "/settings.xml" );
+        this.config = new Config( resourceManager.getUserSettingsPath() );
         this.interactionsManager = new InteractionsManager("ocaml");
 	    this.debugManager = new DebugManager( "" );
-        styleLoader = new StyleLoader( "./styles" );
+        
+        CompositeStyleLoader compStyleLoader = new CompositeStyleLoader();
+        compStyleLoader.addStyleLoader( new StyleLoader( resourceManager.getUserStylesPath() ) );
+        compStyleLoader.addStyleLoader( new StyleLoader( resourceManager.getInstallationStylesPath() ) );
+        this.styleLoader = compStyleLoader;
 
         windows = new ArrayList<MainWindow>();
         setupGui();
@@ -61,12 +74,19 @@ public class Application {
     }
 
     /**
+     * Retrieves the resource manager used by the application.
+     */
+    public ResourceManager getResourceManager() {
+        return this.resourceManager;
+    }
+
+    /**
      * Constructs the front-end gui for the application.
      */
     protected void setupGui() {
         // set some mac-specific properties
         System.setProperty("apple.awt.graphics.EnableQ2DX", "true");
-        System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Oasis IDE");
+        System.setProperty("com.apple.mrj.application.apple.menu.about.name", APPLICATION_NAME);
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch( Exception ex ) {

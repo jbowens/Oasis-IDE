@@ -37,6 +37,9 @@ public class Runner {
             // TODO: Initialize a new settings file with default settings.
             System.err.println("Unable to find or load application settings.");
             System.exit(1);
+        } catch(ResourceLoadingException e) {
+            System.err.println("Unable to load required resources.");
+            System.exit(1);
         }
     }
 

@@ -36,9 +36,12 @@ public class StyleLoader {
 	 * @param the style directory to load styles from
 	 */
 	public StyleLoader(String styleDirectory) {
-		this.styleDirectory = styleDirectory;
-		styles = getStyles(styleDirectory);
-		Collections.sort(styles);
+		if( styleDirectory != null )
+        {
+            this.styleDirectory = styleDirectory;
+		    styles = getStyles(styleDirectory);
+		    Collections.sort(styles);
+        }
 	}
 
 	/**
