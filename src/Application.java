@@ -185,14 +185,5 @@ public class Application {
         System.exit(0);
     }
 
-    /**
-     * Last ditch close() in case close() isn't called earlier.
-     */
-    public void finalize() {
-        close();
-    }
-
-
-
 }
 
