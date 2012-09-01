@@ -11,6 +11,7 @@ import java.io.File;
 public class ResourceManager {
     
     protected static final String SETTINGS_FILENAME = "settings.xml";
+    protected static final String DEFAULT_SETTINGS_FILE = "./settings.xml";
     protected static final String STYLES_DIRNAME = "styles";
     protected static final String INSTALLATION_STYLES_DIR = "./styles";
 
@@ -53,6 +54,14 @@ public class ResourceManager {
     }
 
     /**
+     * Returns the path to the default settings file.
+     */
+    public String getDefaultSettingsPath()
+    {
+        return DEFAULT_SETTINGS_FILE;
+    }
+
+    /**
      * Initializes the user's oasis directory by creating
      * the necessary files if they haven't yet been created.
      *
@@ -72,7 +81,17 @@ public class ResourceManager {
         File settingsFile = new File( getUserSettingsPath() );
         if( ! settingsFile.exists() )
         {
-            // TODO: Create a settings file with the default values
+            // Create a settings file with the default settings
+            try {
+                Config defaultSettings = new Config( getDefaultSettingsPath() );
+                defaultSettings.save( getUserSettingsPath() );
+            } catch( SettingsSaveException ex )
+            {
+                throw new ResourceLoadingException();
+            } catch( NoSettingsException ex )
+            {
+                throw new ResourceLoadingException();
+            }
         }
 
         // Setup the styles directory

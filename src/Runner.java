@@ -10,12 +10,14 @@ import java.util.ArrayList;
  */
 public class Runner {
 
+    protected static final String USER_SETTINGS_DIR = ".oasis";
+
     public static void main(String args[]) throws Exception {
 
         // Mac-specific properties:
         System.setProperty("apple.laf.useScreenMenuBar", "true");
 
-        String oasisUserHome = System.getProperty( "user.home" ) + File.separator + ".oasis";
+        String oasisUserHome = System.getProperty( "user.home" ) + File.separator + USER_SETTINGS_DIR;
 
         /* Look for files to open */
         ArrayList<String> filesToOpen = new ArrayList<String>();
