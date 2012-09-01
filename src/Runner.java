@@ -19,7 +19,7 @@ public class Runner {
 
         /* Look for files to open */
         ArrayList<String> filesToOpen = new ArrayList<String>();
-        for( int i = 2; i < args.length; i++ ) {
+        for( int i = 0; i < args.length; i++ ) {
             filesToOpen.add( args[i] );
         }
 
