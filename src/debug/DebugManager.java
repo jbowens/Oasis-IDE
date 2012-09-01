@@ -37,13 +37,12 @@ public class DebugManager{
 	*in sending in input.
 	*
 	* @param filename  - the name of the module that we are compiling
-	* @param port - the port through which the debugger should communicate with the program
 	*
 	*@return a new handle
 	*/
-	public int newDebuggerInstance(String filename, int port) throws FileNotFoundException, DebuggerCompilationException, IOException {
+	public int newDebuggerInstance(String filename) throws FileNotFoundException, DebuggerCompilationException, IOException {
 		int index = currIndex++;
-		Debug newInstance = new Debug(ocamlCompileC, ocamlDebugC, filename, index, port);
+		Debug newInstance = new Debug(ocamlCompileC, ocamlDebugC, filename, index);
 		debuggers.add(newInstance);
 		return index;
 	}

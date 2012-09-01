@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.awt.FlowLayout;
 import java.awt.BorderLayout;
 import java.io.File;
+import java.io.FileNotFoundException;
 
 import javax.swing.JEditorPane;
 import javax.swing.JPanel;
@@ -41,11 +42,9 @@ public class DebugTab extends Tab {
 
 	protected DebugStepper step;
 
-	protected int port;
-
 	public DebugTab(CodeArea codeArea, File f, FileHandler fh, StyleSet s) {
 		super(codeArea, f, fh, s);
-		this.step = new DebugStepper(this, codeArea.getWindow().getDebugManager(), f, port);
+		this.step = new DebugStepper(this, codeArea.getWindow().getDebugManager(), f);
 		this.interactionsPanel.setDebug(this.step.getDM(), this.step.getHandle());
 		textPane.setEditable(false);
 		lineNums.setBreakpointSource(step);
@@ -54,7 +53,7 @@ public class DebugTab extends Tab {
 
 	public DebugTab(CodeArea codeArea, FileHandler fh, StyleSet s) {
 		super(codeArea, fh, s);
-		this.step = new DebugStepper(this, codeArea.getWindow().getDebugManager(), f, port);
+		this.step = new DebugStepper(this, codeArea.getWindow().getDebugManager(), f);
 		this.interactionsPanel.setDebug(this.step.getDM(), this.step.getHandle());
 		textPane.setEditable(false);
 		lineNums.setBreakpointSource(step);
@@ -63,12 +62,13 @@ public class DebugTab extends Tab {
 
 	protected InteractionsPanel createInteractionsPanel() {
 		try {
-			int handle = codeArea.getWindow().getInteractionsManager().newRemoteInteractionsInstance();
-			port = codeArea.getWindow().getInteractionsManager().getPort(handle);
+			int handle = codeArea.getWindow().getInteractionsManager().newInteractionsInstance(null);
 			return new InteractionsPanel(codeArea.getWindow().getInteractionsManager(), handle, codeArea.getFont(), style, null);
 		}  catch( InteractionsUnavailableException ex ) {
 			return null;
-		}
+		} catch( FileNotFoundException ex ) {
+            return null;
+        }
 	}
 
 

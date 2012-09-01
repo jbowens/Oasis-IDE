@@ -9,7 +9,7 @@ import camel.interactions.TextOutputListener;
  *Represents an indivdual debug instance.
  */
 public class Debug extends Thread {
-	/*The Runtime of the class */
+    /*The Runtime of the class */
     private Runtime runtime;
     
     /*The ocamldebug Process */
@@ -41,9 +41,6 @@ public class Debug extends Thread {
 
     /*The handle number of this debug instance */
     int handle;
-
-    /* The port to communicate with the gui on */
-    int port;
     
     /**
     *Creates a new Debug backend.
@@ -52,14 +49,12 @@ public class Debug extends Thread {
     *@parma ocamlDebug - the command for running the debugger
     *@param filename - the name of the file that is being debugged
     *@param handle - the id of the Debug instance
-    *@param port - the port the debug should sent to
     */
-    public Debug(String ocamlCompileC, String ocamlDebugC, String filename, int handle, int port) 
+    public Debug(String ocamlCompileC, String ocamlDebugC, String filename, int handle) 
     throws IOException, FileNotFoundException, DebuggerCompilationException{
         observers = new ArrayList<TextOutputListener>();
         this.ocamlCompileC = ocamlCompileC;
         this.ocamlDebugC = ocamlDebugC;
-        this.port = port;
 
         if(filename.equals("")){
             this.filename = null;
@@ -95,7 +90,7 @@ public class Debug extends Thread {
             String tester = "cp " + filename + " ./";
             runtime.exec(tester);
         }catch(IOException e){
-		System.out.println("HERE");
+        System.out.println("HERE");
             throw new DebuggerCompilationException();
         //}catch(FileNotFoundException f){
         //    throw new FileNotFoundException();
@@ -123,16 +118,16 @@ public class Debug extends Thread {
     *debugger cannot be called for some reason.
     */
     public void callDebug() throws IOException, FileNotFoundException, DebuggerCompilationException{
-    	//try{
-    		String debugArgs[] = new String[4];
-    		debugArgs[0] = ocamlDebugC;
+        //try{
+            String debugArgs[] = new String[4];
+            debugArgs[0] = ocamlDebugC;
             debugArgs[1] = outFile;
             debugArgs[2] = "-s";
-            debugArgs[3] = "localhost:" + port;
+            debugArgs[3] = "localhost";
             try{
                 debugger = runtime.exec(debugArgs);
             }catch(IOException e){
-		    //e.printStackTrace();
+            //e.printStackTrace();
                 throw new DebuggerCompilationException();
             }
             debugWriter = new OutputStreamWriter(debugger.getOutputStream());
@@ -182,10 +177,10 @@ public class Debug extends Thread {
         try{
                 debugWriter.write(cmd);
                 debugWriter.flush();
-	       //}
+           //}
         }catch(IOException e){
             //Eat it
-	       e.printStackTrace();
+           e.printStackTrace();
             //throw new InvalidInteractionsException();
         }
     }
