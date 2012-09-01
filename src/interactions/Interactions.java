@@ -38,13 +38,6 @@ public abstract class Interactions {
     }
 
     /**
-     * Returns the relevant port
-     */
-    public int getPort() {
-        return -1;
-    }
-
-    /**
      * Passes on user input to the standard in of the remote
      * interactions instance.
      *
