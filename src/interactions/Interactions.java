@@ -57,11 +57,4 @@ public abstract class Interactions {
      */
     public abstract void close();
 
-    /*
-     * Last ditch close() in case close() isn't called earlier.
-     */
-    public void finalize() {
-        close();
-    }
-
 }
