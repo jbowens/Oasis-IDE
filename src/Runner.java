@@ -1,5 +1,6 @@
 package camel;
 
+import java.io.File;
 import javax.swing.UIManager;
 import java.util.ArrayList;
 
@@ -14,16 +15,17 @@ public class Runner {
         // Mac-specific properties:
         System.setProperty("apple.laf.useScreenMenuBar", "true");
 
+        String oasisUserHome = System.getProperty( "user.home" ) + File.separator + ".oasis";
+
         /* Look for files to open */
         ArrayList<String> filesToOpen = new ArrayList<String>();
-        for( int i = 0; i < args.length; i++ ) {
+        for( int i = 2; i < args.length; i++ ) {
             filesToOpen.add( args[i] );
         }
 
         /* Create the new instance of the application */
         try {
-            String settingsFile = "settings.xml";
-            Application app = new Application( settingsFile );
+            Application app = new Application( oasisUserHome );
 
             /* Load the files, or a blank one */
             if( ! filesToOpen.isEmpty() )

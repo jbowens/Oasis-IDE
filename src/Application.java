@@ -7,6 +7,7 @@ import camel.gui.code_area.*;
 import camel.syntaxhighlighter.StyleLoader;
 import java.util.*;
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
 
 /**
  * Primary application class. Instantation of this class creates
@@ -14,6 +15,9 @@ import javax.swing.JOptionPane;
  * new backend.
  */
 public class Application {
+
+    /* The location of the user's application files */
+    protected String userHome;
 
     /* The configurations object for this instance of the application. */
     protected Config config;
@@ -36,13 +40,15 @@ public class Application {
     /**
      * Creates a new Application from the given settings file.
      *
-     * @param settingsFile the xml file to load settings from
+     * @param userHome the location of the user's app files, setings, etc.
      *
      * @throws NoSettingsException when the settings file cannot be found
      */
-    public Application(String settingsFile) throws NoSettingsException {
+    public Application(String userHome) throws NoSettingsException {
         // TODO: Add test to ensure OCaml is installed / find the ocaml executable
-        this.config = new Config( settingsFile );
+        this.userHome = userHome;
+
+        this.config = new Config( userHome + "/settings.xml" );
         this.interactionsManager = new InteractionsManager("ocaml");
 	    this.debugManager = new DebugManager( "" );
         styleLoader = new StyleLoader( "./styles" );
@@ -61,7 +67,11 @@ public class Application {
         // set some mac-specific properties
         System.setProperty("apple.awt.graphics.EnableQ2DX", "true");
         System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Oasis IDE");
-        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch( Exception ex ) {
+            // Do nothing.
+        }
         windows.add(new MainWindow(this, config, interactionsManager, debugManager));
     }
 
