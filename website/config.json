@@ -1,0 +1,52 @@
+{
+    "meta": {
+        "description": "An esprit config file for oasiside.com",
+        "esprit_version": "1.0a"
+    },
+
+    "debug": true,
+
+    "db_default_dsn": "mysql:host=localhost;dbname=oasis_main;charset=utf8",
+    "db_default_user": "oasis_prod",
+    "db_default_pass": "chameaux",
+
+    "memcached_servers": [
+        {
+            "host": "localhost",
+            "port": 11211
+        }
+    ],
+
+    "memcached": {
+        "key_prefix": "oasis_"
+    },
+
+    "base_command_sources": [
+        {
+            "namespace": "\\oasis\\commands",
+            "directory": "/home/oasis/Oasis-IDE/website/commands"
+        }
+    ],
+
+    "base_view_sources": [
+        {
+            "namespace": "\\oasis\\views",
+            "directory": "/home/oasis/Oasis-IDE/website/views"
+        }
+    ],
+
+    "default_resolvers": {
+        "use_path_command_resolver": true,
+        "use_path_view_resolver": true,
+        "use_catchall_view_resolver": true
+    },
+
+    "twig": {
+        "twig_autoloader": "/home/oasis/Oasis-IDE/website/twigautoloader.php",
+        "templates_dir": "/home/oasis/Oasis-IDE/website/templates",
+        "options": {
+            "cache": "/home/oasis/twigcache",
+            "debug": true
+        }
+    }
+}
