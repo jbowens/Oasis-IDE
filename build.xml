@@ -37,6 +37,8 @@
         </manifest>
         <fileset dir="build" includes="**/*.class" />
         <fileset dir="build" includes="/Users/jbowens/junit-4.10.jar" />
+	<zipfileset dir="fonts" prefix="fonts" />
+	<zipfileset dir="styles" prefix="styles" />
     </jar>
   </target>
 

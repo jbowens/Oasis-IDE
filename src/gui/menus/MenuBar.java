@@ -29,7 +29,7 @@ public class MenuBar extends JMenuBar {
 
 		_ocamlMenu = new OCamlMenu(this, window.getCodeArea(),app);
 
-		_vMenu = new ViewMenu(this, app.getConfig(), app.getStyleLoader(), window.getCodeArea());
+		_vMenu = new ViewMenu(this, app.getConfig(), app.getStyleSource(), window.getCodeArea());
 
 		add(_vMenu, FlowLayout.LEFT);
 		add(_ocamlMenu, FlowLayout.LEFT);
