@@ -9,6 +9,6 @@ a { color: #956a37; }
 ul#nav a { color: #887a69; }
 ul#nav a:hover { color: #564532; }
 #page-body { margin-top: 3em; }
-#info-column { width: 250px; float: right; }
-#index-content { margin-right: 250px;
+#info-column { width: 18em; float: right; }
+#index-content { margin-right: 19em; }
 .clear { clear: both; }
