@@ -4,8 +4,10 @@ import camel.debug.*;
 import camel.interactions.*;
 import camel.gui.main.*;
 import camel.gui.code_area.*;
-import camel.syntaxhighlighter.CompositeStyleLoader;
-import camel.syntaxhighlighter.StyleLoader;
+import camel.syntaxhighlighter.CompositeStyleSource;
+import camel.syntaxhighlighter.FileSystemStyleLoader;
+import camel.syntaxhighlighter.StyleParserException;
+import camel.syntaxhighlighter.StyleSource;
 import java.io.File;
 import java.util.*;
 import javax.swing.JOptionPane;
@@ -35,8 +37,8 @@ public class Application {
     /* The debug manager that organizes all interactions with the ocamldebug backend */
     protected DebugManager debugManager;
 
-    /* A style loader to load styles from the file system */
-    protected StyleLoader styleLoader;
+    /* The primary style source used by the system */
+    protected StyleSource styleSource;
 
     /* The main GUI class */
     protected MainWindow gui; 
@@ -61,10 +63,16 @@ public class Application {
         this.interactionsManager = new InteractionsManager("ocaml");
 	    this.debugManager = new DebugManager( "" );
         
-        CompositeStyleLoader compStyleLoader = new CompositeStyleLoader();
-        compStyleLoader.addStyleLoader( new StyleLoader( resourceManager.getUserStylesPath() ) );
-        compStyleLoader.addStyleLoader( new StyleLoader( resourceManager.getInstallationStylesPath() ) );
-        this.styleLoader = compStyleLoader;
+        CompositeStyleSource compStyleSource = new CompositeStyleSource();
+        try {
+            compStyleSource.addStyleSource( new FileSystemStyleLoader( resourceManager.getUserStylesPath() ) );
+        } catch( StyleParserException ex )
+        {
+            System.err.println("Unable to load styles from the file system.");
+        }
+        // TODO: Add jar style loader
+        //compStyleSource.addStyleSource( new StyleLoader( resourceManager.getInstallationStylesPath() ) );
+        this.styleSource = compStyleSource;
 
         windows = new ArrayList<MainWindow>();
         setupGui();
@@ -129,10 +137,10 @@ public class Application {
     }
 
     /**
-     * Gets the style loader for this application.
+     * Gets the style source for this application.
      */
-    public StyleLoader getStyleLoader() {
-        return styleLoader;
+    public StyleSource getStyleSource() {
+        return styleSource;
     }
 
     /**
