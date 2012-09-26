@@ -1,0 +1,5 @@
+/styles/Brown.xml
+/styles/DOS.xml
+/styles/Homebrew.xml
+/styles/SimpleDark.xml
+/styles/SimpleLight.xml

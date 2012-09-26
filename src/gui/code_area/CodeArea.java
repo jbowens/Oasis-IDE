@@ -101,7 +101,7 @@ public class CodeArea extends JPanel {
 
 		String configStyle = app.getConfig().getSetting("styleset");
 
-		for( StyleSet s : app.getStyleLoader().getAvailableStyles() ) {
+		for( StyleSet s : app.getStyleSource().getAvailableStyles() ) {
 			if( s.getName() != null && s.getName().equals(configStyle) ) {
 				initialStyle = s;
 				break;

@@ -13,7 +13,8 @@ public class ResourceManager {
     protected static final String SETTINGS_FILENAME = "settings.xml";
     protected static final String DEFAULT_SETTINGS_FILE = "./settings.xml";
     protected static final String STYLES_DIRNAME = "styles";
-    protected static final String INSTALLATION_STYLES_DIR = "./styles";
+    protected static final String INSTALLATION_STYLES_DIR = "styles";
+    protected static final String INSTALLATION_STYLES_LIST = "/styles/style-list.txt";
 
     protected String userHome;
 
@@ -51,6 +52,11 @@ public class ResourceManager {
     public String getInstallationStylesPath()
     {
         return INSTALLATION_STYLES_DIR;
+    }
+
+    public String getInstallationStylesListPath()
+    {
+        return INSTALLATION_STYLES_LIST;
     }
 
     /**

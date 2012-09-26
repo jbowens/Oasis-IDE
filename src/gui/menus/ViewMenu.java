@@ -3,8 +3,11 @@ package camel.gui.menus;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.util.List;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 import javax.swing.JFileChooser;
 import javax.swing.JMenu;
@@ -13,7 +16,7 @@ import javax.swing.JCheckBoxMenuItem;
 
 import camel.gui.controller.FileHandler;
 import camel.gui.code_area.CodeArea;
-import camel.syntaxhighlighter.StyleLoader;
+import camel.syntaxhighlighter.StyleSource;
 import camel.syntaxhighlighter.StyleSet;
 import camel.Config;
 
@@ -33,7 +36,7 @@ public class ViewMenu extends JMenu implements ActionListener {
 
 	protected CodeArea _codeArea;
 
-	protected StyleLoader _styleLoader;
+	protected StyleSource _styleSource;
 
 	protected Config _config;
 
@@ -42,20 +45,21 @@ public class ViewMenu extends JMenu implements ActionListener {
 	 *
 	 * @param parentBar the parent menubar of this menu
 	 */
-	public ViewMenu(MenuBar parentBar, Config config, StyleLoader styleLoader, CodeArea codeArea) {
+	public ViewMenu(MenuBar parentBar, Config config, StyleSource styleSource, CodeArea codeArea) {
 		
 		super("View");
 
 		this.parentBar = parentBar;
 		_codeArea = codeArea;
 		_config = config;
-		_styleLoader = styleLoader;
+		_styleSource = styleSource;
 
 		setMnemonic('V');
 
 		_styles = new JMenu("Code Styles");
 
-		List<StyleSet> styles = styleLoader.getAvailableStyles();
+		List<StyleSet> styles = new ArrayList( styleSource.getAvailableStyles() );
+        Collections.sort(styles);
 
 		for( StyleSet s : styles ) {
 			JMenuItem menuItem = new JMenuItem(s.getName());
