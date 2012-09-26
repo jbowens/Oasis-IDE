@@ -1,6 +1,5 @@
 package camel.syntaxhighlighter;
 
-import camel.util.JarNavigator;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.File;

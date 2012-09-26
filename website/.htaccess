@@ -9,6 +9,9 @@ RewriteRule ^(.*)$ http://%1/$1 [R=301,L]
 # through Apache, without going through Esprit's controller.
 RewriteRule ^static/(.*)$ static/$1 [L,NC]
 
+# Allow dist files to be accessed through Apache
+RewriteRule ^dist/(.*)$ dist/$1 [L,NC]
+
 # Forward favicon requests
 RewriteRule ^favicon.ico$ static/favicon.ico [L,NC]
 
