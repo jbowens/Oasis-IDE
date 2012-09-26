@@ -1,3 +1,4 @@
 <?php
 
-echo "<h1>TESTING</h1>";
+require_once "/var/lib/php/esprit/autoloader.php";
+
