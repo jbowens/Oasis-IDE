@@ -6,6 +6,7 @@ import camel.gui.main.*;
 import camel.gui.code_area.*;
 import camel.syntaxhighlighter.CompositeStyleSource;
 import camel.syntaxhighlighter.FileSystemStyleLoader;
+import camel.syntaxhighlighter.JarStyleLoader;
 import camel.syntaxhighlighter.StyleParserException;
 import camel.syntaxhighlighter.StyleSource;
 import java.io.File;
@@ -66,6 +67,7 @@ public class Application {
         CompositeStyleSource compStyleSource = new CompositeStyleSource();
         try {
             compStyleSource.addStyleSource( new FileSystemStyleLoader( resourceManager.getUserStylesPath() ) );
+            compStyleSource.addStyleSource( new JarStyleLoader( resourceManager.getInstallationStylesListPath() ) );
         } catch( StyleParserException ex )
         {
             System.err.println("Unable to load styles from the file system.");
