@@ -11,7 +11,8 @@
     <pathelement location="build" />
     <pathelement location="/usr/share/java/junit4.jar" />
     <pathelement location="/Users/jbowens/junit-4.10.jar" />
-  </path>
+    <pathelement location="/home/oasis/junit-4.11.jar" />
+</path>
 
   <target name="init">
     <!-- Create the time stamp -->
