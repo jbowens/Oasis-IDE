@@ -27,6 +27,7 @@ public class JarStyleLoader implements StyleSource {
 
     public JarStyleLoader(String styleListing) throws StyleParserException
     {
+        styles = new ArrayList<StyleSet>();
         styleParser = StyleParser.createParser();
 
         try {
@@ -46,7 +47,6 @@ public class JarStyleLoader implements StyleSource {
                 System.out.println(line);
             }
 
-            styles = new ArrayList<StyleSet>();
             for(String file : styleFilenames)
             {
                 InputStream styleInputStream = getClass().getResourceAsStream(file);

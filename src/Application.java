@@ -67,13 +67,13 @@ public class Application {
         CompositeStyleSource compStyleSource = new CompositeStyleSource();
         try {
             compStyleSource.addStyleSource( new FileSystemStyleLoader( resourceManager.getUserStylesPath() ) );
-            compStyleSource.addStyleSource( new JarStyleLoader( resourceManager.getInstallationStylesListPath() ) );
+            JarStyleLoader jarStyleLoader = new JarStyleLoader( resourceManager.getInstallationStylesListPath() );
+            if( jarStyleLoader != null )
+                compStyleSource.addStyleSource( jarStyleLoader );
         } catch( StyleParserException ex )
         {
             System.err.println("Unable to load styles from the file system.");
         }
-        // TODO: Add jar style loader
-        //compStyleSource.addStyleSource( new StyleLoader( resourceManager.getInstallationStylesPath() ) );
         this.styleSource = compStyleSource;
 
         windows = new ArrayList<MainWindow>();
