@@ -10,7 +10,11 @@ ul#nav a { color: #887a69; }
 ul#nav a:hover { color: #564532; }
 #page-body { margin-top: 3em; }
 #info-column { width: 18em; float: right; }
+#info-column .colBox { margin-bottom: 1.5em; }
 #index-content { margin-right: 19em; }
 pre.command-line { background: #222; color: #FFF; font-family: monospace; padding: 0.5em; font-size: 1.1em; }
 div.screenshot { margin: 1em; float: left; }
+#use-at-brown { margin: 1em 0; }
+#use-at-brown pre.command-line { width: 14em; background: #444; }
+.program { font-family: monospace; }
 .clear { clear: both; }
