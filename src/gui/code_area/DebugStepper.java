@@ -192,7 +192,6 @@ public class DebugStepper implements MouseListener,CaretListener,TextOutputListe
 		/*Register listener*/
 		try {
 			this.handle = this.dm.newDebuggerInstance(f.getAbsolutePath());
-			//System.out.println("HANDLE: " + this.handle);
 			this.dm.registerOutputListener(this,this.handle);
 			this.dm.registerOutputListener(this.tab.getInteractionsPanel(),this.handle);
 		} catch (Exception e) {}	
@@ -226,7 +225,7 @@ public class DebugStepper implements MouseListener,CaretListener,TextOutputListe
 	}
 	
 	private void updateLineNumber(int line) {
-		System.out.println("Update Line: " + line);
+		// System.out.println("Update Line: " + line);
 		JEditorPane text = this.tab.getTextPane();
 		int currentLine = 0;
 		int currentSelection = 0;
@@ -241,9 +240,9 @@ public class DebugStepper implements MouseListener,CaretListener,TextOutputListe
 			} else {
 			    // set to the end of doc
 			    currentSelection = textContent.length();
-			    currentLine= line; // exits loop
+			    currentLine = line; // exits loop
 			}
-		    }
+		}
 		text.setCaretPosition(currentSelection);
 
 	}
@@ -279,10 +278,8 @@ public class DebugStepper implements MouseListener,CaretListener,TextOutputListe
 					}
 				}else if(inputArray[i].equals("Breakpoint")){
 					if(((i + 3)< inputArray.length) && inputArray[i+1].equals(":")){
-						System.out.println("receiveOutput equals Breakpoint");
 						try{
 							int lineNum = Integer.parseInt(inputArray[i+3]);
-							System.out.println("LineNum: " + lineNum);
 							updateLineNumber(lineNum);
 						}catch(NumberFormatException nmf){
 							/* Eat it */

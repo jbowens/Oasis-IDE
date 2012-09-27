@@ -87,8 +87,6 @@ public class Debug extends Thread {
         Process compileProcess;
         try{
             compileProcess = runtime.exec(compileArgs);
-            String tester = "cp " + filename + " ./";
-            runtime.exec(tester);
         }catch(IOException e){
         System.out.println("HERE");
             throw new DebuggerCompilationException();
