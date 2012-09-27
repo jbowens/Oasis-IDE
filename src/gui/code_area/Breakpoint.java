@@ -1,6 +1,8 @@
 package camel.gui.code_area;
 
-
+/**
+ * Represents a breakpoint in a debug instance.
+ */
 public class Breakpoint {
 	
 	private int lineNum;

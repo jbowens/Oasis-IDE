@@ -345,6 +345,9 @@ public class DebugStepper implements MouseListener,CaretListener,TextOutputListe
 				setBreakpoint(bpCounter, linePos,  true);
 			}
 
+            // Make sure this new breakpoint is reflected in the gui
+            this.tab.repaint();
+
 			this.lastClick = -1;
 		}
 		else {
