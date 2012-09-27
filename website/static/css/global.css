@@ -11,4 +11,5 @@ ul#nav a:hover { color: #564532; }
 #page-body { margin-top: 3em; }
 #info-column { width: 18em; float: right; }
 #index-content { margin-right: 19em; }
+pre.command-line { background: #222; color: #FFF; font-family: monospace; padding: 0.5em; font-size: 1.1em; }
 .clear { clear: both; }
