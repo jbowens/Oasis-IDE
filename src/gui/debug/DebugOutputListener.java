@@ -40,9 +40,9 @@ public class DebugOutputListener implements TextOutputListener{
 							/*Eat it */
 						}
 					}
-					System.out.println(inputArray[i]);
-					System.out.println(inputArray[i+1]);
-					System.out.println(inputArray[i+2]);
+					//System.out.println(inputArray[i]);
+					//System.out.println(inputArray[i+1]);
+					//System.out.println(inputArray[i+2]);
 				}
 			}
 	}

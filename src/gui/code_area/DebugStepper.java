@@ -192,7 +192,7 @@ public class DebugStepper implements MouseListener,CaretListener,TextOutputListe
 		/*Register listener*/
 		try {
 			this.handle = this.dm.newDebuggerInstance(f.getAbsolutePath());
-			System.out.println("HANDLE: " + this.handle);
+			//System.out.println("HANDLE: " + this.handle);
 			this.dm.registerOutputListener(this,this.handle);
 			this.dm.registerOutputListener(this.tab.getInteractionsPanel(),this.handle);
 		} catch (Exception e) {}	

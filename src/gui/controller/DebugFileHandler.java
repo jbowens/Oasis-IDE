@@ -22,7 +22,7 @@ public class DebugFileHandler {
 		try {
 			this.br = new BufferedReader(new InputStreamReader(new DataInputStream(new FileInputStream(path))));
 		} catch (FileNotFoundException e) {
-			System.out.println("Could not open file to debug. :(");
+			System.err.println("Could not open file to debug. :(");
 		}
 	}
 	

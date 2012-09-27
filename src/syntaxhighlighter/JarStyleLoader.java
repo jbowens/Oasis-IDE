@@ -34,7 +34,7 @@ public class JarStyleLoader implements StyleSource {
             InputStream is = getClass().getResourceAsStream(styleListing);
             if( is == null )
             {
-                System.err.println("is is null");
+                System.err.println("jar styles input stream is null... not loading any styles from containing jar");
                 return;
             }
             BufferedReader br = new BufferedReader( new InputStreamReader( is ) );
@@ -44,7 +44,6 @@ public class JarStyleLoader implements StyleSource {
             while( (line = br.readLine()) != null )
             {
                 styleFilenames.add( line );
-                System.out.println(line);
             }
 
             for(String file : styleFilenames)
