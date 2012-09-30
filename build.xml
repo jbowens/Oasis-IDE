@@ -37,7 +37,7 @@
     <!-- Create the distribution directory -->
     <mkdir dir="${dist}/"/>
 
-    <jar jarfile="${dist}/OasisIDE-1.0beta.jar" basedir="${build}">
+    <jar jarfile="${dist}/OasisIDE-1.0beta.jar">
         <manifest>
             <attribute name="Main-Class" value="camel.Runner" />
         </manifest>
