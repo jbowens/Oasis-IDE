@@ -272,7 +272,7 @@ public class CodeArea extends JPanel {
 		/*Can't debug a debug tab!*/
 		if (!current.checkDebug()) {
 			if(current.getPath() != null)
-				fh.openFile(new File(current.getPath()));
+				fh.openFile(new File(current.getPath()), true);
 		}
 	}
 

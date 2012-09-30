@@ -11,3 +11,4 @@ build
 7
 8
 website/dist/*.jar
+*.swp
