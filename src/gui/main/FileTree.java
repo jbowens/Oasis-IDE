@@ -1,5 +1,11 @@
 package camel.gui.main;
+
 import camel.gui.controller.FileHandler;
+import camel.util.DirectoryFileFilter;
+import camel.util.HiddenFileFilter;
+import camel.util.MlFileFilter;
+import camel.util.TextFileFilter;
+import camel.util.UnionFileFilter;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -12,61 +18,46 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.event.TreeModelListener;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
 
 public class FileTree extends JPanel {
+
 	protected File root;
 	protected JScrollPane sp;
-	/*
-	* FileTree Constructor
-	*/
+	
+    /**
+	 * FileTree Constructor
+     *
+     * @param fh  a FileHandler
+	 */
 	public FileTree(FileHandler fh)
 	{
-		root = new File(".");
+        // Set the root to be the user home directory
+		root = PrintableFile.createFromFile( new File(System.getProperty( "user.home" ) ));
+
 		final FileHandler fHandler = fh;
 		FileTreeModel model = new FileTreeModel(root);
 		final JTree tree = new JTree();
 		tree.setModel(model);
 		
 		int startRow = 1;
-		String prefix = ".";
+		String prefix = "";
 		File node;
 		TreePath path;
-		MouseListener ml = new MouseAdapter()
+		TreeSelectionListener tsl = new TreeSelectionListener()
 		{
-			public void mousePressed(MouseEvent e)
+			public void valueChanged(TreeSelectionEvent e)
 			{
-				int selRow = tree.getRowForLocation(e.getX(), e.getY());
-				TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
-				if(selPath != null)
-				{
-					String sPath = selPath.toString();
-					//regex to parse path from selpath
-					Pattern p = Pattern.compile("\\[(.*),(.*?)\\]");
-					Matcher m = p.matcher(sPath);
-					if(m.matches())
-					{
-						//regex to check for .ml files
-						String path = m.group(2);
-						Pattern p2 = Pattern.compile("(.*?)\\.ml");
-						Matcher m2 = p2.matcher(path);
-						if(selRow != -1 && m2.matches() && e.getClickCount() == 2)
-						{
-							//need regex to parse path from treepath
-							File f = new File(path);
-							String abs = f.getAbsolutePath().toString();
-							Pattern p3 = Pattern.compile("(.*)\\s\\./(.*)");
-							Matcher m3 = p3.matcher(abs);
-							if(m3.matches())
-								fHandler.openFTFile(m3.group(1)+m3.group(2));
-						}
-					}
-				}
-			}
+                File selectedFile = (File) tree.getLastSelectedPathComponent();
+                if( selectedFile != null && ! selectedFile.isDirectory() )
+                    fHandler.openFile(selectedFile, false);
+		    }
 		};
-		tree.addMouseListener(ml);
+		tree.addTreeSelectionListener(tsl);
 		sp = new JScrollPane(tree);
 	}
 }
@@ -74,31 +65,42 @@ public class FileTree extends JPanel {
 
 class FileTreeModel implements TreeModel
 {
-	private FileFilter fileFilter = new HiddenFileFilter();
+	protected FileFilter fileFilter;
 	protected File root;
-	public FileTreeModel(File r)
+	
+    /**
+     * Constructs a new FileTreeModel with the given file as the root.
+     */
+    public FileTreeModel(File r)
 	{
 		root = r;
+
+        // Setup the filter
+        UnionFileFilter filter = new UnionFileFilter();
+        filter.unionFilter( new TextFileFilter() );
+        filter.unionFilter( new MlFileFilter() );
+        filter.unionFilter( new DirectoryFileFilter() );
+        fileFilter = new HiddenFileFilter( filter );
 	}
-	/*
+
+	/**
 	 * Gets a specific file from the tree
 	 */
 	public Object getChild(Object parent, int index) {
-		String[] children = ((File)parent).list();
-		if ((children == null) || (index >= children.length)){ 
+		
+        File[] children = ((File) parent).listFiles( fileFilter );
+
+		if ((children == null) || (index >= children.length))
+        { 
 			return null;
 		}
-		/*
-		else if(children[index].startsWith("."))
-		{
-			return new File("");
-		}
-		*/
 		else
-			return new File((File) parent, children[index]);
+        {
+			return PrintableFile.createFromFile(children[index]);
+        }
 	}
 
-	/*
+	/**
 	 * Tells the FTModel how many children it has
 	 */
 	public int getChildCount(Object parent) {
@@ -116,29 +118,31 @@ class FileTreeModel implements TreeModel
 	 * Gets the index of a given child
 	 */
 	public int getIndexOfChild(Object parent, Object child) {
-		 File directory = (File)parent;
-         File fileSysEntity = (File)child;
-         File[] children = directory.listFiles(fileFilter);
-         int result = -1;
+		 
+        File directory = (File) parent;
+        File fileSysEntity = (File) child;
+        File[] children = directory.listFiles( fileFilter );
 
-         for ( int i = 0; i < children.length; ++i ) {
-             if ( fileSysEntity.equals( children[i] ) ) {
-                 result = i;
-                 break;
-             }
-         }
+        int result = -1;
 
-         return result;
+        for ( int i = 0; i < children.length; i++ ) {
+            if ( fileSysEntity.equals( children[i] ) )  {
+                result = i;
+                break;
+            }
+        }
 
+        return result;
 	}
 
-	/*
+	/**
 	 * Returns the root of the tree
 	 */
 	public Object getRoot() {
 		return root;
 	}
-	/*
+
+	/**
 	 * 	Returns true if node is a file
 	 */
 	public boolean isLeaf(Object node) {
@@ -153,12 +157,6 @@ class FileTreeModel implements TreeModel
 	}
 	public void valueForPathChanged(TreePath path, Object newValue) {
 		// do nothing
-	}
-	private class HiddenFileFilter implements FileFilter {
-
-		public boolean accept(File pathname) {
-			return true;
-		}
 	}
 
 }
