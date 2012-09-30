@@ -1,0 +1,17 @@
+------------------------------------------------------------------------
+ Compiling locally
+------------------------------------------------------------------------
+
+ To compile locally, first create a symlink to a junit 4.x jar by the
+ name of "junit.jar". Oasis IDE uses JUnit for running unit tests 
+ against the build. It's a good idea to make sure you didn't break any
+ before you commit. Once you've created the symlink, you should be able
+ to compile through ant by running "ant compile".
+
+------------------------------------------------------------------------
+ Additional help
+------------------------------------------------------------------------
+
+ If you need any additional help, we will try to keep OasisIDE.com 
+ updated with information on the current project maintainers.
+
