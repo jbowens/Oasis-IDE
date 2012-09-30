@@ -9,9 +9,14 @@
 
   <path id="oasis.class.path">
     <pathelement location="build" />
+    <!-- junit location on dept machines -->
     <pathelement location="/usr/share/java/junit4.jar" />
+    <!-- junit location on my jbowens's machine -->
     <pathelement location="/Users/jbowens/junit-4.10.jar" />
+    <!-- junit location on the oasis website machine -->
     <pathelement location="/home/oasis/junit-4.11.jar" />
+    <!-- default junit symlink -->
+    <pathelement location="junit.jar" />
 </path>
 
   <target name="init">
@@ -36,10 +41,12 @@
         <manifest>
             <attribute name="Main-Class" value="camel.Runner" />
         </manifest>
-        <fileset dir="build" includes="**/*.class" />
-        <fileset dir="build" includes="/Users/jbowens/junit-4.10.jar" />
-	<zipfileset dir="fonts" prefix="fonts" />
-	<zipfileset dir="styles" prefix="styles" />
+        <fileset dir="build">
+            <include name="**/*.class" />
+            <exclude name="**/tests/*.class" />
+        </fileset>
+	    <zipfileset dir="fonts" prefix="fonts" />
+	    <zipfileset dir="styles" prefix="styles" />
     </jar>
   </target>
 

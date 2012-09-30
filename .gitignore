@@ -12,3 +12,4 @@ build
 8
 website/dist/*.jar
 *.swp
+junit.jar
