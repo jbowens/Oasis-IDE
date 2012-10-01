@@ -167,18 +167,10 @@ public class Application {
      * needs to be called when the program exists.
      */
     public void close() {
-        /* First try to close the guis. There may be unsaved changes! */
-        try {
-            for(MainWindow w : windows)
-                w.close();
-        } catch(CloseDeniedException ex) {
-            // They no longer want to close, so just stop closing.
-            return;
-        }
-
-        /* Now close everything else down */
+        
         interactionsManager.close();
 	    debugManager.close();
+        
         try {
             config.save();
         } catch( SettingsSaveException e ) {
@@ -192,7 +184,7 @@ public class Application {
                 System.err.println("Unable to save settings.");
             }
         }
-        System.exit(0);
+        
     }
 
 }

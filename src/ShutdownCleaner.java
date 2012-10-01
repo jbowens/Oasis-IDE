@@ -27,7 +27,7 @@ public class ShutdownCleaner extends Thread {
     } catch(SettingsSaveException ex) {
       // Oh well
     }
-    //app.gracefulClose();
+    app.close();
   }
 
 }
