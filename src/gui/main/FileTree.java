@@ -28,7 +28,8 @@ public class FileTree extends JPanel {
 
 	protected File root;
 	protected JScrollPane sp;
-	
+	protected File currentSelectedFile;
+
     /**
 	 * FileTree Constructor
      *
@@ -53,12 +54,23 @@ public class FileTree extends JPanel {
 			public void valueChanged(TreeSelectionEvent e)
 			{
                 File selectedFile = (File) tree.getLastSelectedPathComponent();
-                if( selectedFile != null && ! selectedFile.isDirectory() )
-                    fHandler.openFile(selectedFile, false);
+                currentSelectedFile = selectedFile; 
 		    }
 		};
 		tree.addTreeSelectionListener(tsl);
-		sp = new JScrollPane(tree);
+		MouseAdapter mouseAdapter = new MouseAdapter() 
+        {
+            public void mouseClicked(MouseEvent e)
+            {
+                // Only open files on a double click
+                if( currentSelectedFile != null && e.getClickCount() == 2 && !currentSelectedFile.isDirectory() )
+                {
+                    fHandler.openFile(currentSelectedFile, false);
+                }
+            }
+        };
+        tree.addMouseListener(mouseAdapter);
+        sp = new JScrollPane(tree);
 	}
 }
 
