@@ -298,7 +298,7 @@ public class CodeArea extends JPanel {
 		int index = tabs.indexOfComponent(t);
 		if( index == -1 )
 			return;
-		tabs.setTitleAt(index, title);
+        ((TabTitle) tabs.getTabComponentAt(index)).retitle(title);
 	}
 
 	/**
@@ -419,6 +419,11 @@ public class CodeArea extends JPanel {
 			setBorder(BorderFactory.createEmptyBorder());
 			mainWindow.getMB().setEnable(true);
 		}
+
+        public void retitle(String newTitle) {
+            title.setText(newTitle);
+            title.repaint();
+        }
 	}
 	private class TabButton extends JButton implements ActionListener
 	{
